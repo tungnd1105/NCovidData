@@ -34,6 +34,7 @@ public class ProvinceOfVietnam {
       JSONObject province = (JSONObject) dataJsonProvince.get(i);
       listProvince.add(province.get("tinh").toString());
     }
+
     return listProvince;
   }
 

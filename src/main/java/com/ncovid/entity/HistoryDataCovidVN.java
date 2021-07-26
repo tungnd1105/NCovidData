@@ -33,5 +33,7 @@ public class HistoryDataCovidVN implements Serializable {
   private String province;
   private LocalDate date;
   private Integer value;
+  private Integer today;
+  private Integer yesterday;
 
 }
