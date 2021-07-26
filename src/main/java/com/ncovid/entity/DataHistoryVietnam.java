@@ -23,7 +23,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryDataCovidVN implements Serializable {
+public class DataHistoryVietnam implements Serializable {
 
   private static final long serialVersionUID = 6371070049025062271L;
 

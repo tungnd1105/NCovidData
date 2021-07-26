@@ -1,6 +1,6 @@
 package com.ncovid.repositories;
 
-import com.ncovid.entity.HistoryDataCovidVN;
+import com.ncovid.entity.DataHistoryVietnam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,9 +14,9 @@ import java.util.List;
  * @Date 25/07/2021
  */
 @Repository
-public interface HistoryDataCovidVNRepositories extends JpaRepository<HistoryDataCovidVN, Integer> {
+public interface DHVietnamRepositories extends JpaRepository<DataHistoryVietnam, Integer> {
 
 
-  @Query("SELECT a FROM HistoryDataCovidVN a WHERE a.province = ?1")
-  List<HistoryDataCovidVN> findByProvince(String province);
+  @Query("SELECT a FROM DataHistoryVietnam a WHERE a.province = ?1")
+  List<DataHistoryVietnam> findByProvince(String province);
 }

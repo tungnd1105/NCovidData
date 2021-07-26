@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * @author ndtun
@@ -18,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticCovidVN {
+public class StatisticalDataVietnam {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +30,5 @@ public class StatisticCovidVN {
 
   @JoinColumn(name = "id_data_by_date", referencedColumnName = "id")
   @ManyToOne
-  private HistoryDataCovidVN dataByDate;
+  private DataHistoryVietnam dataByDate;
 }

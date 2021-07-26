@@ -1,6 +1,6 @@
 package com.ncovid.repositories;
 
-import com.ncovid.entity.StatisticCovidVN;
+import com.ncovid.entity.StatisticalDataVietnam;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @project NCovidData
  * @Date 25/07/2021
  */
-public interface StatisticCovidVNRepositories extends JpaRepository<StatisticCovidVN, Integer> {
+public interface SDVietnamRepositories extends JpaRepository<StatisticalDataVietnam, Integer> {
 }
