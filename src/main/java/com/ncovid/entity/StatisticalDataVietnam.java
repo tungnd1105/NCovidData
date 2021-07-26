@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ndtun
@@ -22,13 +25,19 @@ public class StatisticalDataVietnam {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private LocalDate updateAt;
   private String province;
   private Integer cases;
   private Integer deaths;
   private Integer domesticCases;
   private Integer entryCases;
+  private Integer today;
+  private Integer yesterday;
 
-  @JoinColumn(name = "id_data_by_date", referencedColumnName = "id")
-  @ManyToOne
-  private DataHistoryVietnam dataByDate;
+  @OneToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "data_by_date",//
+    joinColumns = @JoinColumn(name= "id"),
+    inverseJoinColumns = @JoinColumn(name="id_data"))
+  private List<DataHistoryVietnam> dataByDate = new ArrayList<>();
+
 }
