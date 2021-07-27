@@ -39,55 +39,58 @@ public class DataCovidVietnam {
   @Autowired
   private SDVietnamRepositories SDVietnamRepositories;
 
-  private void insertDataHistoryVietnam(int threadingNumber, String province) throws IOException, InterruptedException {
-    logger.info("Threading-" + threadingNumber + " " + "is running insert data covid by date  of" + " " + province);
+  private void insertDataHistoryVietnam(int threadingNumber, Integer provinceCode) throws IOException, InterruptedException {
+    logger.info("Threading-" + threadingNumber + " " + "is running insert data covid by date  of" + " " + provinceCode);
     JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
     for (int i = 0; i < jsonArray.length(); i++) {
       JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-      if (jsonObject.get("tinh").toString().matches(province)) {
+      if (jsonObject.get("ma").equals(provinceCode)) {
         for (LocalDate date = Util.startDate; date.isBefore(Util.today.plusDays(1)); date = date.plusDays(1)) {
           DataHistoryVietnam DHVietnam = new DataHistoryVietnam();
           JSONObject dataByDate = (JSONObject) jsonObject.get("data");
           DHVietnam.setDate(date);
-          DHVietnam.setProvince(jsonObject.get("tinh").toString());
+          DHVietnam.setProvinceCode(Integer.parseInt(jsonObject.get("ma").toString()));
           DHVietnam.setValue(Integer.parseInt(dataByDate.get(date.toString()).toString()));
           DHVietnamRepositories.save(DHVietnam);
         }
       }
     }
-    logger.info("Threading-" + threadingNumber + " " + "insert data covid by date of" + " " + province + " " + " " + "completed");
+    logger.info("Threading-" + threadingNumber + " " + "insert data covid by date of" + " " + provinceCode + " " + " " +
+      "completed");
   }
 
-  private void insertStatisticalDataVietnam(int threadingNumber, String province) throws IOException, InterruptedException {
-    logger.info("Threading-" + threadingNumber + " " + "is running insert data statistic covid of" + " " + province);
-    List<DataHistoryVietnam> DHVietnamList = DHVietnamRepositories.findByProvince(province);
+  private void insertStatisticalDataVietnam(int threadingNumber, Integer provinceCode) throws IOException, InterruptedException {
+    logger.info("Threading-" + threadingNumber + " " + "is running insert data statistic covid of" + " " + provinceCode);
+    List<DataHistoryVietnam> DHVietnamList = DHVietnamRepositories.findByProvinceCode(provinceCode);
     JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
-    JSONArray jsonArray = (JSONArray) jsonObject.get("rows");
+    JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
     JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
-    for (int i = 0; i < jsonArray.length(); i++) {
+
+    for (int j =0; j < jsonArray1.length(); j++){
+      JSONObject object1 = (JSONObject) jsonArray1.get(j);
       StatisticalDataVietnam SDVietnam = new StatisticalDataVietnam();
-      JSONObject object = (JSONObject) jsonArray.get(i);
-      SDVietnam.setProvince(object.get("tinh").toString());
-      if (object.get("tinh").toString().matches(province)) {
-        SDVietnam.setProvince(object.get("tinh").toString());
-        SDVietnam.setCases(Integer.parseInt(object.get("so_ca").toString()));
-        SDVietnam.setDeaths(Integer.parseInt(object.get("tu_vong").toString()));
-        SDVietnam.setDomesticCases(Integer.parseInt(object.get("cong_dong").toString()));
-        SDVietnam.setEntryCases(Integer.parseInt(object.get("nhap_canh").toString()));
-        SDVietnam.setUpdateAt(Util.today);
-        for (int j = 0; j < jsonArray2.length(); j++) {
-          JSONObject object2 = (JSONObject) jsonArray2.get(j);
-          if (SDVietnam.getProvince().matches(object2.get("tinh").toString())) {
+      for (int i = 0; i < jsonArray2.length(); i++){
+        JSONObject object2 = (JSONObject) jsonArray2.get(i);
+        if(object1.get("tinh").toString().matches(object2.get("tinh").toString())){
+          if(object2.get("ma").equals(provinceCode)){
+            SDVietnam.setProvinceCode(Integer.parseInt(object2.get("ma").toString()));
             SDVietnam.setToday(Integer.parseInt(object2.get("ngay_hien_tai").toString()));
             SDVietnam.setYesterday(Integer.parseInt(object2.get("ngay_truoc_do").toString()));
+            SDVietnam.setCases(Integer.parseInt(object1.get("so_ca").toString()));
+            SDVietnam.setDeaths(Integer.parseInt(object1.get("tu_vong").toString()));
+            SDVietnam.setDomesticCases(Integer.parseInt(object1.get("cong_dong").toString()));
+            SDVietnam.setEntryCases(Integer.parseInt(object1.get("nhap_canh").toString()));
+            SDVietnam.setUpdateAt(Util.today);
+            DHVietnamList.removeIf(e -> !e.getProvinceCode().equals(SDVietnam.getProvinceCode()));
+            SDVietnam.setDataByDate(DHVietnamList);
+            SDVietnamRepositories.save(SDVietnam);
+            logger.info("Threading-" + threadingNumber + " " + "insert data statistic covid of" + " " + object2.get("tinh").toString() + " " + "completed");
           }
         }
-        DHVietnamList.removeIf(e -> !e.getProvince().matches(SDVietnam.getProvince()));
-        SDVietnam.setDataByDate(DHVietnamList);
-        SDVietnamRepositories.save(SDVietnam);
       }
+
     }
-    logger.info("Threading-" + threadingNumber + " " + "insert data statistic covid of" + " " + province + " " + "completed");
+
   }
 
   /**
@@ -96,7 +99,7 @@ public class DataCovidVietnam {
    * update data  at 6am everyday
    * run async:  method insertDataCovidByDate completed task ->  run method insertDataCovidByProvince
    */
-  @Scheduled(cron = "* * 6 * * *")
+  @Scheduled(cron = "10 * * * * *")
   private void runMultithreading() throws IOException, InterruptedException {
     List<StatisticalDataVietnam> dataExist = SDVietnamRepositories.findAll();
     // check data not yet in database
@@ -107,22 +110,24 @@ public class DataCovidVietnam {
       DHVietnamRepositories.deleteAll();
     }
 
-    List<String> allProvince = ProvinceOfVietnam.getAllProvince();
+    List<Integer> provincodeList = ProvinceOfVietnam.getAllProvince();
     AtomicInteger numberOfThread = new AtomicInteger();
 
-    for (String province : allProvince) {
+    for (Integer provinceCode : provincodeList) {
       CompletableFuture.runAsync(() -> {
         numberOfThread.getAndIncrement();
-        try { insertDataHistoryVietnam(numberOfThread.get(), province); }
-
-        catch (IOException | InterruptedException e) {
+        try {
+          insertDataHistoryVietnam(numberOfThread.get(), provinceCode);
+          logger.info("insert data covid by date of all province completed");
+        } catch (IOException | InterruptedException e) {
           logger.error(e.getMessage());
           logger.error("Threading-" + numberOfThread + "" + "interruptedException");
         }
       }).thenRun(() -> {
-        try { insertStatisticalDataVietnam(numberOfThread.get(), province); }
-
-        catch (IOException | InterruptedException e) {
+        try {
+          insertStatisticalDataVietnam(numberOfThread.get(), provinceCode);
+          logger.info("insert data statistical covid of province completed");
+        } catch (IOException | InterruptedException e) {
           logger.error(e.getMessage());
           logger.error("Threading-" + numberOfThread + "" + "interruptedException");
         }

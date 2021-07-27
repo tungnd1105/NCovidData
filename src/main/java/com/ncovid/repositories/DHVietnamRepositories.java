@@ -17,6 +17,6 @@ import java.util.List;
 public interface DHVietnamRepositories extends JpaRepository<DataHistoryVietnam, Integer> {
 
 
-  @Query("SELECT a FROM DataHistoryVietnam a WHERE a.province = ?1")
-  List<DataHistoryVietnam> findByProvince(String province);
+  @Query("SELECT a FROM DataHistoryVietnam a WHERE a.provinceCode = ?1")
+  List<DataHistoryVietnam> findByProvinceCode(int province);
 }

@@ -26,13 +26,13 @@ public class ProvinceOfVietnam {
   public static Logger logger = LoggerFactory.getLogger(ProvinceOfVietnam.class);
 
   @EventListener(ApplicationReadyEvent.class)
-  public static List<String> getAllProvince() throws IOException, InterruptedException {
+  public static List<Integer> getAllProvince() throws IOException, InterruptedException {
     logger.info("Stating get all province of Vietnam");
     JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
-    List<String> listProvince = new ArrayList<>();
+    List<Integer> listProvince = new ArrayList<>();
     for (int i = 0; i < dataJsonProvince.length(); i++ ){
       JSONObject province = (JSONObject) dataJsonProvince.get(i);
-      listProvince.add(province.get("tinh").toString());
+      listProvince.add(Integer.parseInt(province.get("ma").toString()));
     }
 
     return listProvince;

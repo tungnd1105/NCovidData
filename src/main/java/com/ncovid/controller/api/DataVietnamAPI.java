@@ -32,10 +32,10 @@ public class DataVietnamAPI {
   ) throws IOException, ExecutionException, InterruptedException {
     return dataVietnamServices.runMultithreadingFindAllData(start_date, end_date);
   }
-
-  @GetMapping("{province}")
-  private ResponseEntity<StatisticalDataVietnam> findOneByProvince(@PathVariable String province) {
-    return dataVietnamServices.findOneByProvince(province);
-  }
+//
+//  @GetMapping("{provinceCode}")
+//  private ResponseEntity<StatisticalDataVietnam> findOneByProvince(@PathVariable Integer provinceCode) {
+//    return dataVietnamServices.findOneByProvince(provinceCode);
+//  }
 
 }

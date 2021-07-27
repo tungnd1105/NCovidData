@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface SDVietnamRepositories extends JpaRepository<StatisticalDataVietnam, Integer> {
 
-  @Query("SELECT a FROM StatisticalDataVietnam a WHERE a.province = ?1")
-  StatisticalDataVietnam findByProvince(String province);
+  @Query("SELECT a FROM StatisticalDataVietnam a WHERE a.provinceCode = ?1")
+  StatisticalDataVietnam findByProvinceCode(Integer provinceCode);
 
 }

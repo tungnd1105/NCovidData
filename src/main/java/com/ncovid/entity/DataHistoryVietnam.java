@@ -30,7 +30,7 @@ public class DataHistoryVietnam implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private String province;
+  private Integer provinceCode;
   private LocalDate date;
   private Integer value;
 

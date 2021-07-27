@@ -23,10 +23,8 @@ import java.util.List;
 public class StatisticalDataVietnam {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer provinceCode;
   private LocalDate updateAt;
-  private String province;
   private Integer cases;
   private Integer deaths;
   private Integer domesticCases;

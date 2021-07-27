@@ -37,10 +37,10 @@ public class DataVietnamServices {
   @Autowired
   private SDVietnamRepositories sdVietnamRepositories;
 
-  public ResponseEntity<StatisticalDataVietnam> findOneByProvince(String province) {
-    StatisticalDataVietnam SDVietnam = sdVietnamRepositories.findByProvince(province);
+  public ResponseEntity<StatisticalDataVietnam> findOneByProvince(Integer provinceCode) {
+    StatisticalDataVietnam SDVietnam = sdVietnamRepositories.findByProvinceCode(provinceCode);
     try {
-      if (province.trim().isEmpty()) {
+      if (provinceCode == null) {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
       }
 
@@ -52,29 +52,29 @@ public class DataVietnamServices {
     } catch (Exception e) {
       logger.error("handle exception" + e);
     }
-    logger.info("find data covid of" + " " + province + " " + "completed");
+    logger.info("find data covid of" + " " + provinceCode + " " + "completed");
     return ResponseEntity.ok(SDVietnam);
   }
 
-  private StatisticalDataVietnam findDataByProvince(int threadingNumber, String province) {
-    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + province);
+  private StatisticalDataVietnam findDataByProvince(int threadingNumber, Integer provinceCode) {
+    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + provinceCode);
     StatisticalDataVietnam SDVietnam = new StatisticalDataVietnam();
-    if (!province.trim().isEmpty()) {
-      SDVietnam = sdVietnamRepositories.findByProvince(province);
+    if (provinceCode != null) {
+      SDVietnam = sdVietnamRepositories.findByProvinceCode(provinceCode);
     }
-    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + province + " " + "completed");
+    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + provinceCode + " " + "completed");
     return SDVietnam;
   }
 
   public ResponseEntity<List<StatisticalDataVietnam>> runMultithreadingFindAllData(String startDate, String endDate)
     throws IOException, InterruptedException, ExecutionException {
-    List<String> allProvince = ProvinceOfVietnam.getAllProvince();
+    List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     AtomicInteger numberOfThread = new AtomicInteger();
     List<StatisticalDataVietnam> SDVietnamList = new ArrayList<>();
-    for (String province : allProvince) {
+    for (Integer provinceCode : provinceCodeList) {
       numberOfThread.incrementAndGet();
       CompletableFuture<StatisticalDataVietnam> completableFuture =
-        CompletableFuture.supplyAsync(() -> findDataByProvince(numberOfThread.get(), province));
+        CompletableFuture.supplyAsync(() -> findDataByProvince(numberOfThread.get(), provinceCode));
       SDVietnamList.add(completableFuture.get());
 
       // sort by date
