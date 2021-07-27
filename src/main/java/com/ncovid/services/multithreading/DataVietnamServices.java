@@ -1,6 +1,7 @@
 package com.ncovid.services.multithreading;
 
 import com.ncovid.data.multithreading.DataCovidVietnam;
+import com.ncovid.entity.DataHistoryVietnam;
 import com.ncovid.entity.StatisticalDataVietnam;
 import com.ncovid.repositories.SDVietnamRepositories;
 import com.ncovid.util.ProvinceOfVietnam;
@@ -12,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -63,9 +66,8 @@ public class DataVietnamServices {
     return SDVietnam;
   }
 
-  public ResponseEntity<List<StatisticalDataVietnam>> runMultithreadingFindAllData() throws IOException,
-    InterruptedException,
-    ExecutionException {
+  public ResponseEntity<List<StatisticalDataVietnam>> runMultithreadingFindAllData(String startDate, String endDate)
+    throws IOException, InterruptedException, ExecutionException {
     List<String> allProvince = ProvinceOfVietnam.getAllProvince();
     AtomicInteger numberOfThread = new AtomicInteger();
     List<StatisticalDataVietnam> SDVietnamList = new ArrayList<>();
@@ -74,8 +76,19 @@ public class DataVietnamServices {
       CompletableFuture<StatisticalDataVietnam> completableFuture =
         CompletableFuture.supplyAsync(() -> findDataByProvince(numberOfThread.get(), province));
       SDVietnamList.add(completableFuture.get());
+
+      // sort by date
+      SDVietnamList.forEach(a -> a.getDataByDate().sort(Comparator.comparing(DataHistoryVietnam::getDate)));
+
+      if (startDate != null && endDate != null) {
+        /* filter data by start date, end date */
+        SDVietnamList
+          .forEach(e -> e.getDataByDate()
+            .removeIf(b ->
+              !b.getDate().isBefore(LocalDate.parse(startDate)) && b.getDate().isAfter(LocalDate.parse(endDate))));
+      }
     }
+
     return ResponseEntity.ok(SDVietnamList);
   }
-
 }

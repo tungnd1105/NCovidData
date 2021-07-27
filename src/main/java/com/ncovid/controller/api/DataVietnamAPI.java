@@ -1,13 +1,10 @@
-package com.ncovid.controller;
+package com.ncovid.controller.api;
 
 import com.ncovid.entity.StatisticalDataVietnam;
 import com.ncovid.services.multithreading.DataVietnamServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,13 +25,16 @@ public class DataVietnamAPI {
   @Autowired
   private DataVietnamServices dataVietnamServices;
 
-  @GetMapping
-  private ResponseEntity<List<StatisticalDataVietnam>> findAllDataVietnam() throws IOException, ExecutionException, InterruptedException {
-    return dataVietnamServices.runMultithreadingFindAllData();
+  @GetMapping("data-by-date")
+  private ResponseEntity<List<StatisticalDataVietnam>> findAllDataVietnam(
+    @RequestParam(defaultValue = "2021-04-27", required = false) String start_date,
+    @RequestParam(defaultValue = "2021-07-27", required = false) String end_date
+  ) throws IOException, ExecutionException, InterruptedException {
+    return dataVietnamServices.runMultithreadingFindAllData(start_date, end_date);
   }
 
   @GetMapping("{province}")
-  private ResponseEntity<StatisticalDataVietnam> findOneByProvince(@PathVariable String province){
+  private ResponseEntity<StatisticalDataVietnam> findOneByProvince(@PathVariable String province) {
     return dataVietnamServices.findOneByProvince(province);
   }
 

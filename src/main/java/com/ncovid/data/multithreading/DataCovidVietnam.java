@@ -113,16 +113,18 @@ public class DataCovidVietnam {
     for (String province : allProvince) {
       CompletableFuture.runAsync(() -> {
         numberOfThread.getAndIncrement();
-        try {
-          insertDataHistoryVietnam(numberOfThread.get(), province);
-        } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
+        try { insertDataHistoryVietnam(numberOfThread.get(), province); }
+
+        catch (IOException | InterruptedException e) {
+          logger.error(e.getMessage());
+          logger.error("Threading-" + numberOfThread + "" + "interruptedException");
         }
       }).thenRun(() -> {
-        try {
-          insertStatisticalDataVietnam(numberOfThread.get(), province);
-        } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
+        try { insertStatisticalDataVietnam(numberOfThread.get(), province); }
+
+        catch (IOException | InterruptedException e) {
+          logger.error(e.getMessage());
+          logger.error("Threading-" + numberOfThread + "" + "interruptedException");
         }
       });
     }
