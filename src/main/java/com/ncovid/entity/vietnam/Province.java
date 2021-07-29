@@ -1,4 +1,4 @@
-package com.ncovid.entity;
+package com.ncovid.entity.vietnam;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProvinceVietnam implements Serializable {
+public class Province implements Serializable {
 
   private static final long serialVersionUID = -7233922340182006222L;
 
@@ -30,8 +30,14 @@ public class ProvinceVietnam implements Serializable {
   private String  name;
   private String  type;
   private Integer totalPopulation;
+  private Integer popOverEighteen;
+
 
   @OneToOne
   @JoinColumn(name = "id_data_covid", referencedColumnName = "provinceCode")
-  private StatisticalDataVietnam DataCovid;
+  private StatisticalCovid DataCovid;
+
+  @OneToOne
+  @JoinColumn(name ="id_data_vaccine", referencedColumnName = "provinceCode")
+  private StatisticalVaccine DataVaccine;
 }

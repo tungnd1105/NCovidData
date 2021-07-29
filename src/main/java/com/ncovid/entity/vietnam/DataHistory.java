@@ -1,4 +1,4 @@
-package com.ncovid.entity;
+package com.ncovid.entity.vietnam;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataHistoryVietnam implements Serializable {
+public class DataHistory implements Serializable {
 
   private static final long serialVersionUID = 6371070049025062271L;
 

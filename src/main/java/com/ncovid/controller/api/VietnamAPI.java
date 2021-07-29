@@ -1,7 +1,7 @@
 package com.ncovid.controller.api;
 
-import com.ncovid.entity.StatisticalDataVietnam;
-import com.ncovid.services.multithreading.DataVietnamServices;
+import com.ncovid.entity.vietnam.Province;
+import com.ncovid.services.multithreading.vietnam.VietnamServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +20,25 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("api/v1/covid-data/Vietnam")
-public class DataVietnamAPI {
+public class VietnamAPI {
 
   @Autowired
-  private DataVietnamServices dataVietnamServices;
+  private VietnamServices vietnamServices;
 
   @GetMapping("data-by-date")
-  private ResponseEntity<List<StatisticalDataVietnam>> findAllDataVietnam(
-    @RequestParam(defaultValue = "2021-04-27", required = false) String start_date,
-    @RequestParam(defaultValue = "2021-07-27", required = false) String end_date
+  private ResponseEntity<List<Province>> findAllDataVietnam(
+    @RequestParam(defaultValue = "2021-04-26", required = false) String start_date,
+    @RequestParam(defaultValue = "2021-07-28", required = false) String end_date
   ) throws IOException, ExecutionException, InterruptedException {
-    return dataVietnamServices.runMultithreadingFindAllData(start_date, end_date);
+    return vietnamServices.findDataByStartDateAndEndDate(start_date, end_date);
   }
-//
-//  @GetMapping("{provinceCode}")
-//  private ResponseEntity<StatisticalDataVietnam> findOneByProvince(@PathVariable Integer provinceCode) {
-//    return dataVietnamServices.findOneByProvince(provinceCode);
-//  }
+
+  @GetMapping("data-of-province")
+  private ResponseEntity<Province> findOneByProvince(
+    @RequestParam(required = false) Integer provinceCode,
+     @RequestParam(required = false) String name
+  ) {
+    return vietnamServices.findDataByOneProvince(provinceCode,name);
+  }
 
 }

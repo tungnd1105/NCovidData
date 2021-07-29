@@ -23,6 +23,10 @@ public class Util {
 
   public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v1/2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
   public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v1/2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;
+  public static String urlDataAllProince = "https://tiemchungcovid19.gov.vn/api/province/public/all";
+  public static String urlDataPopulationOfProince = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccine-allocate/province-detail";
+  public static String urlDataVaccine = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
+
 
   public static String fetchDataJson(String url) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();

@@ -1,4 +1,4 @@
-package com.ncovid.entity;
+package com.ncovid.entity.vietnam;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticalDataVietnam {
+public class StatisticalCovid {
 
   @Id
   private Integer provinceCode;
@@ -36,6 +36,6 @@ public class StatisticalDataVietnam {
   @JoinTable(name = "data_by_date",//
     joinColumns = @JoinColumn(name= "id"),
     inverseJoinColumns = @JoinColumn(name="id_data"))
-  private List<DataHistoryVietnam> dataByDate = new ArrayList<>();
+  private List<DataHistory> dataByDate = new ArrayList<>();
 
 }

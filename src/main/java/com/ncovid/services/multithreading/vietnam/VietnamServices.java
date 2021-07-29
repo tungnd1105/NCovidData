@@ -1,9 +1,8 @@
-package com.ncovid.services.multithreading;
+package com.ncovid.services.multithreading.vietnam;
 
-import com.ncovid.data.multithreading.DataCovidVietnam;
-import com.ncovid.entity.DataHistoryVietnam;
-import com.ncovid.entity.StatisticalDataVietnam;
-import com.ncovid.repositories.SDVietnamRepositories;
+import com.ncovid.data.multithreading.vietnam.DataCovidVietnam;
+import com.ncovid.entity.vietnam.Province;
+import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.util.ProvinceOfVietnam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -30,65 +28,60 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 @Service
-public class DataVietnamServices {
+public class VietnamServices {
 
   public static Logger logger = LoggerFactory.getLogger(DataCovidVietnam.class);
 
   @Autowired
-  private SDVietnamRepositories sdVietnamRepositories;
+  ProvinceRepositories provinceRepositories;
 
-  public ResponseEntity<StatisticalDataVietnam> findOneByProvince(Integer provinceCode) {
-    StatisticalDataVietnam SDVietnam = sdVietnamRepositories.findByProvinceCode(provinceCode);
+  public ResponseEntity<Province> findDataByOneProvince(Integer provinceCode, String name) {
+    Province dataOfProvince = provinceRepositories.findByProvinceCodeOrName(provinceCode, name);
+    if (provinceCode == null && name == null) {
+      logger.warn("request a parameter province code or province name");
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+    if (dataOfProvince == null) {
+      logger.warn("parameter province code and province name did not matches");
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+    return ResponseEntity.ok(dataOfProvince);
+  }
+
+  /**
+   * Multithreading: each threading get data one province
+   */
+  public ResponseEntity<List<Province>> findDataByStartDateAndEndDate(String startDate, String endDate) {
+    List<Province> dataOfProvinceList = new ArrayList<>();
     try {
-      if (provinceCode == null) {
+
+      if (startDate == null && endDate == null) {
+        logger.warn("request parameter start date code and end date must not be null");
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
       }
 
-      if (SDVietnam == null) {
-        logger.error("not found province");
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+      List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
+      AtomicInteger numberOfThread = new AtomicInteger();
+      for (Integer provinceCode : provinceCodeList) {
+        numberOfThread.incrementAndGet();
+        CompletableFuture<Province> completableFuture =
+          CompletableFuture.supplyAsync(() -> {
+            Province province = provinceRepositories.findById(provinceCode).orElse(null);
+            if (province != null) {
+              province.getDataCovid()
+                .getDataByDate()
+                .removeIf(c -> !c.getDate().isBefore(LocalDate.parse(startDate)) && c.getDate().isAfter(LocalDate.parse(endDate)));
+              logger.info("threading-" + numberOfThread + "select data covid by date of province " + province.getName() + "completed");
+            }
+            return province;
+          });
+        dataOfProvinceList.add(completableFuture.get());
+
       }
-
-    } catch (Exception e) {
-      logger.error("handle exception" + e);
+    }catch (IOException|InterruptedException|ExecutionException e){
+      logger.error(e.getMessage());
     }
-    logger.info("find data covid of" + " " + provinceCode + " " + "completed");
-    return ResponseEntity.ok(SDVietnam);
+    return ResponseEntity.ok(dataOfProvinceList);
   }
 
-  private StatisticalDataVietnam findDataByProvince(int threadingNumber, Integer provinceCode) {
-    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + provinceCode);
-    StatisticalDataVietnam SDVietnam = new StatisticalDataVietnam();
-    if (provinceCode != null) {
-      SDVietnam = sdVietnamRepositories.findByProvinceCode(provinceCode);
-    }
-    logger.info("threading-" + threadingNumber + " " + "is running select data covid of" + " " + provinceCode + " " + "completed");
-    return SDVietnam;
-  }
-
-  public ResponseEntity<List<StatisticalDataVietnam>> runMultithreadingFindAllData(String startDate, String endDate)
-    throws IOException, InterruptedException, ExecutionException {
-    List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
-    AtomicInteger numberOfThread = new AtomicInteger();
-    List<StatisticalDataVietnam> SDVietnamList = new ArrayList<>();
-    for (Integer provinceCode : provinceCodeList) {
-      numberOfThread.incrementAndGet();
-      CompletableFuture<StatisticalDataVietnam> completableFuture =
-        CompletableFuture.supplyAsync(() -> findDataByProvince(numberOfThread.get(), provinceCode));
-      SDVietnamList.add(completableFuture.get());
-
-      // sort by date
-      SDVietnamList.forEach(a -> a.getDataByDate().sort(Comparator.comparing(DataHistoryVietnam::getDate)));
-
-      if (startDate != null && endDate != null) {
-        /* filter data by start date, end date */
-        SDVietnamList
-          .forEach(e -> e.getDataByDate()
-            .removeIf(b ->
-              !b.getDate().isBefore(LocalDate.parse(startDate)) && b.getDate().isAfter(LocalDate.parse(endDate))));
-      }
-    }
-
-    return ResponseEntity.ok(SDVietnamList);
-  }
 }
