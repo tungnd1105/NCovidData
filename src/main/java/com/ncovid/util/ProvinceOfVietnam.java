@@ -25,7 +25,6 @@ public class ProvinceOfVietnam {
 
   public static Logger logger = LoggerFactory.getLogger(ProvinceOfVietnam.class);
 
-  @EventListener(ApplicationReadyEvent.class)
   public static List<Integer> getAllProvince() throws IOException, InterruptedException {
     logger.info("Stating get all province code of Vietnam");
     JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));

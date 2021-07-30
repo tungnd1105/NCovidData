@@ -29,6 +29,7 @@ public class Province implements Serializable {
   private Integer provinceCode;
   private String  name;
   private String  type;
+  private String  shortName;
   private Integer totalPopulation;
   private Integer popOverEighteen;
 

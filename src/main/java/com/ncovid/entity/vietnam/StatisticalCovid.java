@@ -24,7 +24,7 @@ public class StatisticalCovid {
 
   @Id
   private Integer provinceCode;
-  private LocalDate updateAt;
+  private String  updateTime;
   private Integer cases;
   private Integer deaths;
   private Integer domesticCases;

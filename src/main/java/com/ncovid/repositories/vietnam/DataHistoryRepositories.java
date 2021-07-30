@@ -23,4 +23,7 @@ public interface DataHistoryRepositories extends JpaRepository<DataHistory, Inte
   @Query("SELECT a FROM DataHistory a WHERE a.date = ?1")
   DataHistory findByDate(LocalDate date);
 
+  @Query("SELECT a FROM DataHistory a  WHERE a.provinceCode = ?1 and a.date = ?2")
+  DataHistory findByDateAndProvinceCode(Integer provinceCode,LocalDate date);
+
 }

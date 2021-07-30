@@ -26,6 +26,7 @@ public class StatisticalVaccine implements Serializable {
 
   @Id
   private Integer provinceCode;
+  private String  updateTime;
   private Integer totalVaccinated;
   private Integer totalTwiceInjected;
   private Integer totalOnceInjected;

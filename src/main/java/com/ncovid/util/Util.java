@@ -6,6 +6,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -20,6 +21,8 @@ public class Util {
   public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   public static LocalDate startDate = LocalDate.parse(date, formatter);
   public static LocalDate today = LocalDate.now();
+  public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
+  public static String timeUpdate = formatterDateTime.format(LocalDateTime.now());
 
   public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v1/2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
   public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v1/2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;

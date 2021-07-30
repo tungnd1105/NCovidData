@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @package com.ncovid.services.multithreading
  * @project NCovidData
  * @Date 26/07/2021
- * description class: receive and process requests from the controller
+ * description class: receive and process requests get data covid  from the controller
  */
 
 @Service
