@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.vietnam;
 
+import com.ncovid.configration.MultithreadingConfig;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
@@ -14,13 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ndtun
@@ -69,7 +68,7 @@ public class UpdateData {
     }
   }
 
-  private void updateStatisticalCovid(Integer number, Integer provinceCode) {
+  private void updateStatisticalCovid(Integer provinceCode) {
     try {
       DataHistory checkToday = dataHistoryRepositories.findByDateAndProvinceCode(provinceCode, Util.today);
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
@@ -98,15 +97,15 @@ public class UpdateData {
             }
           }
         }
-        logger.info("Threading-" + number + " data covid of " + province.getName() + " has been updated");
+        logger.info("Thread-" + Thread.currentThread().getId() + " completed update data covid today of province " + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
-      logger.warn("Threading-" + number + " handle exception");
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
   }
 
-  private void updateStatisticalVaccine(Integer number, Integer provinceCode) {
+  private void updateStatisticalVaccine(Integer provinceCode) {
     try {
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
@@ -125,11 +124,11 @@ public class UpdateData {
             SVaccineRepositories.save(province.getDataVaccine());
           }
         }
-        logger.info("Threading-" + number + " data vaccine of " + province.getName() + " has been updated");
+        logger.info("Thread-" + Thread.currentThread().getId() + " completed update data vaccine today of province " + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
-      logger.warn("Threading-" + number + " handle exception");
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
   }
 
@@ -141,14 +140,12 @@ public class UpdateData {
    * 0PM,6Am,12AM,8PM everyday
    */
   @Async("taskExecutor")
-  @Scheduled(cron = " * * 0,6,12,8 * * *")
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
-    AtomicInteger numberOfThread = new AtomicInteger();
     for (Integer provinceCode : provinceCodeList) {
       CompletableFuture.runAsync(() -> updateDataCovidToday(provinceCode))
-        .thenRun(() -> updateStatisticalCovid(numberOfThread.get(), provinceCode));
-      CompletableFuture.runAsync(() -> updateStatisticalVaccine(numberOfThread.get(), provinceCode));
+        .thenRun(() -> updateStatisticalCovid(provinceCode));
+      CompletableFuture.runAsync(() -> updateStatisticalVaccine(provinceCode));
     }
   }
 

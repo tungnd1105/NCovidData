@@ -36,6 +36,7 @@ public class VietnamServices {
   ProvinceRepositories provinceRepositories;
 
   public ResponseEntity<Province> findDataByOneProvince(Integer provinceCode, String name) {
+    Long startTime = System.currentTimeMillis();
     Province dataOfProvince = provinceRepositories.findByProvinceCodeOrName(provinceCode, name);
     if (provinceCode == null && name == null) {
       logger.warn("request a parameter province code or province name");
@@ -45,6 +46,8 @@ public class VietnamServices {
       logger.warn("parameter province code and province name did not matches");
       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
+    Long endTime = System.currentTimeMillis();
+    logger.info("Completed select data of province " + dataOfProvince.getName() + " in " + (endTime - startTime) + " ms");
     return ResponseEntity.ok(dataOfProvince);
   }
 
@@ -54,14 +57,13 @@ public class VietnamServices {
   public ResponseEntity<List<Province>> findDataByStartDateAndEndDate(String startDate, String endDate) {
     List<Province> dataOfProvinceList = new ArrayList<>();
     try {
-
       if (startDate == null && endDate == null) {
         logger.warn("request parameter start date code and end date must not be null");
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
       }
-
       List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
       AtomicInteger numberOfThread = new AtomicInteger();
+      Long startTime = System.currentTimeMillis();
       for (Integer provinceCode : provinceCodeList) {
         numberOfThread.incrementAndGet();
         CompletableFuture<Province> completableFuture =
@@ -70,17 +72,20 @@ public class VietnamServices {
             if (province != null) {
               province.getDataCovid()
                 .getDataByDate()
-                .removeIf(c -> !c.getDate().isBefore(LocalDate.parse(startDate)) && c.getDate().isAfter(LocalDate.parse(endDate)));
-              logger.info("threading-" + numberOfThread + "select data covid by date of province " + province.getName() + "completed");
+                .removeIf(c ->
+                  !c.getDate().isBefore(LocalDate.parse(startDate)) && c.getDate().isAfter(LocalDate.parse(endDate)));
+              Long endTime = System.currentTimeMillis();
+              logger.info("Completed select data of all province by date" + province.getName() + " in " + (endTime - startTime) + " ms");
             }
             return province;
           });
         dataOfProvinceList.add(completableFuture.get());
 
       }
-    }catch (IOException|InterruptedException|ExecutionException e){
-      logger.error(e.getMessage());
+    } catch (IOException | InterruptedException | ExecutionException e) {
+      e.printStackTrace();
     }
+
     return ResponseEntity.ok(dataOfProvinceList);
   }
 
