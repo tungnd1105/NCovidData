@@ -29,7 +29,7 @@ public class Util {
   public static String urlDataAllProince = "https://tiemchungcovid19.gov.vn/api/province/public/all";
   public static String urlDataPopulationOfProince = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccine-allocate/province-detail";
   public static String urlDataVaccine = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
-
+  public static String urlDataCovidAllCountry = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.json";
 
   public static String fetchDataJson(String url) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();

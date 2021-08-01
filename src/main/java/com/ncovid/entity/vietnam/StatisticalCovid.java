@@ -1,12 +1,12 @@
 package com.ncovid.entity.vietnam;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,14 +16,16 @@ import java.util.List;
  * @Date 25/07/2021
  * description class: reporter data covid 19 of all province/city in Vietnam
  */
-@Entity
+@Entity(name = "Statistical_Covid_Vietnam")
+@Table(name = "Statistical_Covid_Vietnam")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatisticalCovid {
 
   @Id
-  private Integer provinceCode;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
   private String  updateTime;
   private Integer cases;
   private Integer deaths;
@@ -32,10 +34,13 @@ public class StatisticalCovid {
   private Integer today;
   private Integer yesterday;
 
-  @OneToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "data_by_date",//
-    joinColumns = @JoinColumn(name= "id"),
-    inverseJoinColumns = @JoinColumn(name="id_data"))
-  private List<DataHistory> dataByDate = new ArrayList<>();
+  @JsonBackReference
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "province_Code" )
+  private Province province;
+
+  @OneToMany(mappedBy = "covidData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonManagedReference
+  private List<DataHistory> dataHistory;
 
 }

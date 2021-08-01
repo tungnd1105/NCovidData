@@ -1,6 +1,5 @@
 package com.ncovid.data.multithreading.vietnam;
 
-import com.ncovid.configration.MultithreadingConfig;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
@@ -14,7 +13,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -46,55 +48,56 @@ public class UpdateData {
   @Autowired
   private StatisticalVaccineRepositories SVaccineRepositories;
 
-  private void updateDataCovidToday(Integer provinceCode) {
+
+  private void updateStatisticalVaccine(Integer provinceCode) {
     try {
-      DataHistory checkToday = dataHistoryRepositories.findByDateAndProvinceCode(provinceCode, Util.today);
-      if (checkToday == null) {
-        JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
-        for (int i = 0; i < jsonArray.length(); i++) {
-          JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-          if (jsonObject.getInt("ma") == provinceCode) {
-            DataHistory dataToday = new DataHistory();
-            JSONObject object = (JSONObject) jsonObject.get("data");
-            dataToday.setProvinceCode(jsonObject.getInt("ma"));
-            dataToday.setDate(Util.today);
-            dataToday.setValue(object.getInt(Util.today.toString()));
-            dataHistoryRepositories.save(dataToday);
+      Province province = provinceRepositories.findById(provinceCode).orElse(null);
+      if (province != null) {
+        JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccine));
+        for (int k = 0; k < jsonArray.length(); k++) {
+          JSONObject object = (JSONObject) jsonArray.get(k);
+          if (object.getInt("provinceCode") == province.getProvinceCode()) {
+            province.getVaccineData().setUpdateTime(Util.timeUpdate);
+            province.getVaccineData().setTotalVaccinated(object.getInt("totalInjected"));
+            province.getVaccineData().setTotalOnceInjected(object.getInt("totalOnceInjected"));
+            province.getVaccineData().setTotalTwiceInjected(object.getInt("totalTwiceInjected"));
+            province.getVaccineData().setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
+            province.getVaccineData().setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
+            province.getVaccineData().setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
+            SVaccineRepositories.save(province.getVaccineData());
           }
+          logger.info("Thread-" + Thread.currentThread().getId() + " completed update data vaccine today of province " + province.getName());
         }
       }
     } catch (Exception e) {
       e.printStackTrace();
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
   }
 
   private void updateStatisticalCovid(Integer provinceCode) {
     try {
-      DataHistory checkToday = dataHistoryRepositories.findByDateAndProvinceCode(provinceCode, Util.today);
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
+      JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
+      JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
+      JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
       if (province != null) {
-        JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
-        JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
-        JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
         for (int k = 0; k < jsonArray1.length(); k++) {
           JSONObject object1 = (JSONObject) jsonArray1.get(k);
           for (int i = 0; i < jsonArray2.length(); i++) {
             JSONObject object2 = (JSONObject) jsonArray2.get(i);
-            if (object1.getString("tinh").contains(province.getShortName())
-              && object2.getString("tinh").contains(province.getShortName())) {
-              province.getDataCovid().setUpdateTime(Util.timeUpdate);
-              province.getDataCovid().setCases(object1.getInt("so_ca"));
-              province.getDataCovid().setDeaths(object1.getInt("tu_vong"));
-              province.getDataCovid().setToday(object2.getInt("ngay_hien_tai"));
-              province.getDataCovid().setYesterday(object2.getInt("ngay_truoc_do"));
-              province.getDataCovid().setDomesticCases(object1.getInt("cong_dong"));
-              province.getDataCovid().setEntryCases(object1.getInt("nhap_canh"));
-              if (checkToday == null) {
-                DataHistory dataToday = dataHistoryRepositories.findByDateAndProvinceCode(provinceCode, Util.today);
-                province.getDataCovid().getDataByDate().add(dataToday);
-              }
-              SCovidRepositories.save(province.getDataCovid());
+            if (object2.getInt("ma") == province.getProvinceCode()
+              && object1.getString("tinh").matches(object2.getString("tinh"))) {
+              province.getCovidData().setUpdateTime(Util.timeUpdate);
+              province.getCovidData().setCases(object1.getInt("so_ca"));
+              province.getCovidData().setDeaths(object1.getInt("tu_vong"));
+              province.getCovidData().setToday(object2.getInt("ngay_hien_tai"));
+              province.getCovidData().setYesterday(object2.getInt("ngay_truoc_do"));
+              province.getCovidData().setDomesticCases(object1.getInt("cong_dong"));
+              province.getCovidData().setEntryCases(object1.getInt("nhap_canh"));
+              SCovidRepositories.save(province.getCovidData());
             }
+
           }
         }
         logger.info("Thread-" + Thread.currentThread().getId() + " completed update data covid today of province " + province.getName());
@@ -105,26 +108,27 @@ public class UpdateData {
     }
   }
 
-  private void updateStatisticalVaccine(Integer provinceCode) {
+  private void updateDataCovidToday(Integer provinceCode) {
     try {
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
       if (province != null) {
-        JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccine));
-        for (int k = 0; k < jsonArray.length(); k++) {
-          JSONObject object = (JSONObject) jsonArray.get(k);
-          if (object.getInt("provinceCode") == province.getProvinceCode()) {
-            province.getDataVaccine().setUpdateTime(Util.timeUpdate);
-            province.getDataVaccine().setProvinceCode(object.getInt("provinceCode"));
-            province.getDataVaccine().setTotalVaccinated(object.getInt("totalInjected"));
-            province.getDataVaccine().setTotalOnceInjected(object.getInt("totalOnceInjected"));
-            province.getDataVaccine().setTotalTwiceInjected(object.getInt("totalTwiceInjected"));
-            province.getDataVaccine().setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
-            province.getDataVaccine().setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
-            province.getDataVaccine().setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
-            SVaccineRepositories.save(province.getDataVaccine());
+        province.getCovidData().getDataHistory().forEach(e -> {
+          if (!e.getDate().isEqual(Util.today)) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+              JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+              if (jsonObject.getInt("ma") == province.getProvinceCode()) {
+                DataHistory dataToday = new DataHistory();
+                JSONObject object = (JSONObject) jsonObject.get("data");
+                dataToday.setDate(Util.today);
+                dataToday.setValue(object.getInt(Util.today.toString()));
+                dataToday.setCovidData(province.getCovidData());
+                dataHistoryRepositories.save(dataToday);
+              }
+            }
           }
-        }
-        logger.info("Thread-" + Thread.currentThread().getId() + " completed update data vaccine today of province " + province.getName());
+        });
+        logger.info("Thread-" + Thread.currentThread().getId() + " completed update data covid by date of province " + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -132,21 +136,21 @@ public class UpdateData {
     }
   }
 
-
   /**
    * update data realtime
    * use multithreading to  insert data faster
    * each threading will be update data covid, vaccine of provinces by province code
-   * 0PM,6Am,12AM,8PM everyday
+   * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
+  @Scheduled(cron = "0 0 6,12,20,0 * * * ")
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
-      CompletableFuture.runAsync(() -> updateDataCovidToday(provinceCode))
-        .thenRun(() -> updateStatisticalCovid(provinceCode));
-      CompletableFuture.runAsync(() -> updateStatisticalVaccine(provinceCode));
+      CompletableFuture.runAsync(() -> updateStatisticalVaccine(provinceCode))
+        .thenRun(() -> updateStatisticalCovid(provinceCode))
+        .thenRun(() -> updateStatisticalCovid(provinceCode))
+        .thenRun(() -> updateDataCovidToday(provinceCode));
     }
   }
-
 }

@@ -1,13 +1,11 @@
 package com.ncovid.entity.vietnam;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -27,18 +25,18 @@ public class Province implements Serializable {
 
   @Id
   private Integer provinceCode;
-  private String  name;
-  private String  type;
-  private String  shortName;
+  private String name;
+  private String type;
+  private String shortName;
   private Integer totalPopulation;
   private Integer popOverEighteen;
 
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonManagedReference
+  private StatisticalCovid covidData;
 
-  @OneToOne
-  @JoinColumn(name = "id_data_covid", referencedColumnName = "provinceCode")
-  private StatisticalCovid DataCovid;
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonManagedReference
+  private StatisticalVaccine vaccineData;
 
-  @OneToOne
-  @JoinColumn(name ="id_data_vaccine", referencedColumnName = "provinceCode")
-  private StatisticalVaccine DataVaccine;
 }

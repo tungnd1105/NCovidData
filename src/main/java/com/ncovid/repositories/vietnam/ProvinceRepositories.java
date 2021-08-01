@@ -16,12 +16,4 @@ import java.time.LocalDate;
 @Repository
 public interface ProvinceRepositories extends JpaRepository<Province, Integer> {
 
-  @Query("SELECT a FROM Province a WHERE a.provinceCode = ?1 OR a.name = ?2 ")
-  Province findByProvinceCodeOrName(Integer provinceCode, String name);
-
-  @Query("SELECT a FROM Province a WHERE a.provinceCode = ?1")
-  Province findByProvinceCode(Integer provinceCode);
-
-
-
 }
