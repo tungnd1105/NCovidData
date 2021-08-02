@@ -1,6 +1,10 @@
 package com.ncovid.util;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -29,7 +33,6 @@ public class Util {
   public static String urlDataAllProince = "https://tiemchungcovid19.gov.vn/api/province/public/all";
   public static String urlDataPopulationOfProince = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccine-allocate/province-detail";
   public static String urlDataVaccine = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
-  public static String urlDataCovidAllCountry = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.json";
 
   public static String fetchDataJson(String url) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();
@@ -38,4 +41,14 @@ public class Util {
     return httpResponse.body();
   }
 
+  public static Integer parseInt(String string) {
+    int result;
+    if (string.trim().isEmpty()) {
+      result = 0;
+    } else {
+      double valueDouble = Double.parseDouble(string);
+      result = (int) valueDouble;
+    }
+    return result;
+  }
 }

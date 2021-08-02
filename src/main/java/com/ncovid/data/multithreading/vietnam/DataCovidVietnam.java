@@ -8,6 +8,7 @@ import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.repositories.vietnam.StatisticalCovidRepositories;
 import com.ncovid.repositories.vietnam.StatisticalVaccineRepositories;
+import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
 import com.ncovid.util.Util;
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -50,7 +52,7 @@ public class DataCovidVietnam {
   private StatisticalVaccineRepositories SVaccineRepositories;
 
 
-  private void insertAllProvince(Integer provinceCode) {
+  private void insertDataInfoOfProvince(Integer provinceCode) {
     try {
       Long startTime = System.currentTimeMillis();
       JSONArray jsonDataProvinceArray = new JSONArray(Util.fetchDataJson(Util.urlDataAllProince));
@@ -74,7 +76,7 @@ public class DataCovidVietnam {
         }
       }
       Long endTime = System.currentTimeMillis();
-      logger.info("Thread-" + Thread.currentThread().getId() + " completed insert data province  " + (endTime - startTime) + " ms");
+      logger.info("Thread-" + Thread.currentThread().getId() + Message.insertInfoProvince +  (endTime - startTime) + " ms");
 
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
@@ -105,8 +107,7 @@ public class DataCovidVietnam {
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() +
-          " completed insert data vaccine of province " + province.getName() + " in " + (endTime - startTime) + " ms");
+        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataVaccine + province.getName() + " in " + (endTime - startTime) + " ms");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -141,12 +142,9 @@ public class DataCovidVietnam {
             }
           }
         }
+        Long endTime = System.currentTimeMillis();
+        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataCovid + province.getName() + " in " + (endTime - startTime) + " ms");
       }
-
-      Long endTime = System.currentTimeMillis();
-      logger.info("Thread-" + Thread.currentThread().getId() +
-        " completed insert statistical data covid of province " + province.getName() + " in " + (endTime - startTime) + " ms");
-
     } catch (Exception e) {
       e.printStackTrace();
       logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
@@ -175,8 +173,7 @@ public class DataCovidVietnam {
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() + " completed insert data covid by date of province "
-          + province.getName() + " in " + (endTime - startTime) + " ms");
+        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataCovidBydate  + province.getName() + " in " + (endTime - startTime) + " ms");
       }
 
     } catch (Exception e) {
@@ -193,13 +190,14 @@ public class DataCovidVietnam {
    * insertDataCovidByDate -> insertStatisticalDataCovid -> insertStatisticalDataVaccine -> insertDataAllProvince
    */
   @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
   public void runMultithreading() throws IOException, InterruptedException {
     List<Province> dataExist = provinceRepositories.findAll();
     if (dataExist.size() == 0) {
       List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
       for (Integer provinceCode : provinceCodeList) {
         CompletableFuture.runAsync(() ->
-          insertAllProvince(provinceCode))
+          insertDataInfoOfProvince(provinceCode))
           .thenRun(() -> insertStatisticalDataVaccine(provinceCode))
           .thenRun(() -> insertStatisticalDataCovid(provinceCode))
           .thenRun(() -> insertDataCovidByDate(provinceCode));
