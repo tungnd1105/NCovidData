@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com</groupId>
-    <artifactId>Ncovid</artifactId>
+    <artifactId>NCovid</artifactId>
     <version>0.0.1</version>
     <name>NCovid-Data-API</name>
     <description>NCovid-Data-API</description>
