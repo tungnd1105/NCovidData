@@ -20,9 +20,9 @@ public class MultithreadingConfig {
   @Bean(name ="taskExecutor")
   public Executor taskExecutor(){
     ThreadPoolTaskExecutor executor= new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(20);
-    executor.setMaxPoolSize(20);
-    executor.setQueueCapacity(100);
+    executor.setCorePoolSize(10);
+    executor.setMaxPoolSize(10);
+    executor.setQueueCapacity(50);
     executor.setThreadNamePrefix("Thread-");
     executor.initialize();
     executor.shutdown();
