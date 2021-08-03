@@ -65,6 +65,7 @@ public class DataCovidVietnam {
           province.setShortName(object.getString("shortName"));
           province.setName(object.getString("name"));
           province.setType(object.getString("type"));
+          province.setCountry("Vietnam");
           for (int a = 0; a < jsonDataPopulationArray.length(); a++) {
             JSONObject object2 = (JSONObject) jsonDataPopulationArray.get(a);
             if (object2.getString("provinceName").matches(province.getShortName())) {
@@ -152,7 +153,7 @@ public class DataCovidVietnam {
 
   }
 
-  private void insertDataCovidByDate(Integer provinceCode) {
+  private void insertDataNewCasesByDate(Integer provinceCode) {
     try {
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
       Long startTime = System.currentTimeMillis();
@@ -165,7 +166,7 @@ public class DataCovidVietnam {
               DataHistory dataHistory = new DataHistory();
               JSONObject dataByDate = (JSONObject) jsonObject.get("data");
               dataHistory.setDate(date);
-              dataHistory.setValue(dataByDate.getInt(date.toString()));
+              dataHistory.setNewCases(dataByDate.getInt(date.toString()));
               dataHistory.setCovidData(province.getCovidData());
               DataHistoryRepositories.save(dataHistory);
             }
@@ -173,7 +174,7 @@ public class DataCovidVietnam {
         }
 
         Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataCovidBydate  + province.getName() + " in " + (endTime - startTime) + " ms");
+        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataNewCases  + province.getName() + " in " + (endTime - startTime) + " ms");
       }
 
     } catch (Exception e) {
@@ -187,7 +188,7 @@ public class DataCovidVietnam {
    * use multithreading to  insert data faster
    * each threading will be insert data covid, vaccine of provinces  by province code
    * each threading flow task
-   * insertDataCovidByDate -> insertStatisticalDataCovid -> insertStatisticalDataVaccine -> insertDataAllProvince
+   * insertDataAllProvince -> insertStatisticalDataVaccine ->  insertStatisticalDataCovid ->  insertDataNewCasesByDate
    */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
@@ -200,7 +201,7 @@ public class DataCovidVietnam {
           insertDataInfoOfProvince(provinceCode))
           .thenRun(() -> insertStatisticalDataVaccine(provinceCode))
           .thenRun(() -> insertStatisticalDataCovid(provinceCode))
-          .thenRun(() -> insertDataCovidByDate(provinceCode));
+          .thenRun(() -> insertDataNewCasesByDate(provinceCode));
       }
     }
   }

@@ -29,7 +29,7 @@ public class DataHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private LocalDate date;
-  private Integer value;
+  private Integer newCases;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "id_data_covid")

@@ -1,14 +1,14 @@
 package com.ncovid.controller.api.vietnam;
 
 import com.ncovid.entity.vietnam.Province;
-import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.services.multithreading.vietnam.VietnamServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author ndtun
@@ -23,13 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class VietnamAPI {
 
   @Autowired
-  private ProvinceRepositories vietnamServices;
+  private VietnamServices vietnamServices;
 
+  @RequestMapping("find-one")
+  private ResponseEntity<Province> findOneByProvinceCodeOrName(
+    @RequestParam(required = false) Integer provinceCode,
+    @RequestParam(required = false) String name)
+  {
+    return vietnamServices.findOneByProvinceCodeOrName(provinceCode, name.toUpperCase().substring(1));
+  }
 
-  @GetMapping("{province}")
-  public ResponseEntity<Province> test(@PathVariable Integer province){
-    Province province1 = vietnamServices.findById(province).orElse(null);
-    return ResponseEntity.ok(province1);
+  @RequestMapping("find-all-filter-by-date")
+  private ResponseEntity<List<Province>> findAll(
+    @RequestParam String startDate, @RequestParam String endDate
+  ) {
+    return vietnamServices.multithreading(startDate, endDate);
   }
 
 }

@@ -1,0 +1,23 @@
+2021-08-03 10:46:55.106  INFO 26504 --- [restartedMain] com.ncovid.NcovidApplication             : Starting NcovidApplication using Java 15.0.2 on laptop-ndt with PID 26504 (F:\GitHub\NCovidData\target\classes started by ndtun in F:\GitHub\NCovidData)
+2021-08-03 10:46:55.106  INFO 26504 --- [restartedMain] com.ncovid.NcovidApplication             : No active profile set, falling back to default profiles: default
+2021-08-03 10:46:55.169  INFO 26504 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-08-03 10:46:55.169  INFO 26504 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-08-03 10:46:55.701  INFO 26504 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-08-03 10:46:55.763  INFO 26504 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 48 ms. Found 4 JPA repository interfaces.
+2021-08-03 10:46:56.310  INFO 26504 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9000 (http)
+2021-08-03 10:46:56.310  INFO 26504 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-03 10:46:56.310  INFO 26504 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.48]
+2021-08-03 10:46:56.404  INFO 26504 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-03 10:46:56.404  INFO 26504 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1235 ms
+2021-08-03 10:46:56.513  INFO 26504 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-08-03 10:46:56.544  INFO 26504 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-08-03 10:46:56.623  INFO 26504 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-08-03 10:46:56.685  INFO 26504 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-08-03 10:46:56.752  INFO 26504 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-08-03 10:46:56.756  INFO 26504 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL94Dialect
+2021-08-03 10:46:57.276  INFO 26504 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-08-03 10:46:57.276  INFO 26504 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-08-03 10:46:57.729  WARN 26504 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-08-03 10:46:58.011  INFO 26504 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-08-03 10:46:58.042  INFO 26504 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9000 (http) with context path ''
+2021-08-03 10:46:58.058  INFO 26504 --- [restartedMain] com.ncovid.NcovidApplication             : Started NcovidApplication in 3.544 seconds (JVM running for 4.546)

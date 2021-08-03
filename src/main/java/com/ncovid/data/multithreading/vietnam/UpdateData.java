@@ -48,7 +48,7 @@ public class UpdateData {
   private StatisticalVaccineRepositories SVaccineRepositories;
 
 
-  private void updateVaccineData(Integer provinceCode) {
+  private void updateStatisticalVaccineData(Integer provinceCode) {
     try {
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
@@ -74,7 +74,7 @@ public class UpdateData {
     }
   }
 
-  private void updateCovidData(Integer provinceCode) {
+  private void updateStatisticalCovidData(Integer provinceCode) {
     try {
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
@@ -107,7 +107,7 @@ public class UpdateData {
     }
   }
 
-  private void updateCovidDataByDate(Integer provinceCode) {
+  private void updateDataNewCases(Integer provinceCode) {
     try {
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
@@ -120,7 +120,7 @@ public class UpdateData {
                 DataHistory dataToday = new DataHistory();
                 JSONObject object = (JSONObject) jsonObject.get("data");
                 dataToday.setDate(Util.today);
-                dataToday.setValue(object.getInt(Util.today.toString()));
+                dataToday.setNewCases(object.getInt(Util.today.toString()));
                 dataToday.setCovidData(province.getCovidData());
                 dataHistoryRepositories.save(dataToday);
               }
@@ -138,7 +138,8 @@ public class UpdateData {
   /**
    * update data realtime
    * use multithreading to  insert data faster
-   * each threading will be update data covid, vaccine of provinces by province code
+   * each threading will be flow task
+   * updateStatisticalVaccineData -> updateStatisticalCovidData -> updateCovidDataByDate
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
@@ -146,9 +147,9 @@ public class UpdateData {
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
-      CompletableFuture.runAsync(() -> updateVaccineData(provinceCode))
-        .thenRun(() -> updateCovidData(provinceCode))
-        .thenRun(() -> updateCovidDataByDate(provinceCode));
+      CompletableFuture.runAsync(() -> updateStatisticalVaccineData(provinceCode))
+        .thenRun(() -> updateStatisticalCovidData(provinceCode))
+        .thenRun(() -> updateDataNewCases(provinceCode));
     }
   }
 }

@@ -3,9 +3,8 @@ package com.ncovid.repositories.vietnam;
 import com.ncovid.entity.vietnam.Province;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
 
 /**
  * @author ndtun
@@ -16,4 +15,6 @@ import java.time.LocalDate;
 @Repository
 public interface ProvinceRepositories extends JpaRepository<Province, Integer> {
 
+  @Query("SELECT a from Province a WHERE a.provinceCode = :provinceCode or a.name Like %:name")
+  Province findByProvinceCodeOrName(@Param("provinceCode") Integer provinceCode, @Param("name") String name);
 }
