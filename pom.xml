@@ -11,10 +11,10 @@
     <groupId>com</groupId>
     <artifactId>Ncovid</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Ncovid</name>
-    <description>Demo project for Spring Boot</description>
+    <name>NCovid-Data-API</name>
+    <description>NCovid-Data-API</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,6 +41,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
