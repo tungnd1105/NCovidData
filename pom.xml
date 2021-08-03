@@ -14,7 +14,7 @@
     <name>NCovid-Data-API</name>
     <description>NCovid-Data-API</description>
     <properties>
-        <java.version>111</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
