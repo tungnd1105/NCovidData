@@ -772,3 +772,135 @@ Caused by: java.net.ConnectException: Connection refused: no further information
 2021-08-03 12:02:04.078  INFO 25020 --- [ForkJoinPool.commonPool-worker-123] c.n.d.m.vietnam.DataCovidVietnam         : Thread-264 completed task insert data new cases by date Tỉnh Trà Vinh in 4452 ms
 2021-08-03 12:02:04.092  INFO 25020 --- [ForkJoinPool.commonPool-worker-75] c.n.d.m.vietnam.DataCovidVietnam         : Thread-434 completed task insert data new cases by date Tỉnh Vĩnh Phúc in 4673 ms
 2021-08-03 12:02:04.169  INFO 25020 --- [ForkJoinPool.commonPool-worker-73] c.n.d.m.vietnam.DataCovidVietnam         : Thread-432 completed task insert data new cases by date Tỉnh Thừa Thiên Huế in 3483 ms
+2021-08-03 13:31:28.570  INFO 25836 --- [restartedMain] com.ncovid.NcovidApplication             : Starting NcovidApplication using Java 15.0.2 on laptop-ndt with PID 25836 (F:\GitHub\NCovidData\target\classes started by ndtun in F:\GitHub\NCovidData)
+2021-08-03 13:31:28.570  INFO 25836 --- [restartedMain] com.ncovid.NcovidApplication             : No active profile set, falling back to default profiles: default
+2021-08-03 13:31:28.636  INFO 25836 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-08-03 13:31:28.636  INFO 25836 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-08-03 13:31:29.465  INFO 25836 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-08-03 13:31:29.653  INFO 25836 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 185 ms. Found 4 JPA repository interfaces.
+2021-08-03 13:31:30.403  INFO 25836 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 500 (http)
+2021-08-03 13:31:30.403  INFO 25836 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-03 13:31:30.403  INFO 25836 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.48]
+2021-08-03 13:31:30.528  INFO 25836 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-03 13:31:30.528  INFO 25836 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1886 ms
+2021-08-03 13:31:30.747  INFO 25836 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-08-03 13:31:30.825  INFO 25836 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-08-03 13:31:30.981  INFO 25836 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-08-03 13:31:31.153  INFO 25836 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-08-03 13:31:34.265  INFO 25836 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-08-03 13:31:34.296  INFO 25836 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL94Dialect
+2021-08-03 13:31:37.548  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:37.548  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "data_history" does not exist, skipping
+2021-08-03 13:31:37.815  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:37.815  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "statistical_covid_vietnam" does not exist, skipping
+2021-08-03 13:31:38.065  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:38.065  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "statistical_vaccine_vietnam" does not exist, skipping
+2021-08-03 13:31:38.315  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:38.315  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "data_history" does not exist, skipping
+2021-08-03 13:31:38.581  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:38.581  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "province" does not exist, skipping
+2021-08-03 13:31:38.831  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:38.831  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "statistical_covid_vietnam" does not exist, skipping
+2021-08-03 13:31:39.097  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-03 13:31:39.097  WARN 25836 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "statistical_vaccine_vietnam" does not exist, skipping
+2021-08-03 13:31:40.957  INFO 25836 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-08-03 13:31:40.957  INFO 25836 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-08-03 13:31:41.441  WARN 25836 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-08-03 13:31:41.754  INFO 25836 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-08-03 13:31:41.801  INFO 25836 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 500 (http) with context path ''
+2021-08-03 13:31:41.817  INFO 25836 --- [restartedMain] com.ncovid.NcovidApplication             : Started NcovidApplication in 14.117 seconds (JVM running for 16.027)
+2021-08-03 13:31:42.633  INFO 25836 --- [Thread-1] com.ncovid.util.ProvinceOfVietnam        : Stating get all province code of Vietnam
+2021-08-03 13:31:44.362  INFO 25836 --- [ForkJoinPool.commonPool-worker-51] c.n.d.m.vietnam.DataCovidVietnam         : Thread-236 completed task insert data info of province 466 ms
+2021-08-03 13:31:45.015  INFO 25836 --- [ForkJoinPool.commonPool-worker-7] c.n.d.m.vietnam.DataCovidVietnam         : Thread-85 completed task insert data info of province 1597 ms
+2021-08-03 13:31:45.030  INFO 25836 --- [ForkJoinPool.commonPool-worker-9] c.n.d.m.vietnam.DataCovidVietnam         : Thread-91 completed task insert data info of province 1603 ms
+2021-08-03 13:31:45.030  INFO 25836 --- [ForkJoinPool.commonPool-worker-3] c.n.d.m.vietnam.DataCovidVietnam         : Thread-83 completed task insert data info of province 1612 ms
+2021-08-03 13:31:45.051  INFO 25836 --- [ForkJoinPool.commonPool-worker-1] c.n.d.m.vietnam.DataCovidVietnam         : Thread-89 completed task insert data info of province 1624 ms
+2021-08-03 13:31:45.074  INFO 25836 --- [ForkJoinPool.commonPool-worker-17] c.n.d.m.vietnam.DataCovidVietnam         : Thread-99 completed task insert data info of province 1632 ms
+2021-08-03 13:31:45.545  INFO 25836 --- [ForkJoinPool.commonPool-worker-13] c.n.d.m.vietnam.DataCovidVietnam         : Thread-93 completed task insert data info of province 2118 ms
+2021-08-03 13:31:45.762  INFO 25836 --- [ForkJoinPool.commonPool-worker-23] c.n.d.m.vietnam.DataCovidVietnam         : Thread-107 completed task insert data info of province 2320 ms
+2021-08-03 13:31:45.806  INFO 25836 --- [ForkJoinPool.commonPool-worker-31] c.n.d.m.vietnam.DataCovidVietnam         : Thread-125 completed task insert data info of province 2331 ms
+2021-08-03 13:31:45.806  INFO 25836 --- [ForkJoinPool.commonPool-worker-5] c.n.d.m.vietnam.DataCovidVietnam         : Thread-84 completed task insert data info of province 2388 ms
+2021-08-03 13:31:45.809  INFO 25836 --- [ForkJoinPool.commonPool-worker-29] c.n.d.m.vietnam.DataCovidVietnam         : Thread-113 completed task insert data info of province 2357 ms
+2021-08-03 13:31:45.842  INFO 25836 --- [ForkJoinPool.commonPool-worker-15] c.n.d.m.vietnam.DataCovidVietnam         : Thread-95 completed task insert data info of province 2415 ms
+2021-08-03 13:31:46.358  INFO 25836 --- [ForkJoinPool.commonPool-worker-27] c.n.d.m.vietnam.DataCovidVietnam         : Thread-117 completed task insert data info of province 2902 ms
+2021-08-03 13:31:46.527  INFO 25836 --- [ForkJoinPool.commonPool-worker-33] c.n.d.m.vietnam.DataCovidVietnam         : Thread-138 completed task insert data info of province 2982 ms
+2021-08-03 13:31:46.559  INFO 25836 --- [ForkJoinPool.commonPool-worker-19] c.n.d.m.vietnam.DataCovidVietnam         : Thread-103 completed task insert data info of province 3117 ms
+2021-08-03 13:31:46.567  INFO 25836 --- [ForkJoinPool.commonPool-worker-11] c.n.d.m.vietnam.DataCovidVietnam         : Thread-97 completed task insert data info of province 3140 ms
+2021-08-03 13:31:46.567  INFO 25836 --- [ForkJoinPool.commonPool-worker-35] c.n.d.m.vietnam.DataCovidVietnam         : Thread-147 completed task insert data info of province 2964 ms
+2021-08-03 13:31:46.607  INFO 25836 --- [ForkJoinPool.commonPool-worker-21] c.n.d.m.vietnam.DataCovidVietnam         : Thread-101 completed task insert data info of province 3165 ms
+2021-08-03 13:31:47.141  INFO 25836 --- [ForkJoinPool.commonPool-worker-25] c.n.d.m.vietnam.DataCovidVietnam         : Thread-105 completed task insert data info of province 3699 ms
+2021-08-03 13:31:47.269  INFO 25836 --- [ForkJoinPool.commonPool-worker-37] c.n.d.m.vietnam.DataCovidVietnam         : Thread-186 completed task insert data info of province 3494 ms
+2021-08-03 13:31:47.316  INFO 25836 --- [ForkJoinPool.commonPool-worker-55] c.n.d.m.vietnam.DataCovidVietnam         : Thread-153 completed task insert data info of province 3698 ms
+2021-08-03 13:31:47.348  INFO 25836 --- [ForkJoinPool.commonPool-worker-41] c.n.d.m.vietnam.DataCovidVietnam         : Thread-163 completed task insert data info of province 3629 ms
+2021-08-03 13:31:47.348  INFO 25836 --- [ForkJoinPool.commonPool-worker-63] c.n.d.m.vietnam.DataCovidVietnam         : Thread-223 completed task insert data info of province 3470 ms
+2021-08-03 13:31:47.358  INFO 25836 --- [ForkJoinPool.commonPool-worker-39] c.n.d.m.vietnam.DataCovidVietnam         : Thread-209 completed task insert data info of province 3480 ms
+2021-08-03 13:31:47.706  INFO 25836 --- [ForkJoinPool.commonPool-worker-43] c.n.d.m.vietnam.DataCovidVietnam         : Thread-227 completed task insert data info of province 3821 ms
+2021-08-03 13:31:47.945  INFO 25836 --- [ForkJoinPool.commonPool-worker-49] c.n.d.m.vietnam.DataCovidVietnam         : Thread-225 completed task insert data info of province 4060 ms
+2021-08-03 13:31:48.021  INFO 25836 --- [ForkJoinPool.commonPool-worker-47] c.n.d.m.vietnam.DataCovidVietnam         : Thread-231 completed task insert data info of province 4136 ms
+2021-08-03 13:31:48.054  INFO 25836 --- [ForkJoinPool.commonPool-worker-45] c.n.d.m.vietnam.DataCovidVietnam         : Thread-229 completed task insert data info of province 4169 ms
+2021-08-03 13:31:48.105  INFO 25836 --- [ForkJoinPool.commonPool-worker-57] c.n.d.m.vietnam.DataCovidVietnam         : Thread-234 completed task insert data info of province 4209 ms
+2021-08-03 13:31:48.121  INFO 25836 --- [ForkJoinPool.commonPool-worker-59] c.n.d.m.vietnam.DataCovidVietnam         : Thread-251 completed task insert data info of province 4129 ms
+2021-08-03 13:31:48.121  INFO 25836 --- [ForkJoinPool.commonPool-worker-53] c.n.d.m.vietnam.DataCovidVietnam         : Thread-243 completed task insert data info of province 4200 ms
+2021-08-03 13:31:51.964  INFO 25836 --- [ForkJoinPool.commonPool-worker-3] c.n.d.m.vietnam.DataCovidVietnam         : Thread-83 completed task insert statistical data vaccine of province Thành phố Hồ Chí Minh in 6929 ms
+2021-08-03 13:31:52.252  INFO 25836 --- [ForkJoinPool.commonPool-worker-9] c.n.d.m.vietnam.DataCovidVietnam         : Thread-91 completed task insert statistical data vaccine of province Tỉnh Đồng Nai in 7217 ms
+2021-08-03 13:31:52.730  INFO 25836 --- [ForkJoinPool.commonPool-worker-17] c.n.d.m.vietnam.DataCovidVietnam         : Thread-99 completed task insert statistical data vaccine of province Tỉnh Bến Tre in 7656 ms
+2021-08-03 13:31:52.784  INFO 25836 --- [ForkJoinPool.commonPool-worker-49] c.n.d.m.vietnam.DataCovidVietnam         : Thread-225 completed task insert statistical data vaccine of province Tỉnh Hải Dương in 4839 ms
+2021-08-03 13:31:52.800  INFO 25836 --- [ForkJoinPool.commonPool-worker-47] c.n.d.m.vietnam.DataCovidVietnam         : Thread-231 completed task insert statistical data vaccine of province Tỉnh Thanh Hóa in 4779 ms
+2021-08-03 13:31:52.966  INFO 25836 --- [ForkJoinPool.commonPool-worker-45] c.n.d.m.vietnam.DataCovidVietnam         : Thread-229 completed task insert statistical data vaccine of province Tỉnh Quảng Trị in 4897 ms
+2021-08-03 13:31:52.966  INFO 25836 --- [ForkJoinPool.commonPool-worker-53] c.n.d.m.vietnam.DataCovidVietnam         : Thread-243 completed task insert statistical data vaccine of province Tỉnh Ninh Thuận in 4845 ms
+2021-08-03 13:31:53.023  INFO 25836 --- [ForkJoinPool.commonPool-worker-57] c.n.d.m.vietnam.DataCovidVietnam         : Thread-234 completed task insert statistical data vaccine of province Thành phố Hà Nội in 4918 ms
+2021-08-03 13:31:53.030  INFO 25836 --- [ForkJoinPool.commonPool-worker-59] c.n.d.m.vietnam.DataCovidVietnam         : Thread-251 completed task insert statistical data vaccine of province Tỉnh Khánh Hòa in 4909 ms
+2021-08-03 13:31:53.071  INFO 25836 --- [ForkJoinPool.commonPool-worker-15] c.n.d.m.vietnam.DataCovidVietnam         : Thread-95 completed task insert statistical data vaccine of province Tỉnh Bình Thuận in 7229 ms
+2021-08-03 13:31:53.200  INFO 25836 --- [ForkJoinPool.commonPool-worker-29] c.n.d.m.vietnam.DataCovidVietnam         : Thread-113 completed task insert statistical data vaccine of province Tỉnh Phú Yên in 7391 ms
+2021-08-03 13:31:53.496  INFO 25836 --- [ForkJoinPool.commonPool-worker-27] c.n.d.m.vietnam.DataCovidVietnam         : Thread-117 completed task insert statistical data vaccine of province Tỉnh Bình Định in 7138 ms
+2021-08-03 13:31:53.560  INFO 25836 --- [ForkJoinPool.commonPool-worker-35] c.n.d.m.vietnam.DataCovidVietnam         : Thread-147 completed task insert statistical data vaccine of province Tỉnh Nghệ An in 6993 ms
+2021-08-03 13:31:53.567  INFO 25836 --- [ForkJoinPool.commonPool-worker-33] c.n.d.m.vietnam.DataCovidVietnam         : Thread-138 completed task insert statistical data vaccine of province Tỉnh Đắk Nông in 7040 ms
+2021-08-03 13:31:53.728  INFO 25836 --- [ForkJoinPool.commonPool-worker-19] c.n.d.m.vietnam.DataCovidVietnam         : Thread-103 completed task insert statistical data vaccine of province Thành phố Cần Thơ in 7169 ms
+2021-08-03 13:31:53.728  INFO 25836 --- [ForkJoinPool.commonPool-worker-21] c.n.d.m.vietnam.DataCovidVietnam         : Thread-101 completed task insert statistical data vaccine of province Tỉnh Sóc Trăng in 7121 ms
+2021-08-03 13:31:53.809  INFO 25836 --- [ForkJoinPool.commonPool-worker-11] c.n.d.m.vietnam.DataCovidVietnam         : Thread-97 completed task insert statistical data vaccine of province Thành phố Đà Nẵng in 7242 ms
+2021-08-03 13:31:53.825  INFO 25836 --- [ForkJoinPool.commonPool-worker-25] c.n.d.m.vietnam.DataCovidVietnam         : Thread-105 completed task insert statistical data vaccine of province Tỉnh Đồng Tháp in 6684 ms
+2021-08-03 13:31:53.878  INFO 25836 --- [ForkJoinPool.commonPool-worker-37] c.n.d.m.vietnam.DataCovidVietnam         : Thread-186 completed task insert statistical data vaccine of province Tỉnh Bạc Liêu in 6609 ms
+2021-08-03 13:31:53.940  INFO 25836 --- [ForkJoinPool.commonPool-worker-39] c.n.d.m.vietnam.DataCovidVietnam         : Thread-209 completed task insert statistical data vaccine of province Tỉnh Phú Thọ in 6582 ms
+2021-08-03 13:31:54.007  INFO 25836 --- [ForkJoinPool.commonPool-worker-41] c.n.d.m.vietnam.DataCovidVietnam         : Thread-163 completed task insert statistical data vaccine of province Tỉnh Kiên Giang in 6659 ms
+2021-08-03 13:31:54.255  INFO 25836 --- [ForkJoinPool.commonPool-worker-63] c.n.d.m.vietnam.DataCovidVietnam         : Thread-223 completed task insert statistical data vaccine of province Tỉnh Sơn La in 6907 ms
+2021-08-03 13:31:54.306  INFO 25836 --- [ForkJoinPool.commonPool-worker-55] c.n.d.m.vietnam.DataCovidVietnam         : Thread-153 completed task insert statistical data vaccine of province Tỉnh Hà Tĩnh in 6990 ms
+2021-08-03 13:31:54.349  INFO 25836 --- [ForkJoinPool.commonPool-worker-43] c.n.d.m.vietnam.DataCovidVietnam         : Thread-227 completed task insert statistical data vaccine of province Tỉnh Điện Biên in 6643 ms
+2021-08-03 13:31:54.518  INFO 25836 --- [ForkJoinPool.commonPool-worker-1] c.n.d.m.vietnam.DataCovidVietnam         : Thread-89 completed task insert statistical data vaccine of province Tỉnh Tây Ninh in 9467 ms
+2021-08-03 13:31:54.518  INFO 25836 --- [ForkJoinPool.commonPool-worker-7] c.n.d.m.vietnam.DataCovidVietnam         : Thread-85 completed task insert statistical data vaccine of province Tỉnh Long An in 9503 ms
+2021-08-03 13:31:54.612  INFO 25836 --- [ForkJoinPool.commonPool-worker-13] c.n.d.m.vietnam.DataCovidVietnam         : Thread-93 completed task insert statistical data vaccine of province Tỉnh Vĩnh Long in 9067 ms
+2021-08-03 13:31:54.649  INFO 25836 --- [ForkJoinPool.commonPool-worker-23] c.n.d.m.vietnam.DataCovidVietnam         : Thread-107 completed task insert statistical data vaccine of province Tỉnh An Giang in 8887 ms
+2021-08-03 13:31:54.682  INFO 25836 --- [ForkJoinPool.commonPool-worker-5] c.n.d.m.vietnam.DataCovidVietnam         : Thread-84 completed task insert statistical data vaccine of province Tỉnh Bình Dương in 8873 ms
+2021-08-03 13:31:54.696  INFO 25836 --- [ForkJoinPool.commonPool-worker-31] c.n.d.m.vietnam.DataCovidVietnam         : Thread-125 completed task insert statistical data vaccine of province Tỉnh Đắk Lắk in 8887 ms
+2021-08-03 13:31:55.848  INFO 25836 --- [ForkJoinPool.commonPool-worker-3] c.n.d.m.vietnam.DataCovidVietnam         : Thread-83 completed task insert statistical data covid of province Thành phố Hồ Chí Minh in 3884 ms
+2021-08-03 13:31:56.080  INFO 25836 --- [ForkJoinPool.commonPool-worker-9] c.n.d.m.vietnam.DataCovidVietnam         : Thread-91 completed task insert statistical data covid of province Tỉnh Đồng Nai in 3828 ms
+2021-08-03 13:31:56.175  INFO 25836 --- [ForkJoinPool.commonPool-worker-47] c.n.d.m.vietnam.DataCovidVietnam         : Thread-231 completed task insert statistical data covid of province Tỉnh Thanh Hóa in 3359 ms
+2021-08-03 13:31:56.332  INFO 25836 --- [ForkJoinPool.commonPool-worker-17] c.n.d.m.vietnam.DataCovidVietnam         : Thread-99 completed task insert statistical data covid of province Tỉnh Bến Tre in 3602 ms
+2021-08-03 13:31:56.348  INFO 25836 --- [ForkJoinPool.commonPool-worker-45] c.n.d.m.vietnam.DataCovidVietnam         : Thread-229 completed task insert statistical data covid of province Tỉnh Quảng Trị in 3382 ms
+2021-08-03 13:31:56.454  INFO 25836 --- [ForkJoinPool.commonPool-worker-29] c.n.d.m.vietnam.DataCovidVietnam         : Thread-113 completed task insert statistical data covid of province Tỉnh Phú Yên in 3254 ms
+2021-08-03 13:31:56.562  INFO 25836 --- [ForkJoinPool.commonPool-worker-21] c.n.d.m.vietnam.DataCovidVietnam         : Thread-101 completed task insert statistical data covid of province Tỉnh Sóc Trăng in 2834 ms
+2021-08-03 13:31:57.360  INFO 25836 --- [ForkJoinPool.commonPool-worker-49] c.n.d.m.vietnam.DataCovidVietnam         : Thread-225 completed task insert statistical data covid of province Tỉnh Hải Dương in 4576 ms
+2021-08-03 13:31:57.629  INFO 25836 --- [ForkJoinPool.commonPool-worker-53] c.n.d.m.vietnam.DataCovidVietnam         : Thread-243 completed task insert statistical data covid of province Tỉnh Ninh Thuận in 4663 ms
+2021-08-03 13:31:57.819  INFO 25836 --- [ForkJoinPool.commonPool-worker-19] c.n.d.m.vietnam.DataCovidVietnam         : Thread-103 completed task insert statistical data covid of province Thành phố Cần Thơ in 4091 ms
+2021-08-03 13:31:58.089  INFO 25836 --- [ForkJoinPool.commonPool-worker-51] c.n.d.m.vietnam.DataCovidVietnam         : Thread-236 completed task insert data info of province 3279 ms
+2021-08-03 13:31:58.167  INFO 25836 --- [ForkJoinPool.commonPool-worker-11] c.n.d.m.vietnam.DataCovidVietnam         : Thread-97 completed task insert statistical data covid of province Thành phố Đà Nẵng in 4358 ms
+2021-08-03 13:31:58.631  INFO 25836 --- [ForkJoinPool.commonPool-worker-37] c.n.d.m.vietnam.DataCovidVietnam         : Thread-186 completed task insert statistical data covid of province Tỉnh Bạc Liêu in 4753 ms
+2021-08-03 13:31:59.227  INFO 25836 --- [ForkJoinPool.commonPool-worker-59] c.n.d.m.vietnam.DataCovidVietnam         : Thread-251 completed task insert statistical data covid of province Tỉnh Khánh Hòa in 6197 ms
+2021-08-03 13:31:59.399  INFO 25836 --- [ForkJoinPool.commonPool-worker-57] c.n.d.m.vietnam.DataCovidVietnam         : Thread-234 completed task insert statistical data covid of province Thành phố Hà Nội in 6376 ms
+2021-08-03 13:31:59.415  INFO 25836 --- [ForkJoinPool.commonPool-worker-25] c.n.d.m.vietnam.DataCovidVietnam         : Thread-105 completed task insert statistical data covid of province Tỉnh Đồng Tháp in 5590 ms
+2021-08-03 13:31:59.714  INFO 25836 --- [ForkJoinPool.commonPool-worker-41] c.n.d.m.vietnam.DataCovidVietnam         : Thread-163 completed task insert statistical data covid of province Tỉnh Kiên Giang in 5707 ms
+2021-08-03 13:31:59.900  INFO 25836 --- [ForkJoinPool.commonPool-worker-33] c.n.d.m.vietnam.DataCovidVietnam         : Thread-138 completed task insert statistical data covid of province Tỉnh Đắk Nông in 6333 ms
+2021-08-03 13:31:59.900  INFO 25836 --- [ForkJoinPool.commonPool-worker-15] c.n.d.m.vietnam.DataCovidVietnam         : Thread-95 completed task insert statistical data covid of province Tỉnh Bình Thuận in 6829 ms
+2021-08-03 13:31:59.992  INFO 25836 --- [ForkJoinPool.commonPool-worker-27] c.n.d.m.vietnam.DataCovidVietnam         : Thread-117 completed task insert statistical data covid of province Tỉnh Bình Định in 6496 ms
+2021-08-03 13:32:00.038  INFO 25836 --- [ForkJoinPool.commonPool-worker-35] c.n.d.m.vietnam.DataCovidVietnam         : Thread-147 completed task insert statistical data covid of province Tỉnh Nghệ An in 6478 ms
+2021-08-03 13:32:00.482  INFO 25836 --- [ForkJoinPool.commonPool-worker-39] c.n.d.m.vietnam.DataCovidVietnam         : Thread-209 completed task insert statistical data covid of province Tỉnh Phú Thọ in 6542 ms
+2021-08-03 13:32:00.542  INFO 25836 --- [ForkJoinPool.commonPool-worker-43] c.n.d.m.vietnam.DataCovidVietnam         : Thread-227 completed task insert statistical data covid of province Tỉnh Điện Biên in 6193 ms
+2021-08-03 13:32:00.660  INFO 25836 --- [ForkJoinPool.commonPool-worker-55] c.n.d.m.vietnam.DataCovidVietnam         : Thread-153 completed task insert statistical data covid of province Tỉnh Hà Tĩnh in 6354 ms
+2021-08-03 13:32:00.836  INFO 25836 --- [ForkJoinPool.commonPool-worker-7] c.n.d.m.vietnam.DataCovidVietnam         : Thread-85 completed task insert statistical data covid of province Tỉnh Long An in 6318 ms
+2021-08-03 13:32:00.852  INFO 25836 --- [ForkJoinPool.commonPool-worker-63] c.n.d.m.vietnam.DataCovidVietnam         : Thread-223 completed task insert statistical data covid of province Tỉnh Sơn La in 6597 ms
+2021-08-03 13:32:01.179  INFO 25836 --- [ForkJoinPool.commonPool-worker-1] c.n.d.m.vietnam.DataCovidVietnam         : Thread-89 completed task insert statistical data covid of province Tỉnh Tây Ninh in 6661 ms
+2021-08-03 13:32:01.284  INFO 25836 --- [ForkJoinPool.commonPool-worker-13] c.n.d.m.vietnam.DataCovidVietnam         : Thread-93 completed task insert statistical data covid of province Tỉnh Vĩnh Long in 6672 ms
+2021-08-03 13:32:01.417  INFO 25836 --- [ForkJoinPool.commonPool-worker-5] c.n.d.m.vietnam.DataCovidVietnam         : Thread-84 completed task insert statistical data covid of province Tỉnh Bình Dương in 6735 ms
+2021-08-03 13:32:02.342  INFO 25836 --- [ForkJoinPool.commonPool-worker-31] c.n.d.m.vietnam.DataCovidVietnam         : Thread-125 completed task insert statistical data covid of province Tỉnh Đắk Lắk in 7646 ms
+2021-08-03 13:32:02.688  INFO 25836 --- [ForkJoinPool.commonPool-worker-23] c.n.d.m.vietnam.DataCovidVietnam         : Thread-107 completed task insert statistical data covid of province Tỉnh An Giang in 8039 ms
+2021-08-03 13:32:03.793  INFO 25836 --- [ForkJoinPool.commonPool-worker-51] c.n.d.m.vietnam.DataCovidVietnam         : Thread-236 completed task insert statistical data vaccine of province Tỉnh Tiền Giang in 5704 ms
+2021-08-03 13:32:08.529  INFO 25836 --- [ForkJoinPool.commonPool-worker-51] c.n.d.m.vietnam.DataCovidVietnam         : Thread-236 completed task insert statistical data covid of province Tỉnh Tiền Giang in 4736 ms
