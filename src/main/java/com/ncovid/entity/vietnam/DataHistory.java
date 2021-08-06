@@ -34,6 +34,6 @@ public class DataHistory implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "id_data_covid")
   @JsonBackReference
-  private StatisticalCovid covidData;
+  private CovidStatistics covidData;
 
 }

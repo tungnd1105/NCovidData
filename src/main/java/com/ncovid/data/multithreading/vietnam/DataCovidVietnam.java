@@ -2,12 +2,12 @@ package com.ncovid.data.multithreading.vietnam;
 
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
-import com.ncovid.entity.vietnam.StatisticalCovid;
-import com.ncovid.entity.vietnam.StatisticalVaccine;
+import com.ncovid.entity.vietnam.CovidStatistics;
+import com.ncovid.entity.vietnam.VaccinationStatistics;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
-import com.ncovid.repositories.vietnam.StatisticalCovidRepositories;
-import com.ncovid.repositories.vietnam.StatisticalVaccineRepositories;
+import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
+import com.ncovid.repositories.vietnam.VaccinationStatisticsRepositories;
 import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
 import com.ncovid.util.Util;
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
  * @package com.ncovid.data.multithreading
  * @project NCovidData
  * @Date 26/07/2021
- * description class: insert new data covid 19 of all province/city in Vietnam
+ * description class: insert new data covid 19 and Vaccination  of all province/city in Vietnam
  */
 
 @Service
@@ -43,13 +43,13 @@ public class DataCovidVietnam {
   private DataHistoryRepositories DataHistoryRepositories;
 
   @Autowired
-  private StatisticalCovidRepositories SCovidRepositories;
+  private CovidStatisticsRepositories dataCovidRepositories;
 
   @Autowired
   private ProvinceRepositories provinceRepositories;
 
   @Autowired
-  private StatisticalVaccineRepositories SVaccineRepositories;
+  private VaccinationStatisticsRepositories dataVaccinationRepositories;
 
 
   private void insertDataInfoOfProvince(Integer provinceCode) {
@@ -77,7 +77,7 @@ public class DataCovidVietnam {
         }
       }
       Long endTime = System.currentTimeMillis();
-      logger.info("Thread-" + Thread.currentThread().getId() + Message.insertInfoProvince +  (endTime - startTime) + " ms");
+      logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataDetailProvince +  (endTime - startTime) + " ms");
 
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
@@ -85,25 +85,25 @@ public class DataCovidVietnam {
     }
   }
 
-  private void insertStatisticalDataVaccine(Integer provinceCode) {
+  private void insertVaccinationStatisticsData(Integer provinceCode) {
     try {
       Long startTime = System.currentTimeMillis();
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccine));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccinations));
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         for (int k = 0; k < jsonArray.length(); k++) {
           JSONObject object = (JSONObject) jsonArray.get(k);
           if (object.getInt("provinceCode") == province.getProvinceCode()) {
-            StatisticalVaccine SVaccine = new StatisticalVaccine();
-            SVaccine.setUpdateTime(Util.timeUpdate);
-            SVaccine.setTotalVaccinated(object.getInt("totalInjected"));
-            SVaccine.setTotalOnceInjected(object.getInt("totalOnceInjected"));
-            SVaccine.setTotalTwiceInjected(object.getInt("totalTwiceInjected"));
-            SVaccine.setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
-            SVaccine.setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
-            SVaccine.setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
-            SVaccine.setProvince(province);
-            SVaccineRepositories.save(SVaccine);
+            VaccinationStatistics dataVaccination = new VaccinationStatistics();
+            dataVaccination.setUpdateTime(Util.timeUpdate);
+            dataVaccination.setTotalInjected(object.getInt("totalInjected"));
+            dataVaccination.setTotalInjectedOneDose(object.getInt("totalOnceInjected"));
+            dataVaccination.setTotalFullyInjected(object.getInt("totalTwiceInjected"));
+            dataVaccination.setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
+            dataVaccination.setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
+            dataVaccination.setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
+            dataVaccination.setProvince(province);
+            dataVaccinationRepositories.save(dataVaccination);
           }
         }
 
@@ -116,7 +116,7 @@ public class DataCovidVietnam {
     }
   }
 
-  private void insertStatisticalDataCovid(Integer provinceCode) {
+  private void insertCovidStatisticsData(Integer provinceCode) {
     try {
       Long startTime = System.currentTimeMillis();
       JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
@@ -130,16 +130,16 @@ public class DataCovidVietnam {
             JSONObject object2 = (JSONObject) jsonArray2.get(i);
             if (object2.getInt("ma") == province.getProvinceCode()
               && object1.getString("tinh").matches(object2.getString("tinh"))) {
-              StatisticalCovid SCovid = new StatisticalCovid();
-              SCovid.setToday(object2.getInt("ngay_hien_tai"));
-              SCovid.setYesterday(object2.getInt("ngay_truoc_do"));
-              SCovid.setCases(object1.getInt("so_ca"));
-              SCovid.setDeaths(object1.getInt("tu_vong"));
-              SCovid.setDomesticCases(object1.getInt("cong_dong"));
-              SCovid.setEntryCases(object1.getInt("nhap_canh"));
-              SCovid.setUpdateTime(Util.timeUpdate);
-              SCovid.setProvince(province);
-              SCovidRepositories.save(SCovid);
+              CovidStatistics dataCovid = new CovidStatistics();
+              dataCovid.setToday(object2.getInt("ngay_hien_tai"));
+              dataCovid.setYesterday(object2.getInt("ngay_truoc_do"));
+              dataCovid.setCases(object1.getInt("so_ca"));
+              dataCovid.setDeaths(object1.getInt("tu_vong"));
+              dataCovid.setDomesticCases(object1.getInt("cong_dong"));
+              dataCovid.setEntryCases(object1.getInt("nhap_canh"));
+              dataCovid.setUpdateTime(Util.timeUpdate);
+              dataCovid.setProvince(province);
+              dataCovidRepositories.save(dataCovid);
             }
           }
         }
@@ -188,7 +188,7 @@ public class DataCovidVietnam {
    * use multithreading to  insert data faster
    * each threading will be insert data covid, vaccine of provinces  by province code
    * each threading flow task
-   * insertDataAllProvince -> insertStatisticalDataVaccine ->  insertStatisticalDataCovid ->  insertDataNewCasesByDate
+   * insertDataAllProvince -> insertVaccinationStatisticsData ->  insertCovidStatisticsData ->  insertDataNewCasesByDate
    */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
@@ -199,8 +199,8 @@ public class DataCovidVietnam {
       for (Integer provinceCode : provinceCodeList) {
         CompletableFuture.runAsync(() ->
           insertDataInfoOfProvince(provinceCode))
-          .thenRun(() -> insertStatisticalDataVaccine(provinceCode))
-          .thenRun(() -> insertStatisticalDataCovid(provinceCode))
+          .thenRun(() -> insertVaccinationStatisticsData(provinceCode))
+          .thenRun(() -> insertCovidStatisticsData(provinceCode))
           .thenRun(() -> insertDataNewCasesByDate(provinceCode));
       }
     }

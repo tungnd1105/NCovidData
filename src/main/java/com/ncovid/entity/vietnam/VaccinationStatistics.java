@@ -16,12 +16,12 @@ import java.io.Serializable;
  * description class: reporter data vaccine by province or city in Vietnam
  */
 
-@Entity(name ="Statistical_Vaccine_Vietnam" )
-@Table(name ="Statistical_Vaccine_Vietnam" )
+@Entity(name ="vaccination_statistics_vietnam" )
+@Table(name ="vaccination_statistics_vietnam" )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticalVaccine implements Serializable {
+public class VaccinationStatistics implements Serializable {
 
   private static final long serialVersionUID = 5986887121427178891L;
 
@@ -29,12 +29,15 @@ public class StatisticalVaccine implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String  updateTime;
-  private Integer totalVaccinated;
-  private Integer totalTwiceInjected;
-  private Integer totalOnceInjected;
+  private Integer totalInjected;
+  private Integer totalFullyInjected;
+  private Integer totalInjectedOneDose;
   private Integer totalVaccinationLocation;
   private Integer totalVaccineAllocated;
   private Integer totalVaccineReality;
+  private float   fullyInjectedPercent;
+  private float   injectedOneDosePercent;
+  private float   totalVaccinePercent;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

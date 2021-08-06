@@ -25,19 +25,27 @@ public class Province implements Serializable {
 
   @Id
   private Integer provinceCode;
+  @Column(length = 100)
   private String  name;
+
+  @Column(length = 100)
   private String  type;
+
+  @Column(length = 100)
   private String  shortName;
+
   private Integer totalPopulation;
   private Integer popOverEighteen;
+
+  @Column(length = 100)
   private String  country;
 
-  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
-  private StatisticalCovid covidData;
+  private CovidStatistics covidData;
 
-  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
-  private StatisticalVaccine vaccineData;
+  private VaccinationStatistics vaccinationData;
 
 }
