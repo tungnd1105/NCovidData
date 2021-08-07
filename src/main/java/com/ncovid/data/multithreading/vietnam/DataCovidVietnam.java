@@ -1,12 +1,12 @@
 package com.ncovid.data.multithreading.vietnam;
 
+import com.ncovid.entity.vietnam.CovidStatistics;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
-import com.ncovid.entity.vietnam.CovidStatistics;
 import com.ncovid.entity.vietnam.VaccinationStatistics;
+import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
-import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.VaccinationStatisticsRepositories;
 import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
@@ -54,7 +54,6 @@ public class DataCovidVietnam {
 
   private void insertDataInfoOfProvince(Integer provinceCode) {
     try {
-      Long startTime = System.currentTimeMillis();
       JSONArray jsonDataProvinceArray = new JSONArray(Util.fetchDataJson(Util.urlDataAllProince));
       JSONArray jsonDataPopulationArray = new JSONArray(Util.fetchDataJson(Util.urlDataPopulationOfProince));
       for (int k = 0; k < jsonDataProvinceArray.length(); k++) {
@@ -76,9 +75,6 @@ public class DataCovidVietnam {
           }
         }
       }
-      Long endTime = System.currentTimeMillis();
-      logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataDetailProvince +  (endTime - startTime) + " ms");
-
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
       logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
@@ -87,7 +83,6 @@ public class DataCovidVietnam {
 
   private void insertVaccinationStatisticsData(Integer provinceCode) {
     try {
-      Long startTime = System.currentTimeMillis();
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccinations));
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
@@ -106,9 +101,6 @@ public class DataCovidVietnam {
             dataVaccinationRepositories.save(dataVaccination);
           }
         }
-
-        Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataVaccine + province.getName() + " in " + (endTime - startTime) + " ms");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -118,7 +110,6 @@ public class DataCovidVietnam {
 
   private void insertCovidStatisticsData(Integer provinceCode) {
     try {
-      Long startTime = System.currentTimeMillis();
       JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
       JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
       JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
@@ -143,8 +134,6 @@ public class DataCovidVietnam {
             }
           }
         }
-        Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataCovid + province.getName() + " in " + (endTime - startTime) + " ms");
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -156,7 +145,6 @@ public class DataCovidVietnam {
   private void insertDataNewCasesByDate(Integer provinceCode) {
     try {
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
-      Long startTime = System.currentTimeMillis();
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -172,9 +160,7 @@ public class DataCovidVietnam {
             }
           }
         }
-
-        Long endTime = System.currentTimeMillis();
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataNewCases  + province.getName() + " in " + (endTime - startTime) + " ms");
+        logger.info("Threading-" + Thread.currentThread().getId() + Message.insertDataProvince + province.getName());
       }
 
     } catch (Exception e) {

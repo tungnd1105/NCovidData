@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +26,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ndtun
  * @package com.ncovid.data.multithreading.countries
  * @project NCovidData
  * @Date 04/08/2021
+ * description class: insert new data covid 19 and Vaccination of countries
  */
 @Service
 public class DataCovidCountries {
@@ -50,7 +51,6 @@ public class DataCovidCountries {
 
   private void insertDataDetailCountry(String alphaCode) {
     try {
-      Long startTime = System.currentTimeMillis();
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDetailCountry));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject jsonObject = (JSONObject) jsonArray.get(k);
@@ -64,14 +64,38 @@ public class DataCovidCountries {
           country.setSubregion(jsonObject.getString("subregion"));
           country.setPopulation(jsonObject.getInt("population"));
           country.setNumericCode(jsonObject.get("numericCode").toString());
-          JSONArray array = jsonObject.getJSONArray("latlng");
           countryRepositories.save(country);
         }
       }
-      Long endTime = System.currentTimeMillis();
-      logger.info("Thread-" + Thread.currentThread().getId() + Message.insertDataDetailCountry + (endTime - startTime) + " ms");
     } catch (Exception e) {
       e.printStackTrace();
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
+    }
+  }
+
+  private void insertVaccinationsStatisticsData(String alphaCode) {
+    try {
+      Country country = countryRepositories.findById(alphaCode).orElse(null);
+      Iterable<CSVRecord> data = Util.readerData(Util.urlDataVaccinationsAllCountries);
+      if (country != null) {
+        data.forEach(record -> {
+          if (country.getId().matches(record.get("iso_code"))) {
+            VaccinationStatistics dataVaccinations = new VaccinationStatistics();
+            dataVaccinations.setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
+            dataVaccinations.setNewVaccine(Util.checkString(record.get("new_vaccinations")));
+            dataVaccinations.setTotalFullyInjected(Util.checkString(record.get("people_fully_vaccinated")));
+            dataVaccinations.setTotalInjectedOneDose(Util.checkString(record.get("people_vaccinated")));
+            dataVaccinations.setTotalVaccinePercent(Util.parseDouble(record.get("total_vaccinations_per_hundred")));
+            dataVaccinations.setFullyInjectedPercent(Util.parseDouble(record.get("people_fully_vaccinated_per_hundred")));
+            dataVaccinations.setInjectedOneDosePercent(Util.parseDouble(record.get("people_vaccinated_per_hundred")));
+            dataVaccinations.setCountry(country);
+            dataVaccinationRepositories.save(dataVaccinations);
+          }
+        });
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
   }
 
@@ -79,65 +103,43 @@ public class DataCovidCountries {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
       Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(50000).get();
-      Elements body = document.select("body");
+      Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
-        for (Element element : body.select("tbody tr")) {
+        body.select("tbody tr").forEach(element -> {
           if (element.select("td").get(1).text().matches(country.getName())) {
             CovidStatistics SCovid = new CovidStatistics();
-            SCovid.setTotalCase(Util.parseInt(element.select("td").get(2).text()));
-            SCovid.setNewCases(Util.parseInt(element.select("td").get(3).text()));
-            SCovid.setTotalDeaths(Util.parseInt(element.select("td").get(4).text()));
-            SCovid.setNewDeaths(Util.parseInt(element.select("td").get(5).text()));
-            SCovid.setTotalRecovered(Util.parseInt(element.select("td").get(6).text()));
-            SCovid.setNewRecovered(Util.parseInt(element.select("td").get(7).text()));
-            SCovid.setActiveCases(Util.parseInt(element.select("td").get(8).text()));
-            SCovid.setSeriousCritical(Util.parseInt(element.select("td").get(9).text()));
-            SCovid.setTotalTest(Util.parseInt(element.select("td").get(10).text()));
+            SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
+            SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
+            SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
+            SCovid.setNewDeaths(Util.checkString(element.select("td").get(5).text()));
+            SCovid.setTotalRecovered(Util.checkString(element.select("td").get(6).text()));
+            SCovid.setNewRecovered(Util.checkString(element.select("td").get(7).text()));
+            SCovid.setActiveCases(Util.checkString(element.select("td").get(8).text()));
+            SCovid.setSeriousCritical(Util.checkString(element.select("td").get(9).text()));
+            SCovid.setTotalTest(Util.checkString(element.select("td").get(10).text()));
             SCovid.setCountry(country);
             dataCovidRepositories.save(SCovid);
           }
-        }
-
+        });
+        logger.info("Threading-" + Thread.currentThread().getId() + Message.insertDataCountry + country.getName());
       }
-
     } catch (Exception e) {
       e.printStackTrace();
+      logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
   }
 
-//  private void insertVaccinationStatisticsData(String alphaCode) {
-//    try {
-//  //    Iterable<CSVRecord> data = Util.readerData(Util.urlDataVaccinationsAllCountries);
-//      Country country = countryRepositories.findCountryById(alphaCode);
-//      System.out.println(country);
-////      for (CSVRecord record : data) {
-////        if(record.get("iso_code").matches(alphaCode)) {
-////          if(country != null) {
-////            VaccinationStatistics dataVaccinations = new VaccinationStatistics();
-////            dataVaccinations.setTotalVaccine(Util.parseInt(record.get("total_vaccinations")));
-////            dataVaccinations.setNewVaccine(Util.parseInt(record.get("new_vaccinations")));
-////            dataVaccinations.setTotalFullyInjected(Util.parseInt(record.get("people_fully_vaccinated")));
-////            dataVaccinations.setTotalInjectedOneDose(Util.parseInt(record.get("people_vaccinated")));
-////            dataVaccinations.setTotalVaccinePercent(Util.parseDouble(record.get("total_vaccinations_per_hundred")));
-////            dataVaccinations.setFullyInjectedPercent(Util.parseDouble(record.get("people_fully_vaccinated_per_hundred")));
-////            dataVaccinations.setInjectedOneDosePercent(Util.parseDouble(record.get("people_vaccinated_per_hundred")));
-////            dataVaccinations.setCountry(country);
-////            dataVaccinationRepositories.save(dataVaccinations);
-////          }
-////        }
-////      }
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//  }
-
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException {
-    List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
-    for (String alphaCode : alphaCodeList) {
-      CompletableFuture.runAsync(() -> insertDataDetailCountry(alphaCode))
-        .thenRun(() -> insertCovidStatisticsData(alphaCode));
+  public void runMultithreading() throws IOException, InterruptedException, ExecutionException {
+    List<Country> checkData = countryRepositories.findAll();
+    if (checkData.size() == 0) {
+      List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
+      for (String alphaCode : alphaCodeList) {
+       CompletableFuture.runAsync(() -> insertDataDetailCountry(alphaCode))
+         .thenRun(() -> insertVaccinationsStatisticsData(alphaCode))
+         .thenRun(() -> insertCovidStatisticsData(alphaCode));
+      }
     }
   }
 }

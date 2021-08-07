@@ -2,9 +2,9 @@ package com.ncovid.data.multithreading.vietnam;
 
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
+import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
-import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.VaccinationStatisticsRepositories;
 import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ndtun
@@ -30,10 +31,10 @@ import java.util.concurrent.CompletableFuture;
  * description class: update data covid, vaccine of all province
  */
 @Service
-public class UpdateData {
+public class UpdateDataVietnam {
 
 
-  public static Logger logger = LoggerFactory.getLogger(UpdateData.class);
+  public static Logger logger = LoggerFactory.getLogger(UpdateDataVietnam.class);
 
   @Autowired
   private CovidStatisticsRepositories Covid_Statistics_Country;
@@ -48,9 +49,8 @@ public class UpdateData {
   private VaccinationStatisticsRepositories dataVaccinationRepositories;
 
 
-  private void updateVaccinationStatisticsData(Integer provinceCode) {
+  private void updateVaccinationStatisticsData(Province province) {
     try {
-      Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccinations));
         for (int k = 0; k < jsonArray.length(); k++) {
@@ -66,7 +66,6 @@ public class UpdateData {
             dataVaccinationRepositories.save(province.getVaccinationData());
           }
         }
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataVaccine + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -74,9 +73,8 @@ public class UpdateData {
     }
   }
 
-  private void updateCovidStatisticsData(Integer provinceCode) {
+  private void updateCovidStatisticsData(Province province) {
     try {
-      Province province = provinceRepositories.findById(provinceCode).orElse(null);
       JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
       JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
       JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
@@ -99,7 +97,6 @@ public class UpdateData {
 
           }
         }
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataCovid + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -107,9 +104,8 @@ public class UpdateData {
     }
   }
 
-  private void updateDataNewCases(Integer provinceCode) {
+  private void updateDataNewCases(Province province) {
     try {
-      Province province = provinceRepositories.findById(provinceCode).orElse(null);
       JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
       if (province != null) {
         province.getCovidData().getDataHistory().forEach(e -> {
@@ -127,7 +123,7 @@ public class UpdateData {
             }
           }
         });
-        logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataCovidByDate + Util.today + " of province" + province.getName());
+        logger.info("Threading-" + Thread.currentThread().getId() + Message.updateDataProvince + province.getName());
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -147,9 +143,30 @@ public class UpdateData {
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
-      CompletableFuture.runAsync(() -> updateVaccinationStatisticsData(provinceCode))
-        .thenRun(() -> updateCovidStatisticsData(provinceCode))
-        .thenRun(() -> updateDataNewCases(provinceCode));
+      CompletableFuture<Province> completableFuture =
+        CompletableFuture.supplyAsync(() -> provinceRepositories.findById(provinceCode).orElse(null));
+      completableFuture
+        .thenRun(() -> {
+        try {
+          updateVaccinationStatisticsData(completableFuture.get());
+        } catch (InterruptedException | ExecutionException e) {
+          e.printStackTrace();
+        }
+      })
+        .thenRun(() -> {
+        try {
+          updateCovidStatisticsData(completableFuture.get());
+        } catch (InterruptedException | ExecutionException e) {
+          e.printStackTrace();
+        }
+      })
+        .thenRun(() -> {
+        try {
+          updateDataNewCases(completableFuture.get());
+        } catch (InterruptedException | ExecutionException e) {
+          e.printStackTrace();
+        }
+      });
     }
   }
 }

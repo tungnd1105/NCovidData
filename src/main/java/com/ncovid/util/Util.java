@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -44,15 +45,12 @@ public class Util {
     return httpResponse.body();
   }
 
-  public static Integer parseInt(String string) {
-    int result;
+  public static String checkString(String string) {
+    String result;
     if (string.trim().isEmpty() || string.matches("N/A")) {
-      result = 0;
+      result = "0";
     } else {
-      result = Integer.parseInt(
-        string.replaceAll("[^0-9]", "")
-          .replace(".0","")
-      );
+      result = string.replace(".0","").replaceAll("[^0-9]", "");
     }
     return result;
   }

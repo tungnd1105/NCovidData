@@ -8,14 +8,11 @@ package com.ncovid.util;
  */
 public class Message {
 
-  public static String insertDataDetailProvince =  " completed task insert data detail of province ";
-  public static String insertDataVaccine        =  " completed task insert statistical data vaccine of province ";
-  public static String insertDataCovid          =  " completed task insert statistical data covid of province ";
-  public static String insertDataNewCases       =  " completed task insert data new cases by date ";
-  public static String updateDataVaccine        =  " completed task update statistical data vaccine today of province ";
-  public static String updateDataCovid          =  " completed task update statistical data covid today of province ";
-  public static String updateDataCovidByDate    =  " completed task update data new cases today ";
-  public static String insertDataDetailCountry  =  " completed task insert data detail of country ";
+
+  public static String insertDataCountry         =  " completed task insert data covid and data Vaccinations of country ";
+  public static String insertDataProvince        =  " completed task insert data covid and data Vaccinations of ";
+  public static String updateDataProvince        =  " completed task update data covid and data Vaccinations of ";
+  public static String updateDataCountry         =  " completed task update data covid and data Vaccinations of country ";
 
 
 }

@@ -27,6 +27,7 @@ public class ProvinceOfVietnam {
 
   public static List<Integer> getAllProvince() throws IOException, InterruptedException {
     logger.info("Stating get all province code of Vietnam");
+    logger.info("staring assign task for threading by province code ");
     JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
     List<Integer> listProvince = new ArrayList<>();
     for (int i = 0; i < dataJsonProvince.length(); i++ ){

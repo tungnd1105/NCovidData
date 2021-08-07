@@ -27,15 +27,15 @@ public class CovidStatistics implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private Integer totalCase;
-  private Integer newCases;
-  private Integer totalDeaths;
-  private Integer newDeaths;
-  private Integer totalRecovered;
-  private Integer newRecovered;
-  private Integer activeCases;
-  private Integer seriousCritical;
-  private Integer totalTest;
+  private String totalCase;
+  private String newCases;
+  private String totalDeaths;
+  private String newDeaths;
+  private String totalRecovered;
+  private String newRecovered;
+  private String activeCases;
+  private String seriousCritical;
+  private String totalTest;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

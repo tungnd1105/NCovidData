@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
  * @author ndtun
@@ -27,10 +28,10 @@ public class VaccinationStatistics implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private Integer totalVaccine;
-  private Integer newVaccine;
-  private Integer totalInjectedOneDose;
-  private Integer totalFullyInjected;
+  private String totalVaccine;
+  private String newVaccine;
+  private String totalInjectedOneDose;
+  private String totalFullyInjected;
   private Double totalVaccinePercent;
   private Double fullyInjectedPercent;
   private Double injectedOneDosePercent;
