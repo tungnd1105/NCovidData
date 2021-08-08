@@ -1,6 +1,11 @@
 package com.ncovid.util;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
 import java.io.IOException;
+import java.io.StringReader;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -24,11 +29,14 @@ public class Util {
   public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
   public static String timeUpdate = formatterDateTime.format(LocalDateTime.now());
 
-  public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v1/2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
-  public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v1/2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;
+  public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
+  public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;
   public static String urlDataAllProince = "https://tiemchungcovid19.gov.vn/api/province/public/all";
   public static String urlDataPopulationOfProince = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccine-allocate/province-detail";
-  public static String urlDataVaccine = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
+  public static String urlDataVaccinations = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
+  public static String urlDetailCountry = "https://restcountries.eu/rest/v2/all";
+  public static String urlDataCovidAllCountries = "https://www.worldometers.info/coronavirus/";
+  public static String urlDataVaccinationsAllCountries = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.csv";
 
   public static String fetchDataJson(String url) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();
@@ -37,14 +45,31 @@ public class Util {
     return httpResponse.body();
   }
 
-  public static Integer parseInt(String string) {
-    int result;
-    if (string.trim().isEmpty()) {
-      result = 0;
+  public static String checkString(String string) {
+    String result;
+    if (string.trim().isEmpty() || string.matches("N/A")) {
+      result = "0";
     } else {
-      double valueDouble = Double.parseDouble(string);
-      result = (int) valueDouble;
+      result = string.replace(".0","").replaceAll("[^0-9]", "");
     }
     return result;
+  }
+
+  public static Double parseDouble(String string){
+    double result;
+    if(string.trim().isEmpty()){
+      result =  0.0;
+    }else {
+      result = Double.parseDouble(string.replace(",","."));
+    }
+    return result;
+  }
+
+  public static Iterable<CSVRecord> readerData(String url) throws IOException, InterruptedException {
+    HttpClient client = HttpClient.newHttpClient();
+    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+    HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    StringReader stringReader = new StringReader(httpResponse.body());
+    return CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(stringReader);
   }
 }

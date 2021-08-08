@@ -1,6 +1,6 @@
 package com.ncovid.repositories.vietnam;
 
-import com.ncovid.entity.vietnam.StatisticalVaccine;
+import com.ncovid.entity.vietnam.VaccinationStatistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  * @project NCovidData
  * @Date 29/07/2021
  */
-@Repository
-public interface StatisticalVaccineRepositories extends JpaRepository<StatisticalVaccine, Integer> {
+@Repository(value = "Vaccination_Statistics_Repositories_Vietnam" )
+public interface VaccinationStatisticsRepositories extends JpaRepository<VaccinationStatistics, Integer> {
 }
