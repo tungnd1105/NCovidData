@@ -1,7 +1,7 @@
-package com.ncovid.controller.api.vietnam;
+package com.ncovid.controller.api;
 
 import com.ncovid.entity.vietnam.Province;
-import com.ncovid.services.multithreading.vietnam.VietnamServices;
+import com.ncovid.services.VietnamServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

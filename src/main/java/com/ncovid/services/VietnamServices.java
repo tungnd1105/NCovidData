@@ -1,4 +1,4 @@
-package com.ncovid.services.multithreading.vietnam;
+package com.ncovid.services;
 
 import com.ncovid.data.multithreading.vietnam.DataCovidVietnam;
 import com.ncovid.entity.vietnam.DataHistory;

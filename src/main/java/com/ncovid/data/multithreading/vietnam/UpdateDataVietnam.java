@@ -133,7 +133,7 @@ public class UpdateDataVietnam {
 
   /**
    * update data realtime
-   * use multithreading to  insert data faster
+   * use multithreading to performance optimization
    * each threading will be flow task
    * updateStatisticalVaccineData -> updateStatisticalCovidData -> updateCovidDataByDate
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
@@ -141,32 +141,35 @@ public class UpdateDataVietnam {
   @Async("taskExecutor")
   @Scheduled(cron = "0 0 6,12,20,0 * * * ")
   public void multithreading() throws InterruptedException, IOException {
-    List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
-    for (Integer provinceCode : provinceCodeList) {
-      CompletableFuture<Province> completableFuture =
-        CompletableFuture.supplyAsync(() -> provinceRepositories.findById(provinceCode).orElse(null));
-      completableFuture
-        .thenRun(() -> {
-        try {
-          updateVaccinationStatisticsData(completableFuture.get());
-        } catch (InterruptedException | ExecutionException e) {
-          e.printStackTrace();
-        }
-      })
-        .thenRun(() -> {
-        try {
-          updateCovidStatisticsData(completableFuture.get());
-        } catch (InterruptedException | ExecutionException e) {
-          e.printStackTrace();
-        }
-      })
-        .thenRun(() -> {
-        try {
-          updateDataNewCases(completableFuture.get());
-        } catch (InterruptedException | ExecutionException e) {
-          e.printStackTrace();
-        }
-      });
+    List<Province> checkData = provinceRepositories.findAll();
+    if (checkData.size() != 0) {
+      List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
+      for (Integer provinceCode : provinceCodeList) {
+        CompletableFuture<Province> completableFuture =
+          CompletableFuture.supplyAsync(() -> provinceRepositories.findById(provinceCode).orElse(null));
+        completableFuture
+          .thenRun(() -> {
+            try {
+              updateVaccinationStatisticsData(completableFuture.get());
+            } catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
+            }
+          })
+          .thenRun(() -> {
+            try {
+              updateCovidStatisticsData(completableFuture.get());
+            } catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
+            }
+          })
+          .thenRun(() -> {
+            try {
+              updateDataNewCases(completableFuture.get());
+            } catch (InterruptedException | ExecutionException e) {
+              e.printStackTrace();
+            }
+          });
+      }
     }
   }
 }

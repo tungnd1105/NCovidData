@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @Date 04/08/2021
  * description class: reporter data covid 19 of all Country
  */
-@Entity(name = "covid_Statistics_country")
+@Entity(name = "Covid_Statistics_Country")
 @Table(name = "covid_statistics_country")
 @Data
 @AllArgsConstructor
@@ -27,6 +27,7 @@ public class CovidStatistics implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private String updateTime;
   private String totalCase;
   private String newCases;
   private String totalDeaths;

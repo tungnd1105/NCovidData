@@ -16,7 +16,7 @@ import java.util.List;
  * @Date 25/07/2021
  * description class: reporter data covid 19 of all province/city in Vietnam
  */
-@Entity(name = "covid_statistics_vietnam")
+@Entity(name = "Covid_Statistics_Vietnam")
 @Table(name = "covid_statistics_vietnam")
 @Data
 @AllArgsConstructor

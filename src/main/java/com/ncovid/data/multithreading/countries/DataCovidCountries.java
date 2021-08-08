@@ -81,6 +81,7 @@ public class DataCovidCountries {
         data.forEach(record -> {
           if (country.getId().matches(record.get("iso_code"))) {
             VaccinationStatistics dataVaccinations = new VaccinationStatistics();
+            dataVaccinations.setUpdateTime(Util.timeUpdate);
             dataVaccinations.setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
             dataVaccinations.setNewVaccine(Util.checkString(record.get("new_vaccinations")));
             dataVaccinations.setTotalFullyInjected(Util.checkString(record.get("people_fully_vaccinated")));
@@ -102,12 +103,13 @@ public class DataCovidCountries {
   private void insertCovidStatisticsData(String alphaCode) {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
-      Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(50000).get();
+      Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(500000).get();
       Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
         body.select("tbody tr").forEach(element -> {
           if (element.select("td").get(1).text().matches(country.getName())) {
             CovidStatistics SCovid = new CovidStatistics();
+            SCovid.setUpdateTime(Util.timeUpdate);
             SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
             SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
             SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
@@ -129,6 +131,14 @@ public class DataCovidCountries {
     }
   }
 
+
+  /**
+   * if data not yet in databases run insert new
+   * use multithreading to performance optimization
+   * each threading will be insert data covid, vaccine of provinces  by province code
+   * each threading flow task
+   * insertDataDetailCountry -> insertVaccinationsStatisticsData ->  insertCovidStatisticsData
+   */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
   public void runMultithreading() throws IOException, InterruptedException, ExecutionException {

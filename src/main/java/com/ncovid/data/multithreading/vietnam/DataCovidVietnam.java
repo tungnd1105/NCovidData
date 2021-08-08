@@ -171,7 +171,7 @@ public class DataCovidVietnam {
 
   /**
    * if data not yet in databases run insert new
-   * use multithreading to  insert data faster
+   * use multithreading to performance optimization
    * each threading will be insert data covid, vaccine of provinces  by province code
    * each threading flow task
    * insertDataAllProvince -> insertVaccinationStatisticsData ->  insertCovidStatisticsData ->  insertDataNewCasesByDate

@@ -16,7 +16,7 @@ import java.io.Serializable;
  * description class: reporter data vaccine by province or city in Vietnam
  */
 
-@Entity(name ="vaccination_statistics_vietnam" )
+@Entity(name ="Vaccination_Statistics_Vietnam" )
 @Table(name ="vaccination_statistics_vietnam" )
 @Data
 @AllArgsConstructor

@@ -16,7 +16,7 @@ import java.math.BigInteger;
  * @Date 04/08/2021
  * description class: reporter data vaccination all country
  */
-@Entity(name = "vaccination_statistics_country")
+@Entity(name = "Vaccination_Statistics_Country")
 @Table(name = "vaccination_statistics_country")
 @Data
 @AllArgsConstructor
@@ -28,6 +28,7 @@ public class VaccinationStatistics implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private String updateTime;
   private String totalVaccine;
   private String newVaccine;
   private String totalInjectedOneDose;
