@@ -21,7 +21,7 @@ public class MultithreadingConfig {
   public Executor taskExecutor(){
     ThreadPoolTaskExecutor executor= new ThreadPoolTaskExecutor();
     executor.setCorePoolSize(2);
-    executor.setMaxPoolSize(2);
+    executor.setMaxPoolSize(5);
     executor.setQueueCapacity(50);
     executor.setThreadNamePrefix("Thread-");
     executor.initialize();
