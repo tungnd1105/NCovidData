@@ -63,6 +63,30 @@ public class UpdateDataVietnam {
             province.getVaccinationData().setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
             province.getVaccinationData().setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
             province.getVaccinationData().setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
+            province.getVaccinationData().setFullyInjectedPercent(
+              Util.getPercent(
+                province.getVaccinationData().getTotalFullyInjected(),
+                province.getPopOverEighteen())
+            );
+
+            province.getVaccinationData().setInjectedOneDosePercent(
+              Util.getPercent(
+                province.getVaccinationData().getTotalInjectedOneDose(),
+                province.getPopOverEighteen())
+            );
+
+            province.getVaccinationData().setTotalVaccinePercent(
+              Util.getPercent(
+                province.getVaccinationData().getTotalVaccineReality(),
+                province.getPopOverEighteen())
+            );
+
+            province.getVaccinationData().setTotalInjectedPercent(
+              Util.getPercent(
+                province.getVaccinationData().getTotalInjected(),
+                province.getPopOverEighteen())
+            );
+
             dataVaccinationRepositories.save(province.getVaccinationData());
           }
         }

@@ -139,8 +139,8 @@ public class DataCovidCountries {
    * each threading flow task
    * insertDataDetailCountry -> insertVaccinationsStatisticsData ->  insertCovidStatisticsData
    */
-//  @EventListener(ApplicationReadyEvent.class)
-//  @Async("taskExecutor")
+  @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
   public void runMultithreading() throws IOException, InterruptedException, ExecutionException {
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() == 0) {
