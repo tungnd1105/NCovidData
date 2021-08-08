@@ -35,9 +35,10 @@ public class VaccinationStatistics implements Serializable {
   private Integer totalVaccinationLocation;
   private Integer totalVaccineAllocated;
   private Integer totalVaccineReality;
-  private float   fullyInjectedPercent;
-  private float   injectedOneDosePercent;
-  private float   totalVaccinePercent;
+  private Double  fullyInjectedPercent;
+  private Double  injectedOneDosePercent;
+  private Double  totalVaccinePercent;
+  private Double  totalInjectedPercent;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

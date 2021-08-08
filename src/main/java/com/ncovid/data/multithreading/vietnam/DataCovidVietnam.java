@@ -97,6 +97,10 @@ public class DataCovidVietnam {
             dataVaccination.setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
             dataVaccination.setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
             dataVaccination.setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
+            dataVaccination.setFullyInjectedPercent(Util.getPercent(dataVaccination.getTotalFullyInjected(),province.getPopOverEighteen()));
+            dataVaccination.setInjectedOneDosePercent(Util.getPercent(dataVaccination.getTotalInjectedOneDose(),province.getPopOverEighteen()));
+            dataVaccination.setTotalVaccinePercent(Util.getPercent(dataVaccination.getTotalVaccineReality(),province.getPopOverEighteen()));
+            dataVaccination.setTotalInjectedPercent(Util.getPercent(dataVaccination.getTotalInjected(),province.getPopOverEighteen()));
             dataVaccination.setProvince(province);
             dataVaccinationRepositories.save(dataVaccination);
           }
