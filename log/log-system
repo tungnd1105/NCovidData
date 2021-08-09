@@ -1174,3 +1174,149 @@ org.springframework.beans.factory.BeanCreationNotAllowedException: Error creatin
 
 2021-08-09 21:38:12.454  INFO 24092 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2021-08-09 21:38:12.454  INFO 24092 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2021-08-09 21:45:18.464  INFO 24092 --- [restartedMain] com.ncovid.NcovidApplication             : Starting NcovidApplication using Java 15.0.2 on laptop-ndt with PID 24092 (F:\GitHub\NCovidData\target\classes started by ndtun in F:\GitHub\NCovidData)
+2021-08-09 21:45:18.474  INFO 24092 --- [restartedMain] com.ncovid.NcovidApplication             : No active profile set, falling back to default profiles: default
+2021-08-09 21:45:18.549  INFO 24092 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-08-09 21:45:18.549  INFO 24092 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-08-09 21:45:19.231  INFO 24092 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-08-09 21:45:19.293  INFO 24092 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 61 ms. Found 7 JPA repository interfaces.
+2021-08-09 21:45:19.756  WARN 24092 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Could not load key store 'classpath:keystore.p12'
+2021-08-09 21:45:19.771  INFO 24092 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2021-08-09 21:45:19.787 ERROR 24092 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Could not load key store 'classpath:keystore.p12'
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:163) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:577) ~[spring-context-5.3.8.jar:5.3.8]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:145) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:434) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:338) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332) ~[spring-boot-2.5.2.jar:2.5.2]
+	at com.ncovid.NcovidApplication.main(NcovidApplication.java:11) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:64) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) ~[spring-boot-devtools-2.5.2.jar:2.5.2]
+Caused by: org.springframework.boot.web.server.WebServerException: Could not load key store 'classpath:keystore.p12'
+	at org.springframework.boot.web.embedded.tomcat.SslConnectorCustomizer.configureSslKeyStore(SslConnectorCustomizer.java:132) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.embedded.tomcat.SslConnectorCustomizer.configureSsl(SslConnectorCustomizer.java:92) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.embedded.tomcat.SslConnectorCustomizer.customize(SslConnectorCustomizer.java:57) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.customizeSsl(TomcatServletWebServerFactory.java:351) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.customizeConnector(TomcatServletWebServerFactory.java:329) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:191) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:182) ~[spring-boot-2.5.2.jar:2.5.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:160) ~[spring-boot-2.5.2.jar:2.5.2]
+	... 13 common frames omitted
+Caused by: java.io.FileNotFoundException: class path resource [keystore.p12] cannot be resolved to URL because it does not exist
+	at org.springframework.util.ResourceUtils.getURL(ResourceUtils.java:137) ~[spring-core-5.3.8.jar:5.3.8]
+	at org.springframework.boot.web.embedded.tomcat.SslConnectorCustomizer.configureSslKeyStore(SslConnectorCustomizer.java:129) ~[spring-boot-2.5.2.jar:2.5.2]
+	... 20 common frames omitted
+
+2021-08-09 21:45:49.187  INFO 23204 --- [restartedMain] com.ncovid.NcovidApplication             : Starting NcovidApplication using Java 15.0.2 on laptop-ndt with PID 23204 (F:\GitHub\NCovidData\target\classes started by ndtun in F:\GitHub\NCovidData)
+2021-08-09 21:45:49.187  INFO 23204 --- [restartedMain] com.ncovid.NcovidApplication             : No active profile set, falling back to default profiles: default
+2021-08-09 21:45:49.258  INFO 23204 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-08-09 21:45:49.258  INFO 23204 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-08-09 21:45:49.942  INFO 23204 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-08-09 21:45:50.005  INFO 23204 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 64 ms. Found 7 JPA repository interfaces.
+2021-08-09 21:45:50.489  INFO 23204 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9000 (https)
+2021-08-09 21:45:50.489  INFO 23204 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-08-09 21:45:50.489  INFO 23204 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.48]
+2021-08-09 21:45:50.584  INFO 23204 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-08-09 21:45:50.584  INFO 23204 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1326 ms
+2021-08-09 21:45:50.708  INFO 23204 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-08-09 21:45:50.755  INFO 23204 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-08-09 21:45:50.818  INFO 23204 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-08-09 21:45:50.896  INFO 23204 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-08-09 21:45:52.491  INFO 23204 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-08-09 21:45:52.506  INFO 23204 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL94Dialect
+2021-08-09 21:45:54.742  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:54.758  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "covid_statistics_country" does not exist, skipping
+2021-08-09 21:45:54.945  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:54.945  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "covid_statistics_vietnam" does not exist, skipping
+2021-08-09 21:45:55.133  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:55.133  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "data_history" does not exist, skipping
+2021-08-09 21:45:55.336  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:55.336  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "vaccination_statistics_country" does not exist, skipping
+2021-08-09 21:45:55.524  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:55.524  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : relation "vaccination_statistics_vietnam" does not exist, skipping
+2021-08-09 21:45:55.712  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:55.712  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "country" does not exist, skipping
+2021-08-09 21:45:55.915  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:55.915  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "covid_statistics_country" does not exist, skipping
+2021-08-09 21:45:56.102  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:56.102  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "covid_statistics_vietnam" does not exist, skipping
+2021-08-09 21:45:56.290  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:56.290  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "data_history" does not exist, skipping
+2021-08-09 21:45:56.493  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:56.493  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "province" does not exist, skipping
+2021-08-09 21:45:56.681  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:56.681  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "vaccination_statistics_country" does not exist, skipping
+2021-08-09 21:45:56.869  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2021-08-09 21:45:56.869  WARN 23204 --- [restartedMain] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "vaccination_statistics_vietnam" does not exist, skipping
+2021-08-09 21:45:59.229  INFO 23204 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-08-09 21:45:59.245  INFO 23204 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-08-09 21:45:59.761  WARN 23204 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-08-09 21:46:00.058  INFO 23204 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-08-09 21:46:01.877  INFO 23204 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9000 (https) with context path ''
+2021-08-09 21:46:01.892  INFO 23204 --- [restartedMain] com.ncovid.NcovidApplication             : Started NcovidApplication in 13.326 seconds (JVM running for 14.233)
+2021-08-09 21:46:02.517  INFO 23204 --- [Thread-1] com.ncovid.util.ProvinceOfVietnam        : Stating get all province code of Vietnam
+2021-08-09 21:46:02.517  INFO 23204 --- [Thread-1] com.ncovid.util.ProvinceOfVietnam        : staring assign task for threading by province code 
+2021-08-09 21:56:01.942  WARN 24720 --- [main] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/ndtun/.m2/repository/org/json/json/20210307/json-20210307.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/ndtun/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2021-08-09 21:56:01.974  INFO 24720 --- [main] com.ncovid.NcovidApplicationTests        : Starting NcovidApplicationTests using Java 15.0.2 on laptop-ndt with PID 24720 (started by ndtun in F:\GitHub\NCovidData)
+2021-08-09 21:56:01.974  INFO 24720 --- [main] com.ncovid.NcovidApplicationTests        : No active profile set, falling back to default profiles: default
+2021-08-09 21:56:03.108  INFO 24720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-08-09 21:56:03.248  INFO 24720 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 137 ms. Found 7 JPA repository interfaces.
+2021-08-09 21:56:04.077  INFO 24720 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-08-09 21:56:04.139  INFO 24720 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-08-09 21:56:04.280  INFO 24720 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-08-09 21:56:04.545  INFO 24720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-08-09 21:56:06.155  INFO 24720 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-08-09 21:56:06.186  INFO 24720 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL94Dialect
+2021-08-09 21:56:13.441  INFO 24720 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-08-09 21:56:13.457  INFO 24720 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-08-09 21:56:14.973  WARN 24720 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-08-09 21:56:15.848  INFO 24720 --- [main] com.ncovid.NcovidApplicationTests        : Started NcovidApplicationTests in 14.522 seconds (JVM running for 15.803)
+2021-08-09 21:56:16.179  INFO 24720 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-08-09 21:56:16.179  INFO 24720 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2021-08-09 21:56:16.539 ERROR 24720 --- [Thread-1] .a.i.SimpleAsyncUncaughtExceptionHandler : Unexpected exception occurred invoking async method: public void com.ncovid.data.multithreading.vietnam.DataCovidVietnam.runMultithreading() throws java.io.IOException,java.lang.InterruptedException
+
+org.springframework.beans.factory.BeanCreationNotAllowedException: Error creating bean with name 'entityManagerFactory': Singleton bean creation not allowed while singletons of this factory are in destruction (Do not request a bean from a BeanFactory in a destroy method implementation!)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:220) ~[spring-beans-5.3.8.jar:5.3.8]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.8.jar:5.3.8]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208) ~[spring-beans-5.3.8.jar:5.3.8]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$1.orderedStream(DefaultListableBeanFactory.java:481) ~[spring-beans-5.3.8.jar:5.3.8]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.detectPersistenceExceptionTranslators(PersistenceExceptionTranslationInterceptor.java:167) ~[spring-tx-5.3.8.jar:5.3.8]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:149) ~[spring-tx-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.5.2.jar:2.5.2]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.8.jar:5.3.8]
+	at com.sun.proxy.$Proxy101.findAll(Unknown Source) ~[na:na]
+	at com.ncovid.data.multithreading.vietnam.DataCovidVietnam.runMultithreading(DataCovidVietnam.java:186) ~[classes/:na]
+	at com.ncovid.data.multithreading.vietnam.DataCovidVietnam$$FastClassBySpringCGLIB$$48916ca8.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:779) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750) ~[spring-aop-5.3.8.jar:5.3.8]
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:115) ~[spring-aop-5.3.8.jar:5.3.8]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:832) ~[na:na]
+
+2021-08-09 21:56:18.664  INFO 24720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-08-09 21:56:18.680  INFO 24720 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
