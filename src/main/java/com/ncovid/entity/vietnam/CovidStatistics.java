@@ -39,7 +39,7 @@ public class CovidStatistics {
   @JoinColumn(name = "province_Code" )
   private Province province;
 
-  @OneToMany(mappedBy = "covidData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "covidData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JsonManagedReference
   private List<DataHistory> dataHistory;
 

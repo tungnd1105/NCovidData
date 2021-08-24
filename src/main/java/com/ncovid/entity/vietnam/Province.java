@@ -1,12 +1,12 @@
 package com.ncovid.entity.vietnam;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ncovid.entity.vietnam.vaccinationSite.District;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author ndtun
@@ -16,7 +16,8 @@ import java.io.Serializable;
  * description class: information of all province in Vietnam
  */
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Province implements Serializable {
@@ -47,5 +48,9 @@ public class Province implements Serializable {
   @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
   private VaccinationStatistics vaccinationData;
+
+  @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonManagedReference
+  private List<District> districtList;
 
 }

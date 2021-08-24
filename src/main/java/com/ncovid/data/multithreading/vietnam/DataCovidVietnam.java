@@ -97,10 +97,10 @@ public class DataCovidVietnam {
             dataVaccination.setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
             dataVaccination.setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
             dataVaccination.setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
-            dataVaccination.setFullyInjectedPercent(Util.getPercent(dataVaccination.getTotalFullyInjected(),province.getPopOverEighteen()));
-            dataVaccination.setInjectedOneDosePercent(Util.getPercent(dataVaccination.getTotalInjectedOneDose(),province.getPopOverEighteen()));
-            dataVaccination.setTotalVaccinePercent(Util.getPercent(dataVaccination.getTotalVaccineReality(),province.getPopOverEighteen()));
-            dataVaccination.setTotalInjectedPercent(Util.getPercent(dataVaccination.getTotalInjected(),province.getPopOverEighteen()));
+            dataVaccination.setFullyInjectedPercent(Util.getPercent(dataVaccination.getTotalFullyInjected(), province.getPopOverEighteen()));
+            dataVaccination.setInjectedOneDosePercent(Util.getPercent(dataVaccination.getTotalInjectedOneDose(), province.getPopOverEighteen()));
+            dataVaccination.setTotalVaccinePercent(Util.getPercent(dataVaccination.getTotalVaccineReality(), province.getPopOverEighteen()));
+            dataVaccination.setTotalInjectedPercent(Util.getPercent(dataVaccination.getTotalInjected(), province.getPopOverEighteen()));
             dataVaccination.setProvince(province);
             dataVaccinationRepositories.save(dataVaccination);
           }
@@ -158,7 +158,9 @@ public class DataCovidVietnam {
               DataHistory dataHistory = new DataHistory();
               JSONObject dataByDate = (JSONObject) jsonObject.get("data");
               dataHistory.setDate(date);
-              dataHistory.setNewCases(dataByDate.getInt(date.toString()));
+              if (dataByDate.has(date.toString())) {
+                dataHistory.setNewCases(dataByDate.getInt(date.toString()));
+              }
               dataHistory.setCovidData(province.getCovidData());
               DataHistoryRepositories.save(dataHistory);
             }

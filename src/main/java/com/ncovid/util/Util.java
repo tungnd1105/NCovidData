@@ -29,7 +29,7 @@ public class Util {
   public static LocalDate today = LocalDate.now();
   public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss");
   public static String timeUpdate = formatterDateTime.format(LocalDateTime.now());
-  private static DecimalFormat df2 = new DecimalFormat("#.##");
+  private static final DecimalFormat df2 = new DecimalFormat("#.##");
 
   public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
   public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;
@@ -38,6 +38,8 @@ public class Util {
   public static String urlDataVaccinations = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
   public static String urlDetailCountry = "https://restcountries.eu/rest/v2/all";
   public static String urlDataCovidAllCountries = "https://www.worldometers.info/coronavirus/";
+  public static String getUrlDataVaccinationSite = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-location/search?page=0&size=10&";
+  public static String urlDetailDistricts = "https://provinces.open-api.vn/api/?depth=3";
   public static String urlDataVaccinationsAllCountries = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.csv";
 
   public static String fetchDataJson(String url) throws IOException, InterruptedException {
