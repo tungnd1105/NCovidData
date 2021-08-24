@@ -14,7 +14,6 @@ import java.util.concurrent.Executor;
  * @Date 25/07/2021
  */
 @Configuration
-@EnableAsync
 public class MultithreadingConfig {
 
   @Bean(name ="taskExecutor")
