@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.vietnam;
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.vietnam.CovidStatistics;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
@@ -54,8 +55,8 @@ public class DataCovidVietnam {
 
   private void insertDataInfoOfProvince(Integer provinceCode) {
     try {
-      JSONArray jsonDataProvinceArray = new JSONArray(Util.fetchDataJson(Util.urlDataAllProince));
-      JSONArray jsonDataPopulationArray = new JSONArray(Util.fetchDataJson(Util.urlDataPopulationOfProince));
+      JSONArray jsonDataProvinceArray = new JSONArray(Util.fetchDataJson(APIData.detailProvince));
+      JSONArray jsonDataPopulationArray = new JSONArray(Util.fetchDataJson(APIData.population));
       for (int k = 0; k < jsonDataProvinceArray.length(); k++) {
         JSONObject object = (JSONObject) jsonDataProvinceArray.get(k);
         if (object.getInt("provinceCode") == provinceCode) {
@@ -83,7 +84,7 @@ public class DataCovidVietnam {
 
   private void insertVaccinationStatisticsData(Integer provinceCode) {
     try {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccinations));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.vaccinationsByProvince));
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         for (int k = 0; k < jsonArray.length(); k++) {
@@ -114,9 +115,9 @@ public class DataCovidVietnam {
 
   private void insertCovidStatisticsData(Integer provinceCode) {
     try {
-      JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
+      JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.covidByProvince));
       JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
-      JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
+      JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(APIData.covidByCurrent));
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         for (int j = 0; j < jsonArray1.length(); j++) {
@@ -134,6 +135,8 @@ public class DataCovidVietnam {
               dataCovid.setEntryCases(object1.getInt("nhap_canh"));
               dataCovid.setUpdateTime(Util.timeUpdate);
               dataCovid.setProvince(province);
+              dataCovid.setCasesPercent(Util.getPercent(dataCovid.getCases(),province.getPopOverEighteen()));
+              dataCovid.setDeathsPercent(Util.getPercent(dataCovid.getDeaths(),province.getPopOverEighteen()));
               dataCovidRepositories.save(dataCovid);
             }
           }
@@ -148,7 +151,10 @@ public class DataCovidVietnam {
 
   private void insertDataNewCasesByDate(Integer provinceCode) {
     try {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.covidByCurrent));
+      if(jsonArray.isEmpty()){
+        logger.warn("cannot get data from sources ");
+      }
       Province province = provinceRepositories.findById(provinceCode).orElse(null);
       if (province != null) {
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -192,7 +198,7 @@ public class DataCovidVietnam {
         CompletableFuture.runAsync(() ->
           insertDataInfoOfProvince(provinceCode))
           .thenRun(() -> insertVaccinationStatisticsData(provinceCode))
-          .thenRun(() -> insertCovidStatisticsData(provinceCode))
+          .thenRun(() -> insertCovidStatisticsData(provinceCode));
           .thenRun(() -> insertDataNewCasesByDate(provinceCode));
       }
     }

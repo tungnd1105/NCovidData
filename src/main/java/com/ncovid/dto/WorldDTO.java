@@ -1,4 +1,4 @@
-package com.ncovid.response;
+package com.ncovid.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class World {
+public class WorldDTO {
 
   private Integer totalCases;
   private Integer totalDeaths;

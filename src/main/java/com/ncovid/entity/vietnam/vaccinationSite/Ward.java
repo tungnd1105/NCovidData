@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,6 +42,7 @@ public class Ward implements Serializable {
   private District district;
 
   @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @Fetch(value=FetchMode.SELECT)
   @JsonManagedReference
   private List<Site> siteList;
 }

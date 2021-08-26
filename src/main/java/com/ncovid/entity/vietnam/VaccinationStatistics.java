@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -38,6 +39,7 @@ public class VaccinationStatistics implements Serializable {
   private Double  fullyInjectedPercent;
   private Double  injectedOneDosePercent;
   private Double  totalVaccinePercent;
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double  totalInjectedPercent;
 
   @JsonBackReference

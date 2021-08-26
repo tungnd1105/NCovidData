@@ -13,6 +13,7 @@ public class Message {
   public static String insertDataProvince        =  " completed task insert data covid and data Vaccinations of ";
   public static String updateDataProvince        =  " completed task update data covid and data Vaccinations of ";
   public static String updateDataCountry         =  " completed task update data covid and data Vaccinations of country ";
+  public static String insertDataVaccinationSite =  " completed task insert data vaccination site of ward ";
 
 
 }

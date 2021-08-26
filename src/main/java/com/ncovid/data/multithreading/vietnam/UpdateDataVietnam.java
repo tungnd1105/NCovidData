@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.vietnam;
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
 import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
@@ -52,7 +53,7 @@ public class UpdateDataVietnam {
   private void updateVaccinationStatisticsData(Province province) {
     try {
       if (province != null) {
-        JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataVaccinations));
+        JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.vaccinationsByProvince));
         for (int k = 0; k < jsonArray.length(); k++) {
           JSONObject object = (JSONObject) jsonArray.get(k);
           if (object.getInt("provinceCode") == province.getProvinceCode()) {
@@ -99,9 +100,9 @@ public class UpdateDataVietnam {
 
   private void updateCovidStatisticsData(Province province) {
     try {
-      JSONObject jsonObject = new JSONObject(Util.fetchDataJson(Util.urlDataProvinceType));
+      JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.covidByProvince));
       JSONArray jsonArray1 = (JSONArray) jsonObject.get("rows");
-      JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
+      JSONArray jsonArray2 = new JSONArray(Util.fetchDataJson(APIData.covidByCurrent));
       if (province != null) {
         for (int k = 0; k < jsonArray1.length(); k++) {
           JSONObject object1 = (JSONObject) jsonArray1.get(k);
@@ -130,7 +131,7 @@ public class UpdateDataVietnam {
 
   private void updateDataNewCases(Province province) {
     try {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDataByCurrent));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.covidByCurrent));
       if (province != null) {
         province.getCovidData().getDataHistory().forEach(e -> {
           if (!e.getDate().isEqual(Util.today)) {
@@ -163,7 +164,7 @@ public class UpdateDataVietnam {
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 6,12,20,0 * * * ")
+  @Scheduled(cron = "0 0 18,20,0 * * * ")
   public void multithreading() throws InterruptedException, IOException {
     List<Province> checkData = provinceRepositories.findAll();
     if (checkData.size() != 0) {

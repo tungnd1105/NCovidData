@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,14 +35,17 @@ public class CovidStatistics {
   private Integer entryCases;
   private Integer today;
   private Integer yesterday;
+  private Double casesPercent;
+  private Double deathsPercent;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "province_Code" )
+  @JoinColumn(name = "province_Code")
   private Province province;
 
-  @OneToMany(mappedBy = "covidData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "covidData", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
+  @Fetch(value = FetchMode.SELECT)
   private List<DataHistory> dataHistory;
 
 }

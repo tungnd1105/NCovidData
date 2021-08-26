@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.countries;
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.countries.Country;
 import com.ncovid.repositories.countries.CountryRepositories;
 import com.ncovid.repositories.countries.CovidStatisticsRepositories;
@@ -45,7 +46,7 @@ public class UpdateDataCountry {
   private VaccinationStatisticsRepositories dataVaccinationRepositories;
 
   private void updateVaccinationData(Country country) throws IOException, InterruptedException {
-    Iterable<CSVRecord> data = Util.readerData(Util.urlDataVaccinationsAllCountries);
+    Iterable<CSVRecord> data = Util.readerData(APIData.vaccinationsByCountry);
     if (country != null) {
       data.forEach(record -> {
         if (country.getId().matches(record.get("iso_code"))) {
@@ -64,7 +65,7 @@ public class UpdateDataCountry {
   }
 
   private void updateCovidData(Country country) throws IOException {
-    Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(50000).get();
+    Document document = Jsoup.connect(APIData.covidByCountry.getApi()).timeout(50000).get();
     Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
     if (country != null) {
       body.select("tbody tr").forEach(element -> {
@@ -96,8 +97,8 @@ public class UpdateDataCountry {
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 6,12,20,0 * * * ")
-  public void runMultithreading() throws IOException, InterruptedException, ExecutionException {
+  @Scheduled(cron = "0 0 17,19 * * * ")
+  public void runMultithreading() throws IOException, InterruptedException {
     List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() != 0) {

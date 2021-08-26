@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.countries;
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.countries.Country;
 import com.ncovid.entity.countries.CovidStatistics;
 import com.ncovid.entity.countries.VaccinationStatistics;
@@ -51,7 +52,7 @@ public class DataCovidCountries {
 
   private void insertDataDetailCountry(String alphaCode) {
     try {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDetailCountry));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.detailCountry));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject jsonObject = (JSONObject) jsonArray.get(k);
         if (jsonObject.getString("alpha3Code").matches(alphaCode)) {
@@ -76,7 +77,7 @@ public class DataCovidCountries {
   private void insertVaccinationsStatisticsData(String alphaCode) {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
-      Iterable<CSVRecord> data = Util.readerData(Util.urlDataVaccinationsAllCountries);
+      Iterable<CSVRecord> data = Util.readerData(APIData.vaccinationsByCountry);
       if (country != null) {
         data.forEach(record -> {
           if (country.getId().matches(record.get("iso_code"))) {
@@ -103,7 +104,7 @@ public class DataCovidCountries {
   private void insertCovidStatisticsData(String alphaCode) {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
-      Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(500000).get();
+      Document document = Jsoup.connect(APIData.covidByCountry.getApi()).timeout(500000).get();
       Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
         body.select("tbody tr").forEach(element -> {
@@ -139,9 +140,9 @@ public class DataCovidCountries {
    * each threading flow task
    * insertDataDetailCountry -> insertVaccinationsStatisticsData ->  insertCovidStatisticsData
    */
-  @EventListener(ApplicationReadyEvent.class)
-  @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException, ExecutionException {
+//  @EventListener(ApplicationReadyEvent.class)
+//  @Async("taskExecutor")
+  public void runMultithreading() throws IOException, InterruptedException {
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() == 0) {
       List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();

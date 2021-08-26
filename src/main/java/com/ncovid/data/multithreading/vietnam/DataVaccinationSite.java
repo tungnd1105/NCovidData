@@ -1,6 +1,7 @@
 package com.ncovid.data.multithreading.vietnam;
 
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.vietnam.Province;
 import com.ncovid.entity.vietnam.vaccinationSite.District;
 import com.ncovid.entity.vietnam.vaccinationSite.Site;
@@ -9,6 +10,7 @@ import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.repositories.vietnam.vaccinationSite.DistrictRepositories;
 import com.ncovid.repositories.vietnam.vaccinationSite.SiteRepositories;
 import com.ncovid.repositories.vietnam.vaccinationSite.WardRepositories;
+import com.ncovid.util.Message;
 import com.ncovid.util.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +23,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -35,7 +41,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 public class DataVaccinationSite {
-  
+
   public static Logger logger = LoggerFactory.getLogger(DataVaccinationSite.class);
 
   @Autowired
@@ -90,12 +96,12 @@ public class DataVaccinationSite {
 
   private void insertDataVaccinationSite(List<Ward> wardList) throws IOException, InterruptedException {
     for (Ward ward : wardList) {
+      String api = Util.getUrlDataVaccinationSite +
+        "provinceCode=" + String.format("%02d", ward.getDistrict().getProvince().getProvinceCode()) +
+        "&districtCode=" + String.format("%03d", ward.getDistrict().getDistrictCode()) +
+        "&wardCode=" + String.format("%05d", ward.getWardCode());
       List<Site> siteList = new ArrayList<>();
-      String url = Util.getUrlDataVaccinationSite +
-        "provinceCode=" + ward.getDistrict().getProvince().getProvinceCode() +
-        "&districtCode=" + ward.getDistrict().getDistrictCode() + "&wardCode=" + ward.getWardCode();
-
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(url));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(api));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject object = jsonArray.getJSONObject(k);
         Site site = new Site();
@@ -108,8 +114,8 @@ public class DataVaccinationSite {
         siteList.add(site);
       }
       siteRepositories.saveAll(siteList);
+      logger.info("Threading-" + Thread.currentThread().getId() + Message.insertDataVaccinationSite + ward.getWarName());
     }
-    logger.info("completed " + Thread.currentThread().getId());
   }
 
 
@@ -120,12 +126,12 @@ public class DataVaccinationSite {
    * each threading flow task
    * insertDataInfoOfDistricts -> insertDataInfoOfWard ->  insertDataVaccinationSite
    */
-  @EventListener(ApplicationReadyEvent.class)
-  @Async("taskExecutor")
+//  @EventListener(ApplicationReadyEvent.class)
+//  @Async("taskExecutor")
   public void runMultithreading() throws IOException, InterruptedException {
     List<District> checkData = districtRepositories.findAll();
     if (checkData.size() == 0) {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDetailDistricts));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.detailDistricts));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject jsonObject = jsonArray.getJSONObject(k);
         CompletableFuture<List<Ward>> completableFuture =

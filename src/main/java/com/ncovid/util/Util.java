@@ -1,7 +1,11 @@
 package com.ncovid.util;
 
+import com.ncovid.data.multithreading.countries.DataCovidCountries;
+import com.ncovid.entity.APIData;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -23,6 +27,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class Util {
 
+  public static Logger logger = LoggerFactory.getLogger(Util.class);
+
   public static String date = "2021-04-27";
   public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   public static LocalDate startDate = LocalDate.parse(date, formatter);
@@ -31,21 +37,22 @@ public class Util {
   public static String timeUpdate = formatterDateTime.format(LocalDateTime.now());
   private static final DecimalFormat df2 = new DecimalFormat("#.##");
 
-  public static String urlDataByCurrent = "https://ncov.vncdc.gov.vn/v2/vietnam/by-current?start_time=2021-04-27" + "&end_time=" + today;
-  public static String urlDataProvinceType = "https://ncov.vncdc.gov.vn/v2/vietnam/province-type?start_time=2021-04-27" + "&end_time=" + today;
-  public static String urlDataAllProince = "https://tiemchungcovid19.gov.vn/api/province/public/all";
-  public static String urlDataPopulationOfProince = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccine-allocate/province-detail";
-  public static String urlDataVaccinations = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-statistics/all";
-  public static String urlDetailCountry = "https://restcountries.eu/rest/v2/all";
-  public static String urlDataCovidAllCountries = "https://www.worldometers.info/coronavirus/";
   public static String getUrlDataVaccinationSite = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-location/search?page=0&size=10&";
-  public static String urlDetailDistricts = "https://provinces.open-api.vn/api/?depth=3";
-  public static String urlDataVaccinationsAllCountries = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.csv";
 
-  public static String fetchDataJson(String url) throws IOException, InterruptedException {
+  public static String fetchDataJson(APIData api) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();
-    HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(url)).build();
+    HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(api.getApi())).build();
     HttpResponse<String> httpResponse = newClient.send(newRequest, HttpResponse.BodyHandlers.ofString());
+    System.out.println(httpResponse.statusCode());
+    return httpResponse.body();
+  }
+  public static String fetchDataJson(String api) throws IOException, InterruptedException {
+    HttpClient newClient = HttpClient.newHttpClient();
+    HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(api)).build();
+    HttpResponse<String> httpResponse = newClient.send(newRequest, HttpResponse.BodyHandlers.ofString());
+    if(httpResponse.statusCode() == 500){
+      logger.error("internal server error sources data");
+    }
     return httpResponse.body();
   }
 
@@ -74,9 +81,9 @@ public class Util {
     return Double.parseDouble(result);
   }
 
-  public static Iterable<CSVRecord> readerData(String url) throws IOException, InterruptedException {
+  public static Iterable<CSVRecord> readerData(APIData api) throws IOException, InterruptedException {
     HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(api.getApi())).build();
     HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
     StringReader stringReader = new StringReader(httpResponse.body());
     return CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(stringReader);
