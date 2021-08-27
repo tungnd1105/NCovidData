@@ -36,9 +36,16 @@ public class VaccinationStatistics implements Serializable {
   private Integer totalVaccinationLocation;
   private Integer totalVaccineAllocated;
   private Integer totalVaccineReality;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double  fullyInjectedPercent;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double  injectedOneDosePercent;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double  totalVaccinePercent;
+
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double  totalInjectedPercent;
 

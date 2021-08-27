@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,12 +32,18 @@ public class CovidStatistics {
   private String  updateTime;
   private Integer cases;
   private Integer deaths;
-  private Integer domesticCases;
-  private Integer entryCases;
+  private Integer recovered;
   private Integer today;
   private Integer yesterday;
-  private Double casesPercent;
-  private Double deathsPercent;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
+  private Double  casesPercent;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
+  private Double  deathsPercent;
+
+  @NumberFormat(style = NumberFormat.Style.PERCENT)
+  private Double  recoveredPercent;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

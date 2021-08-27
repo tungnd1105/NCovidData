@@ -17,16 +17,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -96,7 +89,7 @@ public class DataVaccinationSite {
 
   private void insertDataVaccinationSite(List<Ward> wardList) throws IOException, InterruptedException {
     for (Ward ward : wardList) {
-      String api = Util.getUrlDataVaccinationSite +
+      String api = Util.urlDataVaccinationSite +
         "provinceCode=" + String.format("%02d", ward.getDistrict().getProvince().getProvinceCode()) +
         "&districtCode=" + String.format("%03d", ward.getDistrict().getDistrictCode()) +
         "&wardCode=" + String.format("%05d", ward.getWardCode());

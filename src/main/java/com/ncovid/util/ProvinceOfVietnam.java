@@ -26,14 +26,12 @@ public class ProvinceOfVietnam {
 
   public static List<Integer> getAllProvince() throws IOException, InterruptedException {
     logger.info("Stating get all province code of Vietnam");
-    logger.info("staring assign task for threading by province code ");
-    JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(APIData.covidByCurrent));
+    JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(APIData.detailDistricts));
     List<Integer> listProvince = new ArrayList<>();
     for (int i = 0; i < dataJsonProvince.length(); i++) {
       JSONObject province = (JSONObject) dataJsonProvince.get(i);
-      listProvince.add(Integer.parseInt(province.get("ma").toString()));
+      listProvince.add(Integer.parseInt(province.get("code").toString()));
     }
-
     return listProvince;
   }
 
