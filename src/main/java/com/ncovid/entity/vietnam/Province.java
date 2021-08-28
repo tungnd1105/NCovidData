@@ -1,5 +1,6 @@
 package com.ncovid.entity.vietnam;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ncovid.entity.vietnam.vaccinationSite.District;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -46,17 +49,18 @@ public class Province implements Serializable {
   @Column(length = 100)
   private String  country;
 
-  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
   @JsonManagedReference
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private CovidStatistics covidData;
 
-  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
+  @OneToOne(mappedBy = "province", cascade = CascadeType.ALL )
   private VaccinationStatistics vaccinationData;
 
+  @JsonBackReference
+  @Fetch(value = FetchMode.SUBSELECT)
   @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  @JsonManagedReference
-  @Fetch(value= FetchMode.SELECT)
   private List<District> districtList;
 
 }

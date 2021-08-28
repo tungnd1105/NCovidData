@@ -1,5 +1,0 @@
-{
-    "operationName": "provinces",
-    "query": "query provinces {\n  provinces {\n    Province_Name\n    Province_Id\n    Lat\n    Long\n    Confirmed\n    Deaths\n    Recovered\n    Last_Update\n    __typename\n  }\n}\n",
-    "variables": {}
-}

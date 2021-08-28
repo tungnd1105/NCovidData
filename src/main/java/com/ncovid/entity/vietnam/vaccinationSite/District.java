@@ -42,9 +42,8 @@ public class District implements Serializable {
   @JoinColumn(name = "province_Code")
   private Province province;
 
-  @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany( fetch = FetchType.EAGER, mappedBy = "district", cascade = CascadeType.ALL)
   @JsonManagedReference
-  @Fetch(value=FetchMode.SELECT)
   private List<Ward> wardList;
 
 }

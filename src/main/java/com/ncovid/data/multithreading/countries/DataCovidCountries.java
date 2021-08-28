@@ -10,6 +10,7 @@ import com.ncovid.repositories.countries.VaccinationStatisticsRepositories;
 import com.ncovid.util.AlphaCodeCountry;
 import com.ncovid.util.Message;
 import com.ncovid.util.Util;
+import com.ncovid.util.UtilDate;
 import org.apache.commons.csv.CSVRecord;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -82,7 +83,7 @@ public class DataCovidCountries {
         data.forEach(record -> {
           if (country.getId().matches(record.get("iso_code"))) {
             VaccinationStatistics dataVaccinations = new VaccinationStatistics();
-            dataVaccinations.setUpdateTime(Util.timeUpdate);
+            dataVaccinations.setUpdateTime(UtilDate.timeUpdate);
             dataVaccinations.setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
             dataVaccinations.setNewVaccine(Util.checkString(record.get("new_vaccinations")));
             dataVaccinations.setTotalFullyInjected(Util.checkString(record.get("people_fully_vaccinated")));
@@ -110,7 +111,7 @@ public class DataCovidCountries {
         body.select("tbody tr").forEach(element -> {
           if (element.select("td").get(1).text().matches(country.getName())) {
             CovidStatistics SCovid = new CovidStatistics();
-            SCovid.setUpdateTime(Util.timeUpdate);
+            SCovid.setUpdateTime(UtilDate.timeUpdate);
             SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
             SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
             SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
@@ -140,8 +141,8 @@ public class DataCovidCountries {
    * each threading flow task
    * insertDataDetailCountry -> insertVaccinationsStatisticsData ->  insertCovidStatisticsData
    */
-//  @EventListener(ApplicationReadyEvent.class)
-//  @Async("taskExecutor")
+  @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
   public void runMultithreading() throws IOException, InterruptedException {
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() == 0) {

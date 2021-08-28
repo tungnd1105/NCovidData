@@ -8,6 +8,7 @@ import com.ncovid.repositories.countries.VaccinationStatisticsRepositories;
 import com.ncovid.util.AlphaCodeCountry;
 import com.ncovid.util.Message;
 import com.ncovid.util.Util;
+import com.ncovid.util.UtilDate;
 import org.apache.commons.csv.CSVRecord;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -52,7 +53,7 @@ public class UpdateDataCountry {
         if (country.getId().matches(record.get("iso_code"))) {
           country.getVaccinationData().setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
           country.getVaccinationData().setNewVaccine(Util.checkString(record.get("new_vaccinations")));
-          country.getVaccinationData().setUpdateTime(Util.timeUpdate);
+          country.getVaccinationData().setUpdateTime(UtilDate.timeUpdate);
           country.getVaccinationData().setTotalFullyInjected(Util.checkString(record.get("people_fully_vaccinated")));
           country.getVaccinationData().setTotalInjectedOneDose(Util.checkString(record.get("people_vaccinated")));
           country.getVaccinationData().setTotalVaccinePercent(Util.parseDouble(record.get("total_vaccinations_per_hundred")));
@@ -72,7 +73,7 @@ public class UpdateDataCountry {
         if (element.select("td").get(1).text().matches(country.getName())) {
           country.getCovidData().setTotalCase(Util.checkString(element.select("td").get(2).text()));
           country.getCovidData().setNewCases(Util.checkString(element.select("td").get(3).text()));
-          country.getCovidData().setUpdateTime(Util.timeUpdate);
+          country.getCovidData().setUpdateTime(UtilDate.timeUpdate);
           country.getCovidData().setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
           country.getCovidData().setNewDeaths(Util.checkString(element.select("td").get(5).text()));
           country.getCovidData().setTotalRecovered(Util.checkString(element.select("td").get(6).text()));

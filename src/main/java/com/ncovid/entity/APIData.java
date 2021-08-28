@@ -12,7 +12,7 @@ import lombok.ToString;
 
 @ToString
 public enum APIData {
-
+  newCasesByDate("https://ncov.moh.gov.vn/"),
   covidByProvince("https://corona-api.kompa.ai/graphql"),
   detailCountry("https://restcountries.eu/rest/v2/all"),
   covidByCountry("https://www.worldometers.info/coronavirus/"),
