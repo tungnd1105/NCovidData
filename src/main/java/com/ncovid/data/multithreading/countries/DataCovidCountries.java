@@ -1,5 +1,6 @@
 package com.ncovid.data.multithreading.countries;
 
+import com.ncovid.entity.APIData;
 import com.ncovid.entity.countries.Country;
 import com.ncovid.entity.countries.CovidStatistics;
 import com.ncovid.entity.countries.VaccinationStatistics;
@@ -9,6 +10,7 @@ import com.ncovid.repositories.countries.VaccinationStatisticsRepositories;
 import com.ncovid.util.AlphaCodeCountry;
 import com.ncovid.util.Message;
 import com.ncovid.util.Util;
+import com.ncovid.util.UtilDate;
 import org.apache.commons.csv.CSVRecord;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,7 +53,7 @@ public class DataCovidCountries {
 
   private void insertDataDetailCountry(String alphaCode) {
     try {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(Util.urlDetailCountry));
+      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.detailCountry));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject jsonObject = (JSONObject) jsonArray.get(k);
         if (jsonObject.getString("alpha3Code").matches(alphaCode)) {
@@ -76,12 +78,12 @@ public class DataCovidCountries {
   private void insertVaccinationsStatisticsData(String alphaCode) {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
-      Iterable<CSVRecord> data = Util.readerData(Util.urlDataVaccinationsAllCountries);
+      Iterable<CSVRecord> data = Util.readerData(APIData.vaccinationsByCountry);
       if (country != null) {
         data.forEach(record -> {
           if (country.getId().matches(record.get("iso_code"))) {
             VaccinationStatistics dataVaccinations = new VaccinationStatistics();
-            dataVaccinations.setUpdateTime(Util.timeUpdate);
+            dataVaccinations.setUpdateTime(UtilDate.timeUpdate);
             dataVaccinations.setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
             dataVaccinations.setNewVaccine(Util.checkString(record.get("new_vaccinations")));
             dataVaccinations.setTotalFullyInjected(Util.checkString(record.get("people_fully_vaccinated")));
@@ -103,13 +105,13 @@ public class DataCovidCountries {
   private void insertCovidStatisticsData(String alphaCode) {
     try {
       Country country = countryRepositories.findById(alphaCode).orElse(null);
-      Document document = Jsoup.connect(Util.urlDataCovidAllCountries).timeout(500000).get();
+      Document document = Jsoup.connect(APIData.covidByCountry.getApi()).timeout(500000).get();
       Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
         body.select("tbody tr").forEach(element -> {
           if (element.select("td").get(1).text().matches(country.getName())) {
             CovidStatistics SCovid = new CovidStatistics();
-            SCovid.setUpdateTime(Util.timeUpdate);
+            SCovid.setUpdateTime(UtilDate.timeUpdate);
             SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
             SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
             SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
@@ -141,7 +143,7 @@ public class DataCovidCountries {
    */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException, ExecutionException {
+  public void runMultithreading() throws IOException, InterruptedException {
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() == 0) {
       List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();

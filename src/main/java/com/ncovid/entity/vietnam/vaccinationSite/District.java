@@ -6,6 +6,8 @@ import com.ncovid.entity.vietnam.Province;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,7 +42,7 @@ public class District implements Serializable {
   @JoinColumn(name = "province_Code")
   private Province province;
 
-  @OneToMany(mappedBy = "district", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany( fetch = FetchType.EAGER, mappedBy = "district", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<Ward> wardList;
 

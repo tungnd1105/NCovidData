@@ -2,6 +2,7 @@ package com.ncovid.entity.vietnam;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,11 +30,11 @@ public class DataHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private LocalDate date;
-  private Integer newCases;
+  private Integer newCases = 0;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "id_data_covid")
   @JsonBackReference
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "id_data_covid", nullable = false)
   private CovidStatistics covidData;
 
 }

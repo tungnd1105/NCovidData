@@ -1,5 +1,6 @@
 package com.ncovid.util;
 
+import com.ncovid.entity.APIData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class AlphaCodeCountry {
     logger.info("starting get all alpha code of country");
     logger.info("staring assign task for threading by alpha code of country");
     List<String> alphaCodeList = new ArrayList<>();
-    JSONArray dataJson = new JSONArray(Util.fetchDataJson(Util.urlDetailCountry));
+    JSONArray dataJson = new JSONArray(Util.fetchDataJson(APIData.detailCountry));
     for (int i = 0; i < dataJson.length(); i++) {
       JSONObject alphaCode = (JSONObject) dataJson.get(i);
       alphaCodeList.add(alphaCode.getString("alpha3Code"));

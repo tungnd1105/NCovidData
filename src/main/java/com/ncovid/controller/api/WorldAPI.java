@@ -1,6 +1,7 @@
 package com.ncovid.controller.api;
 
-import com.ncovid.response.World;
+
+import com.ncovid.dto.WorldDTO;
 import com.ncovid.services.WorldServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class WorldAPI {
   private WorldServices worldServices;
 
   @GetMapping
-  private ResponseEntity<World> statisticsWorld() {
+  private ResponseEntity<WorldDTO> statisticsWorld() {
     return worldServices.statisticsWorld();
   }
 }
