@@ -1,25 +1,33 @@
 package com.ncovid.services;
 
 import com.ncovid.data.multithreading.vietnam.DataCovidVietnam;
-import com.ncovid.dto.CovidDTO;
-import com.ncovid.dto.VaccinationSiteDTO;
+import com.ncovid.dto.DataTableCovidDTO;
+import com.ncovid.dto.ProvinceDTO;
+import com.ncovid.entity.vietnam.CovidStatistics;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
+import com.ncovid.entity.vietnam.vaccinationSite.Site;
+import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
+import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
+import com.ncovid.repositories.vietnam.vaccinationSite.SiteRepositories;
 import com.ncovid.util.ProvinceOfVietnam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ndtun
@@ -37,91 +45,66 @@ public class VietnamServices {
   @Autowired
   private ProvinceRepositories provinceRepositories;
 
-  public ResponseEntity<Province> findOneByProvinceCodeOrName(Integer provinceCode, String name) {
-    CovidDTO covidDTO = new CovidDTO();
-    if (name != null) {
-      name = name.toUpperCase().substring(1);
-    }
-    if (provinceCode == null && name == null) {
-      logger.warn("requirement a parameter province code or name or short name");
-      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    }
-    Province province = provinceRepositories.findByProvinceCodeOrName(provinceCode, name);
-    if (province == null) {
-      logger.warn("not found ");
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-    province.getCovidData().getDataHistory().sort(Comparator.comparing(DataHistory::getDate));
-    covidDTO.setProvinceCode(province.getProvinceCode());
-    covidDTO.setName(province.getName());
-    covidDTO.setCountry(province.getCountry());
-    covidDTO.setShortName(province.getShortName());
-    covidDTO.setTotalPopulation(province.getTotalPopulation());
-    covidDTO.setPopOverEighteen(province.getPopOverEighteen());
-    covidDTO.setCovidData(province.getCovidData());
-    covidDTO.setVaccinationData(province.getVaccinationData());
-    return ResponseEntity.ok(province);
-  }
+  @Autowired
+  private DataHistoryRepositories dataHistoryRepositories;
 
-  public ResponseEntity<VaccinationSiteDTO> findVaccinationSite(Integer provinceCode, Integer districtsCode, Integer wardCode) {
-    Province province = provinceRepositories.findProvince(provinceCode, districtsCode, wardCode);
-    VaccinationSiteDTO vaccinationSiteDTO = new VaccinationSiteDTO();
-    if (provinceCode == null && districtsCode == null && wardCode == null) {
-      logger.warn("requirement a parameter province code or districts code or ward code");
+  @Autowired
+  private CovidStatisticsRepositories covidStatisticsRepositories;
+
+  @Autowired
+  private SiteRepositories siteRepositories;
+
+  public ResponseEntity<ProvinceDTO> findOneByProvinceCodeOrProvinceName(Integer provinceCode, String name, String shortname) {
+    Province province = provinceRepositories.findByProvinceCodeOrName(provinceCode, name,shortname);
+    ProvinceDTO provinceDTO = ProvinceDTO.TransferProvinceDTO(province);
+    if (provinceCode == null && name == null && shortname == null) {
+      logger.warn("requirement a parameter province code or province name or shortname");
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
     if (province == null) {
-      logger.warn("not found ");
+      logger.warn("parameter did not matches province");
       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    vaccinationSiteDTO.setProvinceCode(province.getProvinceCode());
-    vaccinationSiteDTO.setName(province.getName());
-    vaccinationSiteDTO.setCountry(province.getCountry());
-    vaccinationSiteDTO.setShortName(province.getShortName());
-    vaccinationSiteDTO.setTotalPopulation(province.getTotalPopulation());
-    vaccinationSiteDTO.setDistrictList(province.getDistrictList());
-    vaccinationSiteDTO.setPopOverEighteen(province.getPopOverEighteen());
-    return ResponseEntity.ok(vaccinationSiteDTO);
+    return ResponseEntity.ok(provinceDTO);
   }
 
-  public ResponseEntity<List<CovidDTO>> multithreading(String startDate, String endDate) {
-    List<CovidDTO> provinceList = new ArrayList<>();
-    try {
-      List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
-      if (startDate == null && endDate == null) {
-        logger.warn("requirement parameter start date and end date must not be null");
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-      }
-
-      for (Integer provinceCode : provinceCodeList) {
-        CompletableFuture<CovidDTO> completableFuture = CompletableFuture.supplyAsync(() -> {
-          Province province = provinceRepositories.findById(provinceCode).orElse(null);
-          CovidDTO covidDTO = new CovidDTO();
-          if (province != null) {
-            //filter and sort
-            province.getCovidData()
-              .getDataHistory().removeIf(c ->
-              !c.getDate().isBefore(LocalDate.parse(startDate)) && c.getDate().isAfter(LocalDate.parse(endDate)));
-
-            covidDTO.setProvinceCode(province.getProvinceCode());
-            covidDTO.setName(province.getName());
-            covidDTO.setCountry(province.getCountry());
-            covidDTO.setShortName(province.getShortName());
-            covidDTO.setTotalPopulation(province.getTotalPopulation());
-            covidDTO.setPopOverEighteen(province.getPopOverEighteen());
-            covidDTO.setCovidData(province.getCovidData());
-            covidDTO.setVaccinationData(province.getVaccinationData());
-            covidDTO.getCovidData().getDataHistory().sort(Comparator.comparing(DataHistory::getDate));
-            logger.info("Completed select data of province " + covidDTO.getName());
-          }
-          return covidDTO;
-        });
-        provinceList.add(completableFuture.get());
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+  public ResponseEntity<List<DataHistory>> findByDate(Integer provinceCode, String startDate, String endDate) {
+    List<DataHistory> dataHistory = dataHistoryRepositories.findByDate(provinceCode, LocalDate.parse(startDate), LocalDate.parse(endDate));
+    if (dataHistory == null) {
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    return ResponseEntity.ok(provinceList);
+    if (provinceCode == null && startDate.trim().isEmpty() && endDate.trim().isEmpty()) {
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+    return ResponseEntity.ok(dataHistory);
   }
 
+  public ResponseEntity<List<DataTableCovidDTO>> findAlal() throws IOException, InterruptedException, ExecutionException {
+    Long a = System.currentTimeMillis();
+    List<DataTableCovidDTO> dtoList = new ArrayList<>();
+    List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
+    for (Integer provinceCode : provinceCodeList) {
+      CompletableFuture<DataTableCovidDTO> data = CompletableFuture.supplyAsync(() -> {
+        CovidStatistics covidStatistics = covidStatisticsRepositories.findCovidStatistics(provinceCode);
+        return DataTableCovidDTO.TransferDataTableCovidDTO(covidStatistics);
+      });
+      CompletableFuture.allOf(data).join();
+      dtoList.add(data.get());
+    }
+    return ResponseEntity.ok(dtoList);
+  }
+
+  public ResponseEntity<Page<Site>> searchVaccinationSite(
+    Integer pageNumber, Integer pageSize,
+    Integer provinceCode, Integer districtCode, Integer wardCode
+  ) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Page<Site> page = siteRepositories.findAllSite(pageable, provinceCode, districtCode, wardCode);
+    return ResponseEntity.ok(page);
+  }
+  public ResponseEntity<Page<Site>> findAllVaccinationSite(Integer pageNumber, Integer pageSize){
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Page<Site> page = siteRepositories.findAll(pageable);
+    return ResponseEntity.ok(page);
+  }
 }

@@ -8,6 +8,7 @@ import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.repositories.vietnam.VaccinationStatisticsRepositories;
+import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
 import com.ncovid.util.Util;
 import com.ncovid.util.UtilDate;
@@ -19,6 +20,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -104,7 +108,7 @@ public class UpdateDataVietnam {
   }
 
 
-  private Province updateCovidStatisticsData(Province province) throws IOException, InterruptedException {
+  private void updateCovidStatisticsData(Province province) throws IOException, InterruptedException {
     Path pathFile = Paths.get(Util.bodyGraphQl.getAbsolutePath());
     JSONObject jsonObject = new JSONObject(Util.postMapping(APIData.covidByProvince, pathFile));
     JSONObject jsonObject2 = jsonObject.getJSONObject("data");
@@ -123,38 +127,43 @@ public class UpdateDataVietnam {
         covidStatisticsRepositories.save(province.getCovidData());
       }
     }
-    return province;
   }
 
 
-  public Province updateDataNewCases(Province province) throws IOException {
+  public void updateDataNewCases(Province province) throws IOException {
     Document document = Jsoup.connect(APIData.newCasesByDate.getApi()).timeout(500000).get();
     Elements body = document.select("body").select("table#sailorTable");
     if (body != null) {
       body.select("tbody tr").forEach(element -> {
         if (element.child(0).text().contains(province.getShortName())) {
-          DataHistory newCases = new DataHistory();
-          newCases.setDate(UtilDate.today);
-          newCases.setNewCases(Integer.parseInt(element.child(2).text()));
-          newCases.setCovidData(province.getCovidData());
-          dataHistoryRepositories.save(newCases);
-          province.getCovidData().setToday(newCases.getNewCases());
           province.getCovidData().getDataHistory().forEach(e -> {
             if (UtilDate.today.minusDays(1).isEqual(e.getDate())) {
               province.getCovidData().setYesterday(e.getNewCases());
             }
           });
+          province.getCovidData().setToday(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
           covidStatisticsRepositories.save(province.getCovidData());
+          DataHistory dataHistory = dataHistoryRepositories.findByDate(province.getProvinceCode(), UtilDate.today);
+          if(dataHistory != null){
+            dataHistory.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
+            dataHistoryRepositories.save(dataHistory);
+          }else {
+            DataHistory newCasesDate = new DataHistory();
+            newCasesDate.setDate(UtilDate.today);
+            newCasesDate.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
+            newCasesDate.setCovidData(province.getCovidData());
+            dataHistoryRepositories.save(newCasesDate);
+          }
+          logger.info("Thread-" + Thread.currentThread().getId()+ Message.updateDataProvince + province.getName());
+
         }
       });
-      System.out.println(province.getCovidData().getDataHistory().size());
     }
-    return province;
   }
 
 
   @Async("taskExecutor")
-  @Scheduled(cron = "* 54 6,14 * * *")
+  @Scheduled(cron = "* 0 6,14 * * *")
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {

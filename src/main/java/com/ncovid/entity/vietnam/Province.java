@@ -58,7 +58,7 @@ public class Province implements Serializable {
   @OneToOne(mappedBy = "province", cascade = CascadeType.ALL )
   private VaccinationStatistics vaccinationData;
 
-  @JsonBackReference
+  @JsonManagedReference
   @Fetch(value = FetchMode.SUBSELECT)
   @OneToMany(mappedBy = "province", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<District> districtList;

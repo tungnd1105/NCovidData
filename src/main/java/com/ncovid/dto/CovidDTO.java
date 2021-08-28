@@ -1,7 +1,5 @@
 package com.ncovid.dto;
 
-import com.ncovid.entity.vietnam.CovidStatistics;
-import com.ncovid.entity.vietnam.VaccinationStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,15 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CovidDTO {
+  private String  updateTime;
+  private Integer cases;
+  private Integer deaths;
+  private Integer recovered;
+  private Integer today;
+  private Integer yesterday;
+  private Double  casesPercent;
+  private Double  deathsPercent;
+  private Double  recoveredPercent;
 
-
-  private Integer provinceCode;
-  private String  name;
-  private String  type;
-  private String  shortName;
-  private Integer totalPopulation;
-  private Integer popOverEighteen;
-  private String  country;
-  private CovidStatistics covidData;
-  private VaccinationStatistics vaccinationData;
 }

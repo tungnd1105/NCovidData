@@ -18,7 +18,13 @@ import java.util.List;
 @Repository
 public interface DataHistoryRepositories extends JpaRepository<DataHistory, Integer> {
 
-  @Query( "SELECT a from DataHistory a where a.date = :date")
-  DataHistory findByDate(@Param("date")LocalDate date);
+  @Query( "SELECT a from DataHistory a " +
+    " inner join Covid_Statistics_Vietnam c on a.covidData.id = c.id " +
+    " where c.province.provinceCode = ?1 and a.date >= ?2 and a.date <= ?3 ")
+  List<DataHistory> findByDate(Integer provinceCode, LocalDate startDate, LocalDate endDate );
+
+  @Query("SELECT a FROM DataHistory a inner join Covid_Statistics_Vietnam  c on c.id = a.covidData.id" +
+    " where c.province.provinceCode = ?1 and a.date = ?2")
+  DataHistory findByDate( Integer provinceCode ,LocalDate date);
 
 }
