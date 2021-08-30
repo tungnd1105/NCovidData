@@ -20,8 +20,9 @@ public interface DataHistoryRepositories extends JpaRepository<DataHistory, Inte
 
   @Query( "SELECT a from DataHistory a " +
     " inner join Covid_Statistics_Vietnam c on a.covidData.id = c.id " +
-    " where c.province.provinceCode = ?1 and a.date >= ?2 and a.date <= ?3 ")
-  List<DataHistory> findByDate(Integer provinceCode, LocalDate startDate, LocalDate endDate );
+    " inner join Province p on p.provinceCode = c.province.provinceCode" +
+    " where c.province.provinceCode = ?1 or p.name = ?2 and a.date >= ?3  and a.date <= ?4 order by a.date ASC ")
+  List<DataHistory> findByDate(Integer provinceCode, String provinceName, LocalDate startDate, LocalDate endDate );
 
   @Query("SELECT a FROM DataHistory a inner join Covid_Statistics_Vietnam  c on c.id = a.covidData.id" +
     " where c.province.provinceCode = ?1 and a.date = ?2")

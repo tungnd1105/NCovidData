@@ -12,6 +12,7 @@ import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
 import com.ncovid.repositories.vietnam.vaccinationSite.SiteRepositories;
 import com.ncovid.util.ProvinceOfVietnam;
+import com.ncovid.util.UtilDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +69,14 @@ public class VietnamServices {
     return ResponseEntity.ok(provinceDTO);
   }
 
-  public ResponseEntity<List<DataHistory>> findByDate(Integer provinceCode, String startDate, String endDate) {
-    List<DataHistory> dataHistory = dataHistoryRepositories.findByDate(provinceCode, LocalDate.parse(startDate), LocalDate.parse(endDate));
+  public ResponseEntity<List<DataHistory>> findByDate(Integer provinceCode, String provinceName, Integer numberDay) {
+    List<DataHistory> dataHistory = dataHistoryRepositories.findByDate(provinceCode, provinceName,UtilDate.today.minusDays(numberDay), UtilDate.today);
     if (dataHistory == null) {
+      logger.warn("parameter did not matches province");
       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    if (provinceCode == null && startDate.trim().isEmpty() && endDate.trim().isEmpty()) {
+    if (provinceCode == null && provinceName == null) {
+      logger.warn("requirement a parameter province code or province name or shortname");
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
     return ResponseEntity.ok(dataHistory);

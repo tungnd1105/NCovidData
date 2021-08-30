@@ -51,10 +51,10 @@ public class VietnamAPI {
   @GetMapping("province/find-by-date")
   private ResponseEntity<List<DataHistory>> findByDate(
     @RequestParam(required = false) Integer provinceCode,
-    @RequestParam(required = false) String startDate,
-    @RequestParam(required = false) String endDate
+    @RequestParam(required = false) String provinceName,
+    @RequestParam(required = false) Integer numberDays
   ) {
-    return vietnamServices.findByDate(provinceCode, startDate, endDate);
+    return vietnamServices.findByDate(provinceCode, provinceName, numberDays);
   }
 
   @GetMapping("search-vaccination-site")
