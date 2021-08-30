@@ -55,7 +55,7 @@ public class VietnamServices {
   private SiteRepositories siteRepositories;
 
   public ResponseEntity<ProvinceDTO> findOneByProvinceCodeOrProvinceName(Integer provinceCode, String name, String shortname) {
-    Province province = provinceRepositories.findByProvinceCodeOrName(provinceCode, name,shortname);
+    Province province = provinceRepositories.findByProvinceCodeOrName(provinceCode, name, shortname);
     ProvinceDTO provinceDTO = ProvinceDTO.TransferProvinceDTO(province);
     if (provinceCode == null && name == null && shortname == null) {
       logger.warn("requirement a parameter province code or province name or shortname");
@@ -102,9 +102,16 @@ public class VietnamServices {
     Page<Site> page = siteRepositories.findAllSite(pageable, provinceCode, districtCode, wardCode);
     return ResponseEntity.ok(page);
   }
-  public ResponseEntity<Page<Site>> findAllVaccinationSite(Integer pageNumber, Integer pageSize){
+
+  public ResponseEntity<Page<Site>> findAllVaccinationSite(Integer pageNumber, Integer pageSize) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     Page<Site> page = siteRepositories.findAll(pageable);
     return ResponseEntity.ok(page);
   }
+
+  public ResponseEntity<List<String>> findAllName() {
+    List<String> listName = provinceRepositories.findName();
+    return ResponseEntity.ok(listName);
+  }
+
 }

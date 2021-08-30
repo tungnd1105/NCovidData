@@ -5,13 +5,14 @@ import com.ncovid.dto.ProvinceDTO;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.vaccinationSite.Site;
 import com.ncovid.services.VietnamServices;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +45,7 @@ public class VietnamAPI {
     @RequestParam(required = false) String provinceName,
     @RequestParam(required = false) String shortName
   ) {
-    return vietnamServices.findOneByProvinceCodeOrProvinceName(provinceCode, provinceName,shortName);
+    return vietnamServices.findOneByProvinceCodeOrProvinceName(provinceCode, provinceName, shortName);
   }
 
   @GetMapping("province/find-by-date")
@@ -70,7 +71,12 @@ public class VietnamAPI {
   @GetMapping("find-all-vaccination-site")
   private ResponseEntity<Page<Site>> findAllSite(
     @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
-    @RequestParam(required = false, defaultValue = "10") Integer pageSize){
+    @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
     return vietnamServices.findAllVaccinationSite(pageNumber, pageSize);
+  }
+
+  @GetMapping("province/all-name")
+  private ResponseEntity<List<String>> findAllName() {
+    return vietnamServices.findAllName();
   }
 }

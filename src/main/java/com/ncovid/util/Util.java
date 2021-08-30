@@ -98,7 +98,7 @@ public class Util {
   }
 
   public static Double getPercent(int a, int b) {
-    String result = df2.format((double) a * 100 / b);
+    String result = df2.format((double) a/b * 100);
     return Double.parseDouble(result);
   }
 }

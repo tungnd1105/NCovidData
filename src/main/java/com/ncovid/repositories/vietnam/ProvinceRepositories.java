@@ -7,6 +7,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author ndtun
  * @package com.ncovid.repositories
@@ -21,5 +23,8 @@ public interface ProvinceRepositories extends JpaRepository<Province, Integer>, 
     @Param("provinceCode") Integer provinceCode,
     @Param("name") String name,
     @Param("shortName") String shortName);
+
+  @Query("SELECT a.name FROM Province a ")
+  List<String> findName();
 
 }

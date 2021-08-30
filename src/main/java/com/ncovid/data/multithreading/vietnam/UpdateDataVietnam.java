@@ -20,8 +20,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -141,20 +138,20 @@ public class UpdateDataVietnam {
               province.getCovidData().setYesterday(e.getNewCases());
             }
           });
-          province.getCovidData().setToday(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
+          province.getCovidData().setToday(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]", "")));
           covidStatisticsRepositories.save(province.getCovidData());
           DataHistory dataHistory = dataHistoryRepositories.findByDate(province.getProvinceCode(), UtilDate.today);
-          if(dataHistory != null){
-            dataHistory.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
+          if (dataHistory != null) {
+            dataHistory.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]", "")));
             dataHistoryRepositories.save(dataHistory);
-          }else {
+          } else {
             DataHistory newCasesDate = new DataHistory();
             newCasesDate.setDate(UtilDate.today);
-            newCasesDate.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]","")));
+            newCasesDate.setNewCases(Integer.parseInt(element.child(2).text().replaceAll("[^0-9]", "")));
             newCasesDate.setCovidData(province.getCovidData());
             dataHistoryRepositories.save(newCasesDate);
           }
-          logger.info("Thread-" + Thread.currentThread().getId()+ Message.updateDataProvince + province.getName());
+          logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataProvince + province.getName());
 
         }
       });
@@ -163,7 +160,7 @@ public class UpdateDataVietnam {
 
 
   @Async("taskExecutor")
-  @Scheduled(cron = "* 0 6,14 * * *")
+  @Scheduled(cron = "0 3 6,18,10 * * *")
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
