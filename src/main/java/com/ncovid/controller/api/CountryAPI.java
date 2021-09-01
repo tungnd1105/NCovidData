@@ -3,6 +3,7 @@ package com.ncovid.controller.api;
 import com.ncovid.entity.countries.Country;
 import com.ncovid.services.CountryServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,14 @@ public class CountryAPI {
   private CountryServices countryServices;
 
   @GetMapping
-  private ResponseEntity<List<Country>> findAll() {
-    return countryServices.findAll();
+  private ResponseEntity<Page<Country>> findAll(
+    @RequestParam(defaultValue = "0") Integer pageNumber,
+    @RequestParam(defaultValue = "10") Integer pageSize
+  ) {
+    return countryServices.findAll(pageNumber, pageSize);
   }
 
-  @GetMapping("get-data-country")
+  @GetMapping("find-one")
   private ResponseEntity<Country> findOneByIdOrAlphaCode(
     @RequestParam(required = false) String id,
     @RequestParam(required = false) String name,

@@ -6,6 +6,9 @@ import com.ncovid.util.AlphaCodeCountry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,7 @@ public class CountryServices {
   private CountryRepositories countryRepositories;
 
   public ResponseEntity<Country> findOneByNameOrAlphaCode(String id, String name, String alpha2Code) {
-    Country country = countryRepositories.findByIdOrAlpha2CodeOrName(id, name, alpha2Code);
+    Country country = countryRepositories.findByIdOrAlpha2CodeOrName(id.toUpperCase(), name, alpha2Code);
     if (id == null & name == null & alpha2Code == null) {
       logger.warn("requirement a parameter id or name or short alpha2Code");
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -42,18 +45,9 @@ public class CountryServices {
     return ResponseEntity.ok(country);
   }
 
-  public ResponseEntity<List<Country>> findAll() {
-    List<Country> countryList = new ArrayList<>();
-    try {
-      List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
-      for (String alphaCode : alphaCodeList) {
-        CompletableFuture<Country> completableFuture = CompletableFuture.supplyAsync(() -> countryRepositories.findById(alphaCode).orElse(null));
-        countryList.add(completableFuture.get());
-        logger.info("completed select data of" + completableFuture.get().getName());
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  public ResponseEntity<Page<Country>> findAll( Integer pageNumber, Integer pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber,pageSize);
+    Page<Country> countryList = countryRepositories.findAll(pageable);
     return ResponseEntity.ok(countryList);
   }
 

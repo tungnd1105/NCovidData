@@ -32,6 +32,7 @@ public class Util {
 
   public static File bodyGraphQl = new File("JsonData/bodyGraphQl.json");
   public static File covidBydate = new File("JsonData/by-current.json");
+  public static File dataCountry= new File("JsonData/dataCountry.json");
 
 
   public static String validStatusCode(HttpResponse<String> httpResponse) {

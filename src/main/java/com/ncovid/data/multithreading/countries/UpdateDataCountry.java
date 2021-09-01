@@ -98,7 +98,7 @@ public class UpdateDataCountry {
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 17,19 * * * ")
+  @Scheduled(cron = "0 0 18 * * * ")
   public void runMultithreading() throws IOException, InterruptedException {
     List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
     List<Country> checkData = countryRepositories.findAll();

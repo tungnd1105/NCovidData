@@ -160,7 +160,7 @@ public class UpdateDataVietnam {
 
 
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 6,18,0 * * *")
+  @Scheduled(cron = "0 52 8,22 * * *")
   public void multithreading() throws InterruptedException, IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
