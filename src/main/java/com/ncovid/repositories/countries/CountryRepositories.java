@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
 @package com.ncovid.repositories.countries
 @project NCovidData
@@ -18,4 +20,6 @@ import org.springframework.data.jpa.repository.Query;
 
   Page<Country> findAll(Pageable pageable);
 
+  @Query("SELECT a.name FROM Country a")
+  List<String> findName();
 }

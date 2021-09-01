@@ -26,6 +26,11 @@ public class CountryAPI {
   @Autowired
   private CountryServices countryServices;
 
+  @GetMapping("all-name")
+  private ResponseEntity<List<String>> findAllName(){
+    return countryServices.findAllName();
+  }
+
   @GetMapping
   private ResponseEntity<Page<Country>> findAll(
     @RequestParam(defaultValue = "0") Integer pageNumber,
