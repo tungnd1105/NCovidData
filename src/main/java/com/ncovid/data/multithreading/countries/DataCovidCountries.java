@@ -113,7 +113,9 @@ public class DataCovidCountries {
       Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
         for (Element element: body.select("tbody tr")){
-          if (element.select("td").get(1).text().contains(country.getName())) {
+          if (element.select("td").get(1).text().replaceAll("\\s+","")
+            .equalsIgnoreCase(country.getName().replaceAll("\\s+","")))
+          {
             SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
             SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
             SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
