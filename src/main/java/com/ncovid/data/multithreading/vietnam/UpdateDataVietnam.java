@@ -160,8 +160,8 @@ public class UpdateDataVietnam {
 
 
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 8,21 * * *")
-  public void multithreading() throws InterruptedException, IOException {
+  @Scheduled(cron = "0 1   8,23 * * *")
+  public void multithreading() throws IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
       CompletableFuture.supplyAsync(() -> updateVaccinationStatisticsData(provinceCode)).thenApplyAsync(province -> {

@@ -32,11 +32,6 @@ public class Site implements Serializable {
   @Column(length = 200)
   private String address;
 
-  private Integer injectionExecutorAmount;
-  private Integer emergencyExecutorAmount;
-  private boolean status;
-
-
   @JsonBackReference
   @ManyToOne
   @JoinColumn(name = "ward_Code")

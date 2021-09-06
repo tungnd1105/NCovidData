@@ -33,6 +33,15 @@ public class CountryServices {
     return ResponseEntity.ok(allName);
   }
 
+  public ResponseEntity<List<String>> findAllRegion(){
+    List<String> allRegion = countryRepositories.findRegion();
+    return ResponseEntity.ok(allRegion);
+  }
+
+  public ResponseEntity<List<Country>> findCountryByRegion(String continent){
+    List<Country> countryList = countryRepositories.findCountryByRegion(continent);
+    return ResponseEntity.ok(countryList);
+  }
   public ResponseEntity<Country> findOneByNameOrAlphaCode(String id, String name, String alpha2Code) {
     if(id != null){
       id = id.toUpperCase();

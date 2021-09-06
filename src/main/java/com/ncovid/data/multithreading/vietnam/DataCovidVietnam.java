@@ -153,7 +153,7 @@ public class DataCovidVietnam {
         JSONObject jsonObject = jsonArray.getJSONObject(k);
         if (jsonObject.getInt("ma") == province.getProvinceCode()) {
           JSONObject dataByDate = (JSONObject) jsonObject.get("data");
-          for (LocalDate date = UtilDate.startDate; date.isBefore(LocalDate.parse("2021-08-29")); date = date.plusDays(1)) {
+          for (LocalDate date = UtilDate.startDate; date.isBefore(LocalDate.parse("2021-09-06")); date = date.plusDays(1)) {
             DataHistory dataHistory = new DataHistory();
             dataHistory.setDate(date);
             dataHistory.setNewCases(dataByDate.getInt(date.toString()));
@@ -179,7 +179,7 @@ public class DataCovidVietnam {
    */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException {
+  public void runMultithreading() throws IOException {
     List<Province> dataExist = provinceRepositories.findAll();
     if (dataExist.size() == 0) {
       logger.info("staring assign task for threading by province code ");

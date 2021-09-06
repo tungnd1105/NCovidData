@@ -23,6 +23,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -103,9 +105,6 @@ public class DataVaccinationSite {
         Site site = new Site();
         site.setName(object.getString("name"));
         site.setAddress(object.getString("address"));
-        site.setEmergencyExecutorAmount(object.getInt("emergencyExecutorAmount"));
-        site.setInjectionExecutorAmount(object.getInt("injectionExecutorAmount"));
-        site.setStatus(!(object.getInt("status") == 0));
         site.setWard(ward);
         siteList.add(site);
       }
@@ -124,10 +123,10 @@ public class DataVaccinationSite {
    */
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException {
+  public void runMultithreading() throws IOException{
     List<District> checkData = districtRepositories.findAll();
     if (checkData.size() == 0) {
-      JSONArray jsonArray = new JSONArray(Util.fetchDataJson(APIData.detailDistricts));
+      JSONArray jsonArray = new JSONArray((new String(Files.readAllBytes(Paths.get(Util.dataProvinceVN.getAbsolutePath())))));
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject jsonObject = jsonArray.getJSONObject(k);
         CompletableFuture<List<Ward>> completableFuture =

@@ -22,4 +22,12 @@ import java.util.List;
 
   @Query("SELECT a.name FROM Country a")
   List<String> findName();
+
+  @Query("SELECT DISTINCT TRIM(a.subregion) FROM Country a ")
+  List<String> findRegion();
+
+  @Query("SELECT a FROM Country a " +
+    " INNER JOIN Covid_Statistics_Country c ON c.country.id = a.id" +
+    " WHERE a.subregion = ?1")
+  List<Country> findCountryByRegion(String region);
 }
