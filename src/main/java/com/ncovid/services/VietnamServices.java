@@ -1,6 +1,6 @@
 package com.ncovid.services;
 
-import com.ncovid.data.multithreading.vietnam.DataCovidVietnam;
+import com.ncovid.data.multithreading.vietnam.DataCovid;
 import com.ncovid.dto.DataTableCovidDTO;
 import com.ncovid.dto.ProvinceDTO;
 import com.ncovid.entity.vietnam.CovidStatistics;
@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -41,7 +40,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class VietnamServices {
 
-  public static Logger logger = LoggerFactory.getLogger(DataCovidVietnam.class);
+  public static Logger logger = LoggerFactory.getLogger(DataCovid.class);
 
   @Autowired
   private ProvinceRepositories provinceRepositories;
