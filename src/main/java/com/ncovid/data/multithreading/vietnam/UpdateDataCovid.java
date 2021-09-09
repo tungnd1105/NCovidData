@@ -20,10 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.Collator;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -51,85 +48,62 @@ public class UpdateDataCovid {
   private CovidStatisticsRepositories covidStatisticsRepositories;
 
 
-  private Province updateCovidStatisticsData(Integer provinceCode) throws IOException, InterruptedException {
+  public void updateDataCovid(Integer provinceCode) throws IOException, InterruptedException {
     Province province = provinceRepositories.findById(provinceCode).orElse(null);
-    if (province != null) {
-      Path pathFile = Paths.get(Util.bodyGraphQl.getAbsolutePath());
-      JSONObject jsonObject = new JSONObject(Util.postMapping(APIData.covidByProvince, pathFile));
-      JSONObject jsonObject2 = jsonObject.getJSONObject("data");
-      JSONArray jsonArray = jsonObject2.getJSONArray("provinces");
-      for (int k = 0; k < jsonArray.length(); k++) {
-        JSONObject data = jsonArray.getJSONObject(k);
-        String provinceId = data.getString("Province_Id").replaceAll("[^0-9]", "");
-        if (province.getProvinceCode() == Integer.parseInt(provinceId)) {
-          province.getCovidData().setUpdateTime(UtilDate.timeUpdate);
-          province.getCovidData().setCases(data.getInt("Confirmed"));
-          province.getCovidData().setDeaths(data.getInt("Deaths"));
-          province.getCovidData().setRecovered(data.getInt("Recovered"));
-          province.getCovidData().setCasesPercent(Util.getPercent(province.getCovidData().getCases(), province.getTotalPopulation()));
-          province.getCovidData().setDeathsPercent(Util.getPercent(province.getCovidData().getDeaths(), province.getPopOverEighteen()));
-          province.getCovidData().setRecoveredPercent(Util.getPercent(province.getCovidData().getRecovered(), province.getTotalPopulation()));
-          covidStatisticsRepositories.save(province.getCovidData());
-        }
-      }
-    }
-    return province;
-  }
-
-  public Province updateDataNewCases(Province province) throws IOException, InterruptedException {
     Collator usCollator = Collator.getInstance(Locale.US);
     usCollator.setStrength(Collator.PRIMARY);
-    JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.newCasesByDate.getApi()));
+    JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.covidByProvince.getApi()));
     JSONArray jsonArray = jsonObject.getJSONArray("locations");
-    for (int k = 0; k < jsonArray.length(); k++) {
-      JSONObject data = jsonArray.getJSONObject(k);
-      if (usCollator.compare(data.getString("name"), province.getShortName()) == 0 ||
-         data.getString("name").contains(province.getShortName())) {
-        province.getCovidData().getDataHistory().forEach(e -> {
-          if (UtilDate.today.minusDays(1).isEqual(e.getDate())) {
-            province.getCovidData().setYesterday(e.getNewCases());
+    if (province != null) {
+      for (int k = 0; k < jsonArray.length(); k++) {
+        JSONObject data = jsonArray.getJSONObject(k);
+        if (usCollator.compare(data.getString("name"), province.getShortName()) == 0 ||
+          data.getString("name").contains(province.getShortName())) {
+
+          province.getCovidData().setNewCases(data.getInt("casesToday"));
+
+          if (province.getCovidData().getDeaths() != data.getInt("death")) {
+            int newDeaths = data.getInt("death") - province.getCovidData().getDeaths();
+            province.getCovidData().setNewDeaths(newDeaths);
           }
-        });
-        province.getCovidData().setToday(data.getInt("casesToday"));
-        covidStatisticsRepositories.save(province.getCovidData());
-        DataHistory dataHistory = dataHistoryRepositories.findByDate(province.getProvinceCode(), UtilDate.today);
-        if (dataHistory != null) {
-          dataHistory.setNewCases(data.getInt("casesToday"));
-          dataHistoryRepositories.save(dataHistory);
-        } else {
-          DataHistory newCasesDate = new DataHistory();
-          newCasesDate.setDate(UtilDate.today);
-          newCasesDate.setNewCases(data.getInt("casesToday"));
-          newCasesDate.setCovidData(province.getCovidData());
-          dataHistoryRepositories.save(newCasesDate);
+
+          province.getCovidData().getDataHistory().forEach(e -> {
+            if (UtilDate.today.minusDays(1).isEqual(e.getDate())) {
+              province.getCovidData().setYesterdayCases(e.getNewCases());
+            }
+          });
+
+          covidStatisticsRepositories.save(province.getCovidData());
+          // update new case by date
+          DataHistory dataHistory = dataHistoryRepositories.findByDate(province.getProvinceCode(), UtilDate.today);
+          if (dataHistory != null) {
+            dataHistory.setNewCases(data.getInt("casesToday"));
+            dataHistoryRepositories.save(dataHistory);
+          } else {
+            DataHistory newCasesDate = new DataHistory();
+            newCasesDate.setDate(UtilDate.today);
+            newCasesDate.setNewCases(data.getInt("casesToday"));
+            newCasesDate.setCovidData(province.getCovidData());
+            dataHistoryRepositories.save(newCasesDate);
+          }
         }
       }
+      logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataCovidProvince + province.getName());
     }
-    logger.info("Thread-" + Thread.currentThread().getId() + Message.updateDataCovidProvince + province.getName());
-    return province;
   }
 
   // update everyday
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 10 * * *")
+  @Scheduled(cron = "0 22 21 * * *")
   public void multithreading() throws IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {
-      CompletableFuture.supplyAsync(() -> {
-        Province province = new Province();
+      CompletableFuture.runAsync(() -> {
         try {
-          province =  updateCovidStatisticsData(provinceCode);
+          updateDataCovid(provinceCode);
         } catch (IOException | InterruptedException e) {
           e.printStackTrace();
         }
-        return province;
-      }).thenApplyAsync(province -> {
-        try {
-          return updateDataNewCases(province);
-        } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
-        }
-        return  province;
       });
     }
   }

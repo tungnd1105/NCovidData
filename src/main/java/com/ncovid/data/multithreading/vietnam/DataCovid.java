@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Collator;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -80,27 +82,26 @@ public class DataCovid {
   }
 
   private Province insertCovidStatisticsData(Province province) throws IOException, InterruptedException {
-    Path pathFile = Paths.get(Util.bodyGraphQl.getAbsolutePath());
-    JSONObject jsonObject = new JSONObject(Util.postMapping(APIData.covidByProvince, pathFile));
-    JSONObject jsonObject2 = jsonObject.getJSONObject("data");
-    JSONArray jsonArray = jsonObject2.getJSONArray("provinces");
+    Collator usCollator = Collator.getInstance(Locale.US);
+    usCollator.setStrength(Collator.PRIMARY);
+    JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.covidByProvince.getApi()));
+    JSONArray jsonArray = jsonObject.getJSONArray("locations");
     CovidStatistics covidStatistics = new CovidStatistics();
     for (int k = 0; k < jsonArray.length(); k++) {
       JSONObject data = jsonArray.getJSONObject(k);
-      String provinceId = data.getString("Province_Id").replaceAll("[^0-9]", "");
       if (province != null) {
-        if (province.getProvinceCode() == Integer.parseInt(provinceId)) {
-          covidStatistics.setCases(data.getInt("Confirmed"));
-          covidStatistics.setDeaths(data.getInt("Deaths"));
-          covidStatistics.setRecovered(data.getInt("Recovered"));
+        if (usCollator.compare(data.getString("name"), province.getShortName()) == 0 ||
+          data.getString("name").contains(province.getShortName())) {
+          covidStatistics.setCases(data.getInt("cases"));
+          covidStatistics.setDeaths(data.getInt("death"));
+          covidStatistics.setTreating(data.getInt("treating"));
           covidStatistics.setCasesPercent(Util.getPercent(covidStatistics.getCases(), province.getTotalPopulation()));
           covidStatistics.setDeathsPercent(Util.getPercent(covidStatistics.getDeaths(), province.getPopOverEighteen()));
-          covidStatistics.setRecoveredPercent(Util.getPercent(covidStatistics.getRecovered(), province.getTotalPopulation()));
         }
-        covidStatistics.setUpdateTime(UtilDate.timeUpdate);
-        covidStatistics.setProvince(province);
-        dataCovidRepositories.save(covidStatistics);
       }
+      covidStatistics.setUpdateTime(UtilDate.timeUpdate);
+      covidStatistics.setProvince(province);
+      dataCovidRepositories.save(covidStatistics);
     }
     return provinceRepositories.findById(province.getProvinceCode()).orElse(null);
   }
@@ -154,31 +155,6 @@ public class DataCovid {
       }
     }
   }
-
-//  private Province insertCovidStatisticsData(Province province) throws IOException, InterruptedException {
-//    JSONObject jsonObject = new JSONObject(Util.fetchDataJson(APIData.covidByProvince.getApi()));
-//    JSONArray jsonArray = jsonObject.getJSONArray("locations");
-//    CovidStatistics covidStatistics = new CovidStatistics();
-//    for (int k = 0; k < jsonArray.length(); k++) {
-//      JSONObject data = jsonArray.getJSONObject(k);
-//      if (province != null) {
-//        if (data.getString("name").contains(province.getShortName())) {
-//          covidStatistics.setCases(data.getInt("cases"));
-//          covidStatistics.setDeaths(data.getInt("death"));
-//          covidStatistics.setRecovered(data.getInt("recovered"));
-//          covidStatistics.setTreating(data.getInt("treating"));
-//          covidStatistics.setCasesPercent(Util.getPercent(covidStatistics.getCases(), province.getTotalPopulation()));
-//          covidStatistics.setDeathsPercent(Util.getPercent(covidStatistics.getDeaths(), province.getPopOverEighteen()));
-//          covidStatistics.setRecoveredPercent(Util.getPercent(covidStatistics.getRecovered(), province.getTotalPopulation()));
-//        }
-//      }
-//      covidStatistics.setUpdateTime(UtilDate.timeUpdate);
-//      covidStatistics.setProvince(province);
-//      dataCovidRepositories.save(covidStatistics);
-//    }
-//    return provinceRepositories.findById(province.getProvinceCode()).orElse(null);
-//  }
-
 
 }
 

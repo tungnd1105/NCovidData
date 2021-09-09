@@ -19,9 +19,9 @@ public class DataTableCovidDTO {
   private String  name;
   private Integer cases;
   private Integer deaths;
-  private Integer recovered;
-  private Integer today;
-  private Integer yesterday;
+  private Integer newDeaths;
+  private Integer newCases;
+  private Integer yesterdayCases;
 
   public static DataTableCovidDTO TransferDataTableCovidDTO(CovidStatistics covidStatistics){
     DataTableCovidDTO dataTableCovidDTO = new DataTableCovidDTO();
@@ -29,9 +29,9 @@ public class DataTableCovidDTO {
     dataTableCovidDTO.setName(covidStatistics.getProvince().getName());
     dataTableCovidDTO.setCases(covidStatistics.getCases());
     dataTableCovidDTO.setDeaths(covidStatistics.getDeaths());
-    dataTableCovidDTO.setRecovered(covidStatistics.getRecovered());
-    dataTableCovidDTO.setToday(covidStatistics.getToday());
-    dataTableCovidDTO.setYesterday(covidStatistics.getYesterday());
+    dataTableCovidDTO.setNewDeaths(covidStatistics.getNewDeaths());
+    dataTableCovidDTO.setNewCases(covidStatistics.getNewCases());
+    dataTableCovidDTO.setYesterdayCases(covidStatistics.getYesterdayCases());
     return dataTableCovidDTO;
   }
 }

@@ -91,9 +91,8 @@ public class UpdateDataVaccination {
   }
 
 
-  // update binally two day
   @Async("taskExecutor")
-  @Scheduled(cron = "* * * 2 * *")
+  @Scheduled(cron = " 0 0 22 * * *")
   public void multithreading() throws IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {

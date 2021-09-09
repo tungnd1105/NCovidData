@@ -17,11 +17,10 @@ public class CovidDTO {
   private String  updateTime;
   private Integer cases;
   private Integer deaths;
-  private Integer recovered;
-  private Integer today;
-  private Integer yesterday;
+  private Integer newDeaths;
+  private Integer newCases;
+  private Integer treating;
+  private Integer yesterdayCases;
   private Double  casesPercent;
   private Double  deathsPercent;
-  private Double  recoveredPercent;
-
 }

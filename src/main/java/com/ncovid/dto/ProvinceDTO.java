@@ -41,12 +41,12 @@ public class ProvinceDTO {
     covidDTO.setUpdateTime(province.getCovidData().getUpdateTime());
     covidDTO.setCases(province.getCovidData().getCases());
     covidDTO.setDeaths(province.getCovidData().getDeaths());
-    covidDTO.setRecovered(province.getCovidData().getRecovered());
     covidDTO.setCasesPercent(province.getCovidData().getCasesPercent());
     covidDTO.setDeathsPercent(province.getCovidData().getDeathsPercent());
-    covidDTO.setRecoveredPercent(province.getCovidData().getRecoveredPercent());
-    covidDTO.setToday(province.getCovidData().getToday());
-    covidDTO.setYesterday(province.getCovidData().getYesterday());
+    covidDTO.setNewCases(province.getCovidData().getNewCases());
+    covidDTO.setNewDeaths(province.getCovidData().getNewDeaths());
+    covidDTO.setTreating(province.getCovidData().getTreating());
+    covidDTO.setYesterdayCases(province.getCovidData().getYesterdayCases());
     provinceDTO.setProvinceCode(province.getProvinceCode());
     provinceDTO.setName(province.getName());
     provinceDTO.setShortName(province.getShortName());

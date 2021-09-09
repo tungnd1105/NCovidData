@@ -121,8 +121,8 @@ public class DataVaccinationSite {
    * each threading flow task
    * insertDataInfoOfDistricts -> insertDataInfoOfWard ->  insertDataVaccinationSite
    */
-//  @EventListener(ApplicationReadyEvent.class)
-//  @Async("taskExecutor")
+  @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
   public void runMultithreading() throws IOException{
     List<District> checkData = districtRepositories.findAll();
     if (checkData.size() == 0) {

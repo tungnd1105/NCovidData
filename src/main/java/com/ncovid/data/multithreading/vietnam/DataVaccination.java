@@ -74,8 +74,8 @@ public class DataVaccination {
     return dataVaccination.getProvince();
   }
 
-//  @EventListener(ApplicationReadyEvent.class)
-//  @Async("taskExecutor")
+  @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
   public void runMultithreading() throws IOException {
     List<VaccinationStatistics> dataExist = dataVaccinationRepositories.findAll();
     if (dataExist.size() == 0) {
