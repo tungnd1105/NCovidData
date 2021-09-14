@@ -1,6 +1,5 @@
 package com.ncovid.controller.api;
 
-import com.ncovid.dto.DataTableCovidDTO;
 import com.ncovid.dto.ProvinceDTO;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.vaccinationSite.Site;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ndtun
@@ -33,9 +30,22 @@ public class VietnamAPI {
   private VietnamServices vietnamServices;
 
 
+  @GetMapping("province/all-name")
+  private ResponseEntity<List<String>> findAllName() {
+    return vietnamServices.findAllName();
+  }
+
   @GetMapping
-  private ResponseEntity<List<DataTableCovidDTO>> findAll() throws IOException, InterruptedException, ExecutionException {
-    return vietnamServices.findAlal();
+  private ResponseEntity<List<ProvinceDTO>> findAllProvince() {
+    return vietnamServices.findAllProvince();
+  }
+
+  @GetMapping("page")
+  private ResponseEntity<Page<ProvinceDTO>> findAllProvince(
+    @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+    @RequestParam(required = false, defaultValue = "10") Integer pageSize
+  ) {
+    return vietnamServices.findAllProvince(pageNumber, pageSize);
   }
 
   @GetMapping("province")
@@ -44,7 +54,7 @@ public class VietnamAPI {
     @RequestParam(required = false) String provinceName,
     @RequestParam(required = false) String shortName
   ) {
-    return vietnamServices.findOneByProvinceCodeOrProvinceName(provinceCode, provinceName, shortName);
+    return vietnamServices.findOneBy(provinceCode, provinceName, shortName);
   }
 
   @GetMapping("province/find-by-date")
@@ -72,10 +82,5 @@ public class VietnamAPI {
     @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
     @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
     return vietnamServices.findAllVaccinationSite(pageNumber, pageSize);
-  }
-
-  @GetMapping("province/all-name")
-  private ResponseEntity<List<String>> findAllName() {
-    return vietnamServices.findAllName();
   }
 }

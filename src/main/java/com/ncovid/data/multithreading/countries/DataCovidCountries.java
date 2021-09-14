@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ndtun
@@ -84,7 +83,7 @@ public class DataCovidCountries {
     try {
       Iterable<CSVRecord> data = Util.readerData(APIData.vaccinationsByCountry);
       if (country != null) {
-        for(CSVRecord record: data){
+        for (CSVRecord record : data) {
           if (country.getId().matches(record.get("iso_code"))) {
             dataVaccinations.setTotalVaccine(Util.checkString(record.get("total_vaccinations")));
             dataVaccinations.setNewVaccine(Util.checkString(record.get("new_vaccinations")));
@@ -103,7 +102,7 @@ public class DataCovidCountries {
       e.printStackTrace();
       logger.warn("Thread-" + Thread.currentThread().getId() + " handle exception");
     }
-     return dataVaccinations.getCountry();
+    return dataVaccinations.getCountry();
   }
 
   private Country insertCovidStatisticsData(Country country) {
@@ -112,10 +111,9 @@ public class DataCovidCountries {
       Document document = Jsoup.connect(APIData.covidByCountry.getApi()).timeout(500000).get();
       Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
       if (country != null) {
-        for (Element element: body.select("tbody tr")){
-          if (element.select("td").get(1).text().replaceAll("\\s+","")
-            .equalsIgnoreCase(country.getName().replaceAll("\\s+","")))
-          {
+        for (Element element : body.select("tbody tr")) {
+          if (element.select("td").get(1).text().replaceAll("\\s+", "")
+            .equalsIgnoreCase(country.getName().replaceAll("\\s+", ""))) {
             SCovid.setTotalCase(Util.checkString(element.select("td").get(2).text()));
             SCovid.setNewCases(Util.checkString(element.select("td").get(3).text()));
             SCovid.setTotalDeaths(Util.checkString(element.select("td").get(4).text()));
@@ -147,16 +145,16 @@ public class DataCovidCountries {
    * each threading flow task
    * insertDataDetailCountry -> insertVaccinationsStatisticsData ->  insertCovidStatisticsData
    */
-//  @EventListener(ApplicationReadyEvent.class)
-//  @Async("taskExecutor")
-  public void runMultithreading() throws IOException, InterruptedException {
+  @EventListener(ApplicationReadyEvent.class)
+  @Async("taskExecutor")
+  public void processingDataCountries() throws IOException, InterruptedException {
     List<Country> checkData = countryRepositories.findAll();
     if (checkData.size() == 0) {
       List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
       for (String alphaCode : alphaCodeList) {
-       CompletableFuture.supplyAsync(() ->insertDataDetailCountry(alphaCode))
-         .thenApplyAsync(this::insertVaccinationsStatisticsData)
-         .thenApplyAsync(this::insertCovidStatisticsData);
+        CompletableFuture.supplyAsync(() -> insertDataDetailCountry(alphaCode))
+          .thenApplyAsync(this::insertVaccinationsStatisticsData)
+          .thenApplyAsync(this::insertCovidStatisticsData);
       }
     }
   }

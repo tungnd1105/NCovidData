@@ -38,6 +38,7 @@ public class CovidStatistics {
   private Integer newCases = 0;
   private Integer treating=0;
   private Integer yesterdayCases = 0;
+  private Integer yesterdayDeaths = 0;
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double casesPercent = 0.0;

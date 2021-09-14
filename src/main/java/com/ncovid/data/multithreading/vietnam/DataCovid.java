@@ -4,11 +4,9 @@ import com.ncovid.entity.APIData;
 import com.ncovid.entity.vietnam.CovidStatistics;
 import com.ncovid.entity.vietnam.DataHistory;
 import com.ncovid.entity.vietnam.Province;
-import com.ncovid.entity.vietnam.VaccinationStatistics;
 import com.ncovid.repositories.vietnam.CovidStatisticsRepositories;
 import com.ncovid.repositories.vietnam.DataHistoryRepositories;
 import com.ncovid.repositories.vietnam.ProvinceRepositories;
-import com.ncovid.repositories.vietnam.VaccinationStatisticsRepositories;
 import com.ncovid.util.Message;
 import com.ncovid.util.ProvinceOfVietnam;
 import com.ncovid.util.Util;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Collator;
 import java.time.LocalDate;
@@ -113,7 +110,7 @@ public class DataCovid {
         JSONObject jsonObject = jsonArray.getJSONObject(k);
         if (jsonObject.getInt("ma") == province.getProvinceCode()) {
           JSONObject dataByDate = (JSONObject) jsonObject.get("data");
-          for (LocalDate date = UtilDate.startDate; date.isBefore(LocalDate.parse("2021-09-09")); date = date.plusDays(1)) {
+          for (LocalDate date = UtilDate.startDate; date.isBefore(LocalDate.parse("2021-09-13")); date = date.plusDays(1)) {
             DataHistory dataHistory = new DataHistory();
             dataHistory.setDate(date);
             dataHistory.setNewCases(dataByDate.getInt(date.toString()));
@@ -130,31 +127,26 @@ public class DataCovid {
     return province;
   }
 
-  /**
-   * if data not yet in databases run insert new
-   * use multithreading to performance optimization
-   * each threading will be insert data covid of provinces  by province code
-   */
+
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException {
+  public void processingDataCovidVietnam() throws IOException {
     List<Province> dataExist = provinceRepositories.findAll();
     if (dataExist.size() == 0) {
       logger.info("starting assign task for threading by province code ");
       List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
       for (Integer provinceCode : provinceCodeList) {
         CompletableFuture.supplyAsync(() -> insertDataInfoOfProvince(provinceCode))
-        .thenApplyAsync(province -> {
-          try {
-            province= insertCovidStatisticsData(province);
-          } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-          }
-          return province;
-        }).thenApplyAsync(this::insertDataNewCasesByDate);
+          .thenApplyAsync(province -> {
+            try {
+              province = insertCovidStatisticsData(province);
+            } catch (IOException | InterruptedException e) {
+              e.printStackTrace();
+            }
+            return province;
+          }).thenApplyAsync(this::insertDataNewCasesByDate);
       }
     }
   }
-
 }
 

@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -55,6 +56,24 @@ public class UpdateDataVaccination {
             province.getVaccinationData().setTotalVaccineAllocated(object.getInt("totalVaccineAllocated"));
             province.getVaccinationData().setTotalVaccineReality(object.getInt("totalVaccineAllocatedReality"));
             province.getVaccinationData().setTotalVaccinationLocation(object.getInt("totalVaccinationLocation"));
+
+            if(object.getInt("totalTwiceInjected")> province.getVaccinationData().getTotalFullyInjected()){
+              province.getVaccinationData().setNewFullyInjected(
+                object.getInt("totalTwiceInjected") -  province.getVaccinationData().getTotalFullyInjected()
+              );
+            }
+
+            if(object.getInt("totalOnceInjected")> province.getVaccinationData().getTotalInjectedOneDose()){
+              province.getVaccinationData().setNewInjectedOneDose(
+                object.getInt("totalOnceInjected") -  province.getVaccinationData().getTotalInjectedOneDose()
+              );
+            }
+
+            if(!LocalDate.parse(province.getVaccinationData().getUpdateTime(),UtilDate.formatterDateTime).equals(UtilDate.today)){
+              province.getVaccinationData().setYesterdayFullyInjected(province.getVaccinationData().getNewFullyInjected());
+              province.getVaccinationData().setYesterdayInjectedOneDose(province.getVaccinationData().getNewInjectedOneDose());
+            }
+
             province.getVaccinationData().setFullyInjectedPercent(
               Util.getPercent(
                 province.getVaccinationData().getTotalFullyInjected(),
@@ -92,7 +111,7 @@ public class UpdateDataVaccination {
 
 
   @Async("taskExecutor")
-  @Scheduled(cron = " 0 0 22 * * *")
+  @Scheduled(cron = " 0 42 19 * * *")
   public void multithreading() throws IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {

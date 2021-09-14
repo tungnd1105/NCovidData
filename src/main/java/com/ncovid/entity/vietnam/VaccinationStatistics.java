@@ -38,6 +38,11 @@ public class VaccinationStatistics implements Serializable {
   private Integer totalVaccinationLocation = 0;
   private Integer totalVaccineAllocated = 0;
   private Integer totalVaccineReality = 0;
+  private Integer newFullyInjected=0;
+  private Integer yesterdayFullyInjected=0;
+  private Integer newInjectedOneDose=0;
+  private Integer yesterdayInjectedOneDose=0;
+
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double fullyInjectedPercent = 0.0;
@@ -50,6 +55,7 @@ public class VaccinationStatistics implements Serializable {
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double totalInjectedPercent = 0.0;
+
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

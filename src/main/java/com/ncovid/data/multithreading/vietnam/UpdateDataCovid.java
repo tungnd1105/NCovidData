@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -58,22 +59,31 @@ public class UpdateDataCovid {
       for (int k = 0; k < jsonArray.length(); k++) {
         JSONObject data = jsonArray.getJSONObject(k);
         if (usCollator.compare(data.getString("name"), province.getShortName()) == 0 ||
-          data.getString("name").contains(province.getShortName())) {
+          data.getString("name").contains(province.getShortName()))
+        {
 
+          // set new cases and deaths
           province.getCovidData().setNewCases(data.getInt("casesToday"));
-
-          if (province.getCovidData().getDeaths() != data.getInt("death")) {
+          if (data.getInt("death") > province.getCovidData().getDeaths()) {
             int newDeaths = data.getInt("death") - province.getCovidData().getDeaths();
             province.getCovidData().setNewDeaths(newDeaths);
           }
 
+          // set yesterday cases and deaths
+          if(!LocalDate.parse(province.getCovidData().getUpdateTime(),UtilDate.formatterDateTime).equals(UtilDate.today)){
+            province.getCovidData().setYesterdayDeaths(province.getCovidData().getNewDeaths());
+          }
           province.getCovidData().getDataHistory().forEach(e -> {
             if (UtilDate.today.minusDays(1).isEqual(e.getDate())) {
               province.getCovidData().setYesterdayCases(e.getNewCases());
             }
           });
 
+          province.getCovidData().setCases(data.getInt("cases"));
+          province.getCovidData().setDeaths((data.getInt("death")));
+          province.getCovidData().setUpdateTime(UtilDate.timeUpdate);
           covidStatisticsRepositories.save(province.getCovidData());
+
           // update new case by date
           DataHistory dataHistory = dataHistoryRepositories.findByDate(province.getProvinceCode(), UtilDate.today);
           if (dataHistory != null) {
@@ -94,7 +104,7 @@ public class UpdateDataCovid {
 
   // update everyday
   @Async("taskExecutor")
-  @Scheduled(cron = "0 22 21 * * *")
+  @Scheduled(cron = "0 40 19 * * *")
   public void multithreading() throws IOException {
     List<Integer> provinceCodeList = ProvinceOfVietnam.getAllProvince();
     for (Integer provinceCode : provinceCodeList) {

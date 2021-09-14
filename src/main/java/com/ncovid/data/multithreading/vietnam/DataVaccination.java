@@ -76,7 +76,7 @@ public class DataVaccination {
 
   @EventListener(ApplicationReadyEvent.class)
   @Async("taskExecutor")
-  public void runMultithreading() throws IOException {
+  public void processingDataVaccinationVietnam() throws IOException {
     List<VaccinationStatistics> dataExist = dataVaccinationRepositories.findAll();
     if (dataExist.size() == 0) {
       logger.info("staring assign task for threading by province code ");
