@@ -70,7 +70,8 @@ public class UpdateDataCountry {
     Elements body = document.select("body").select("div#nav-today table#main_table_countries_today");
     if (country != null) {
       body.select("tbody tr").forEach(element -> {
-        if (element.select("td").get(1).text().matches(country.getName())) {
+        if (element.select("td").get(1).text().replaceAll("\\s+","")
+          .equalsIgnoreCase(country.getName().replaceAll("\\s+",""))) {
           country.getCovidData().setTotalCase(Util.checkString(element.select("td").get(2).text()));
           country.getCovidData().setNewCases(Util.checkString(element.select("td").get(3).text()));
           country.getCovidData().setUpdateTime(UtilDate.timeUpdate);
@@ -98,7 +99,7 @@ public class UpdateDataCountry {
    * 0PM o'clock,6Am o'clock ,12AM o'clock,8PM o'clock everyday
    */
   @Async("taskExecutor")
-  @Scheduled(cron = "0 0 17,19 * * * ")
+  @Scheduled(cron = "0 7 11 * * * ")
   public void runMultithreading() throws IOException, InterruptedException {
     List<String> alphaCodeList = AlphaCodeCountry.getAllAlphaCode();
     List<Country> checkData = countryRepositories.findAll();

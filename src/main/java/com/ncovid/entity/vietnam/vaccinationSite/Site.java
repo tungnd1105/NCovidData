@@ -1,7 +1,6 @@
 package com.ncovid.entity.vietnam.vaccinationSite;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,12 +32,8 @@ public class Site implements Serializable {
   @Column(length = 200)
   private String address;
 
-  private Integer injectionExecutorAmount;
-  private Integer emergencyExecutorAmount;
-  private boolean status;
-
-  @JsonManagedReference
-  @ManyToOne(fetch = FetchType.EAGER)
+  @JsonBackReference
+  @ManyToOne
   @JoinColumn(name = "ward_Code")
   private Ward ward;
 }

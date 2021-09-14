@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,9 @@ public class ProvinceOfVietnam {
 
   public static Logger logger = LoggerFactory.getLogger(ProvinceOfVietnam.class);
 
-  public static List<Integer> getAllProvince() throws IOException, InterruptedException {
+  public static List<Integer> getAllProvince() throws IOException{
     logger.info("Stating get all province code of Vietnam");
-    JSONArray dataJsonProvince = new JSONArray(Util.fetchDataJson(APIData.detailDistricts));
+    JSONArray dataJsonProvince = new JSONArray(new String(Files.readAllBytes(Paths.get(Util.dataProvinceVN.getAbsolutePath()))));
     List<Integer> listProvince = new ArrayList<>();
     for (int i = 0; i < dataJsonProvince.length(); i++) {
       JSONObject province = (JSONObject) dataJsonProvince.get(i);

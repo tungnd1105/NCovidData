@@ -3,11 +3,9 @@ package com.ncovid.controller.api;
 import com.ncovid.entity.countries.Country;
 import com.ncovid.services.CountryServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,12 +23,30 @@ public class CountryAPI {
   @Autowired
   private CountryServices countryServices;
 
-  @GetMapping
-  private ResponseEntity<List<Country>> findAll() {
-    return countryServices.findAll();
+  @GetMapping("all-name")
+  private ResponseEntity<List<String>> findAllName() {
+    return countryServices.findAllName();
   }
 
-  @GetMapping("get-data-country")
+  @GetMapping("all-continent")
+  private ResponseEntity<List<String>> findAllRegion() {
+    return countryServices.findAllRegion();
+  }
+
+  @GetMapping("find-all-by/{continent}")
+  private ResponseEntity<List<Country>> findAllRegion(@PathVariable String continent) {
+    return countryServices.findCountryByRegion(continent);
+  }
+
+  @GetMapping
+  private ResponseEntity<Page<Country>> findAll(
+    @RequestParam(defaultValue = "0") Integer pageNumber,
+    @RequestParam(defaultValue = "10") Integer pageSize
+  ) {
+    return countryServices.findAll(pageNumber, pageSize);
+  }
+
+  @GetMapping("find-one")
   private ResponseEntity<Country> findOneByIdOrAlphaCode(
     @RequestParam(required = false) String id,
     @RequestParam(required = false) String name,

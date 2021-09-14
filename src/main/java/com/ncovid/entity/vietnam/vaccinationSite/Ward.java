@@ -36,12 +36,12 @@ public class Ward implements Serializable {
   @Column(length = 50)
   private String divisionType;
 
-  @JsonManagedReference
+  @JsonBackReference
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "district_Code")
   private District district;
 
-  @JsonBackReference
+  @JsonManagedReference
   @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Site> siteList;
 }

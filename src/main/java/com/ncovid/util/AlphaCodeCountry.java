@@ -10,6 +10,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class AlphaCodeCountry {
     logger.info("starting get all alpha code of country");
     logger.info("staring assign task for threading by alpha code of country");
     List<String> alphaCodeList = new ArrayList<>();
-    JSONArray dataJson = new JSONArray(Util.fetchDataJson(APIData.detailCountry));
+    JSONArray dataJson = new JSONArray(new String(Files.readAllBytes(Paths.get(Util.dataCountry.getAbsolutePath()))));
     for (int i = 0; i < dataJson.length(); i++) {
       JSONObject alphaCode = (JSONObject) dataJson.get(i);
       alphaCodeList.add(alphaCode.getString("alpha3Code"));

@@ -30,15 +30,15 @@ public class VaccinationStatistics implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String updateTime;
-  private String totalVaccine;
-  private String newVaccine;
-  private String totalInjectedOneDose;
-  private String totalFullyInjected;
-  private Double totalVaccinePercent;
-  private Double fullyInjectedPercent;
+  private String totalVaccine = "0";
+  private String newVaccine ="0";
+  private String totalInjectedOneDose ="0";
+  private String totalFullyInjected ="0";
+  private Double totalVaccinePercent = 0.0;
+  private Double fullyInjectedPercent = 0.0;
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
-  private Double injectedOneDosePercent;
+  private Double injectedOneDosePercent = 0.0;
 
   @JsonBackReference
   @OneToOne(fetch = FetchType.EAGER)

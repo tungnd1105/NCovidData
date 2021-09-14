@@ -34,19 +34,17 @@ public class CovidStatistics {
   private String updateTime;
   private Integer cases = 0;
   private Integer deaths = 0;
-  private Integer recovered = 0;
-  private Integer today = 0;
-  private Integer yesterday = 0;
+  private Integer newDeaths= 0;
+  private Integer newCases = 0;
+  private Integer treating=0;
+  private Integer yesterdayCases = 0;
+  private Integer yesterdayDeaths = 0;
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double casesPercent = 0.0;
 
   @NumberFormat(style = NumberFormat.Style.PERCENT)
   private Double deathsPercent = 0.0;
-
-  @NumberFormat(style = NumberFormat.Style.PERCENT)
-  private Double recoveredPercent = 0.0;
-
 
   @JsonManagedReference
   @OneToOne

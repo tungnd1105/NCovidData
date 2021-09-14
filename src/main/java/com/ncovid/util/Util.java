@@ -30,8 +30,9 @@ public class Util {
 
   public static String urlDataVaccinationSite = "https://tiemchungcovid19.gov.vn/api/public/dashboard/vaccination-location/search?page=0&size=10&";
 
-  public static File bodyGraphQl = new File("JsonData/bodyGraphQl.json");
   public static File covidBydate = new File("JsonData/by-current.json");
+  public static File dataCountry= new File("JsonData/dataCountry.json");
+  public static File dataProvinceVN= new File("JsonData/dataProvinceVN.json");
 
 
   public static String validStatusCode(HttpResponse<String> httpResponse) {
@@ -55,15 +56,6 @@ public class Util {
   public static String fetchDataJson(String api) throws IOException, InterruptedException {
     HttpClient newClient = HttpClient.newHttpClient();
     HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(api)).build();
-    HttpResponse<String> httpResponse = newClient.send(newRequest, HttpResponse.BodyHandlers.ofString());
-    return validStatusCode(httpResponse);
-  }
-
-  public static String postMapping(APIData api, Path pathBody) throws IOException, InterruptedException {
-    HttpClient newClient = HttpClient.newHttpClient();
-    HttpRequest newRequest = HttpRequest.newBuilder()
-      .uri(URI.create(api.getApi())).header("Content-Type", "application/json")
-      .POST(HttpRequest.BodyPublishers.ofFile(pathBody)).build();
     HttpResponse<String> httpResponse = newClient.send(newRequest, HttpResponse.BodyHandlers.ofString());
     return validStatusCode(httpResponse);
   }
@@ -98,7 +90,7 @@ public class Util {
   }
 
   public static Double getPercent(int a, int b) {
-    String result = df2.format((double) a * 100 / b);
+    String result = df2.format((double) a/b * 100);
     return Double.parseDouble(result);
   }
 }

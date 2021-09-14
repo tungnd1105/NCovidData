@@ -1,10 +1,11 @@
 package com.ncovid.controller.api;
 
-import com.ncovid.dto.CovidDTO;
-import com.ncovid.dto.VaccinationSiteDTO;
-import com.ncovid.entity.vietnam.Province;
+import com.ncovid.dto.ProvinceDTO;
+import com.ncovid.entity.vietnam.DataHistory;
+import com.ncovid.entity.vietnam.vaccinationSite.Site;
 import com.ncovid.services.VietnamServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,26 +29,58 @@ public class VietnamAPI {
   @Autowired
   private VietnamServices vietnamServices;
 
-  @GetMapping("find-one")
-  private ResponseEntity<Province> findOneByProvinceCodeOrName(
-    @RequestParam(required = false) Integer provinceCode,
-    @RequestParam(required = false) String name) {
-    return vietnamServices.findOneByProvinceCodeOrName(provinceCode, name);
+
+  @GetMapping("province/all-name")
+  private ResponseEntity<List<String>> findAllName() {
+    return vietnamServices.findAllName();
   }
 
-  @GetMapping("find-all-filter-by-date")
-  private ResponseEntity<List<CovidDTO>> findAll(
-    @RequestParam String startDate, @RequestParam String endDate
+  @GetMapping
+  private ResponseEntity<List<ProvinceDTO>> findAllProvince() {
+    return vietnamServices.findAllProvince();
+  }
+
+  @GetMapping("page")
+  private ResponseEntity<Page<ProvinceDTO>> findAllProvince(
+    @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+    @RequestParam(required = false, defaultValue = "10") Integer pageSize
   ) {
-    return vietnamServices.multithreading(startDate, endDate);
+    return vietnamServices.findAllProvince(pageNumber, pageSize);
+  }
+
+  @GetMapping("province")
+  private ResponseEntity<ProvinceDTO> findOneByProvinceCodeOrProvinceName(
+    @RequestParam(required = false) Integer provinceCode,
+    @RequestParam(required = false) String provinceName,
+    @RequestParam(required = false) String shortName
+  ) {
+    return vietnamServices.findOneBy(provinceCode, provinceName, shortName);
+  }
+
+  @GetMapping("province/find-by-date")
+  private ResponseEntity<List<DataHistory>> findByDate(
+    @RequestParam(required = false) Integer provinceCode,
+    @RequestParam(required = false) String provinceName,
+    @RequestParam(required = false) Integer numberDays
+  ) {
+    return vietnamServices.findByDate(provinceCode, provinceName, numberDays);
   }
 
   @GetMapping("search-vaccination-site")
-  private ResponseEntity<VaccinationSiteDTO> findVaccinationSite(
-    @RequestParam(required = false) Integer provinceCode,
-    @RequestParam(required = false) Integer districtsCode,
-    @RequestParam(required = false) Integer wardCode
+  private ResponseEntity<Page<Site>> findAllSite(
+    @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+    @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+    @RequestParam(defaultValue = "1") Integer provinceCode,
+    @RequestParam(defaultValue = "1") Integer districtCode,
+    @RequestParam(defaultValue = "1") Integer wardCode
   ) {
-    return vietnamServices.findVaccinationSite(provinceCode, districtsCode, wardCode);
+    return vietnamServices.searchVaccinationSite(pageNumber, pageSize, provinceCode, districtCode, wardCode);
+  }
+
+  @GetMapping("find-all-vaccination-site")
+  private ResponseEntity<Page<Site>> findAllSite(
+    @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+    @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    return vietnamServices.findAllVaccinationSite(pageNumber, pageSize);
   }
 }

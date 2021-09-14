@@ -1,0 +1,384 @@
+[
+  {
+    "population": 8053664,
+    "popOverEighteen": 5745728,
+    "provinceCode": "01",
+    "provinceName": "Hà Nội"
+  },
+  {
+    "population": 854679,
+    "popOverEighteen": 531581,
+    "provinceCode": "02",
+    "provinceName": "Hà Giang"
+  },
+  {
+    "population": 530341,
+    "popOverEighteen": 368973,
+    "provinceCode": "04",
+    "provinceName": "Cao Bằng"
+  },
+  {
+    "population": 313905,
+    "popOverEighteen": 222390,
+    "provinceCode": "06",
+    "provinceName": "Bắc Kạn"
+  },
+  {
+    "population": 784811,
+    "popOverEighteen": 535735,
+    "provinceCode": "08",
+    "provinceName": "Tuyên Quang"
+  },
+  {
+    "population": 730420,
+    "popOverEighteen": 465394,
+    "provinceCode": "10",
+    "provinceName": "Lào Cai"
+  },
+  {
+    "population": 598856,
+    "popOverEighteen": 360552,
+    "provinceCode": "11",
+    "provinceName": "Điện Biên"
+  },
+  {
+    "population": 460196,
+    "popOverEighteen": 269707,
+    "totalVaccineAllocated": 63820,
+    "provinceCode": "12",
+    "provinceName": "Lai Châu"
+  },
+  {
+    "population": 1248415,
+    "popOverEighteen": 792702,
+    "provinceCode": "14",
+    "provinceName": "Sơn La"
+  },
+  {
+    "population": 821030,
+    "popOverEighteen": 564852,
+    "provinceCode": "15",
+    "provinceName": "Yên Bái"
+  },
+  {
+    "population": 854131,
+    "popOverEighteen": 597953,
+    "provinceCode": "17",
+    "provinceName": "Hoà Bình"
+  },
+  {
+    "population": 1286751,
+    "popOverEighteen": 920574,
+    "provinceCode": "19",
+    "provinceName": "Thái Nguyên"
+  },
+  {
+    "population": 781655,
+    "popOverEighteen": 552860,
+    "totalVaccineAllocated": 182860,
+    "provinceCode": "20",
+    "provinceName": "Lạng Sơn"
+  },
+  {
+    "population": 1320324,
+    "popOverEighteen": 935854,
+    "provinceCode": "22",
+    "provinceName": "Quảng Ninh"
+  },
+  {
+    "population": 1803950,
+    "popOverEighteen": 1267538,
+    "provinceCode": "24",
+    "provinceName": "Bắc Giang"
+  },
+  {
+    "population": 1463726,
+    "popOverEighteen": 1029489,
+    "provinceCode": "25",
+    "provinceName": "Phú Thọ"
+  },
+  {
+    "population": 1154154,
+    "popOverEighteen": 789896,
+    "provinceCode": "26",
+    "provinceName": "Vĩnh Phúc"
+  },
+  {
+    "population": 1368840,
+    "popOverEighteen": 985257,
+    "provinceCode": "27",
+    "provinceName": "Bắc Ninh"
+  },
+  {
+    "population": 1892254,
+    "popOverEighteen": 1367571,
+    "provinceCode": "30",
+    "provinceName": "Hải Dương"
+  },
+  {
+    "population": 1837173,
+    "popOverEighteen": 1503831,
+    "provinceCode": "31",
+    "provinceName": "Hải Phòng"
+  },
+  {
+    "population": 1252731,
+    "popOverEighteen": 897430,
+    "totalVaccineAllocated": 146200,
+    "provinceCode": "33",
+    "provinceName": "Hưng Yên"
+  },
+  {
+    "population": 1860447,
+    "popOverEighteen": 1373070,
+    "provinceCode": "34",
+    "provinceName": "Thái Bình"
+  },
+  {
+    "population": 852800,
+    "popOverEighteen": 612219,
+    "provinceCode": "35",
+    "provinceName": "Hà Nam"
+  },
+  {
+    "population": 1780393,
+    "popOverEighteen": 1272614,
+    "provinceCode": "36",
+    "provinceName": "Nam Định"
+  },
+  {
+    "population": 982487,
+    "popOverEighteen": 695394,
+    "provinceCode": "37",
+    "provinceName": "Ninh Bình"
+  },
+  {
+    "population": 3640128,
+    "popOverEighteen": 2605729,
+    "totalVaccineAllocated": 287520,
+    "provinceCode": "38",
+    "provinceName": "Thanh Hóa"
+  },
+  {
+    "population": 3327791,
+    "popOverEighteen": 2319465,
+    "provinceCode": "40",
+    "provinceName": "Nghệ An"
+  },
+  {
+    "population": 1288866,
+    "popOverEighteen": 892702,
+    "provinceCode": "42",
+    "provinceName": "Hà Tĩnh"
+  },
+  {
+    "population": 895430,
+    "popOverEighteen": 616856,
+    "provinceCode": "44",
+    "provinceName": "Quảng Bình"
+  },
+  {
+    "population": 632375,
+    "popOverEighteen": 427306,
+    "provinceCode": "45",
+    "provinceName": "Quảng Trị"
+  },
+  {
+    "population": 1128620,
+    "popOverEighteen": 805048,
+    "provinceCode": "46",
+    "provinceName": "Thừa Thiên Huế"
+  },
+  {
+    "population": 1134310,
+    "popOverEighteen": 826933,
+    "provinceCode": "48",
+    "provinceName": "Đà Nẵng"
+  },
+  {
+    "population": 1495812,
+    "popOverEighteen": 1068985,
+    "provinceCode": "49",
+    "provinceName": "Quảng Nam"
+  },
+  {
+    "population": 1231697,
+    "popOverEighteen": 883502,
+    "provinceCode": "51",
+    "provinceName": "Quảng Ngãi"
+  },
+  {
+    "population": 1486918,
+    "popOverEighteen": 1068887,
+    "provinceCode": "52",
+    "provinceName": "Bình Định"
+  },
+  {
+    "population": 961152,
+    "popOverEighteen": 616333,
+    "provinceCode": "54",
+    "provinceName": "Phú Yên"
+  },
+  {
+    "population": 1231107,
+    "popOverEighteen": 892222,
+    "provinceCode": "56",
+    "provinceName": "Khánh Hòa"
+  },
+  {
+    "population": 590467,
+    "popOverEighteen": 401680,
+    "provinceCode": "58",
+    "provinceName": "Ninh Thuận"
+  },
+  {
+    "population": 1230808,
+    "popOverEighteen": 865494,
+    "provinceCode": "60",
+    "provinceName": "Bình Thuận"
+  },
+  {
+    "population": 540438,
+    "popOverEighteen": 332276,
+    "provinceCode": "62",
+    "provinceName": "Kon Tum"
+  },
+  {
+    "population": 1513847,
+    "popOverEighteen": 956614,
+    "provinceCode": "64",
+    "provinceName": "Gia Lai"
+  },
+  {
+    "population": 1869322,
+    "popOverEighteen": 1259652,
+    "provinceCode": "66",
+    "provinceName": "Đắk Lắk"
+  },
+  {
+    "population": 622168,
+    "popOverEighteen": 392984,
+    "provinceCode": "67",
+    "provinceName": "Đắk Nông"
+  },
+  {
+    "population": 1296606,
+    "popOverEighteen": 892554,
+    "provinceCode": "68",
+    "provinceName": "Lâm Đồng"
+  },
+  {
+    "population": 994679,
+    "popOverEighteen": 676731,
+    "provinceCode": "70",
+    "provinceName": "Bình Phước"
+  },
+  {
+    "population": 1169165,
+    "popOverEighteen": 872730,
+    "provinceCode": "72",
+    "provinceName": "Tây Ninh"
+  },
+  {
+    "population": 2426561,
+    "popOverEighteen": 1868570,
+    "provinceCode": "74",
+    "provinceName": "Bình Dương"
+  },
+  {
+    "population": 3097107,
+    "popOverEighteen": 2240028,
+    "provinceCode": "75",
+    "provinceName": "Đồng Nai"
+  },
+  {
+    "population": 1148313,
+    "popOverEighteen": 823118,
+    "provinceCode": "77",
+    "provinceName": "Bà Rịa - Vũng Tàu"
+  },
+  {
+    "population": 8993082,
+    "popOverEighteen": 6966626,
+    "provinceCode": "79",
+    "provinceName": "Hồ Chí Minh"
+  },
+  {
+    "population": 1688547,
+    "popOverEighteen": 1261735,
+    "provinceCode": "80",
+    "provinceName": "Long An"
+  },
+  {
+    "population": 1764185,
+    "popOverEighteen": 1322325,
+    "totalVaccineAllocated": 286130,
+    "provinceCode": "82",
+    "provinceName": "Tiền Giang"
+  },
+  {
+    "population": 1288463,
+    "popOverEighteen": 980652,
+    "provinceCode": "83",
+    "provinceName": "Bến Tre"
+  },
+  {
+    "population": 1009168,
+    "popOverEighteen": 734794,
+    "provinceCode": "84",
+    "provinceName": "Trà Vinh"
+  },
+  {
+    "population": 1022791,
+    "popOverEighteen": 769026,
+    "provinceCode": "86",
+    "provinceName": "Vĩnh Long"
+  },
+  {
+    "population": 1599504,
+    "popOverEighteen": 1181264,
+    "provinceCode": "87",
+    "provinceName": "Đồng Tháp"
+  },
+  {
+    "population": 1908352,
+    "popOverEighteen": 1371662,
+    "provinceCode": "89",
+    "provinceName": "An Giang"
+  },
+  {
+    "population": 1723067,
+    "popOverEighteen": 1248338,
+    "provinceCode": "91",
+    "provinceName": "Kiên Giang"
+  },
+  {
+    "population": 1235171,
+    "popOverEighteen": 941769,
+    "provinceCode": "92",
+    "provinceName": "Cần Thơ"
+  },
+  {
+    "population": 733017,
+    "popOverEighteen": 536163,
+    "provinceCode": "93",
+    "provinceName": "Hậu Giang"
+  },
+  {
+    "population": 1199653,
+    "popOverEighteen": 861361,
+    "provinceCode": "94",
+    "provinceName": "Sóc Trăng"
+  },
+  {
+    "population": 907236,
+    "provinceCode": "95",
+    "provinceName": "Bạc Liêu"
+  },
+  {
+    "population": 1194476,
+    "popOverEighteen": 857571,
+    "provinceCode": "96",
+    "provinceName": "Cà Mau"
+  }
+]
